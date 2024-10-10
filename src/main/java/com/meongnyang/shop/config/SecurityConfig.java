@@ -1,10 +1,12 @@
 package com.meongnyang.shop.config;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
+@Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
@@ -18,7 +20,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
-                .antMatchers("/auth/**")
+                .antMatchers("/auth/**",
+                        "/user/**",
+                        "/admin/**",
+                        "/swagger-ui.html/**/**",
+                        "/webjars/**",
+                        "/swagger-resources/**",
+                        "/v2/api-docs/**")
                 .permitAll()
                 .antMatchers(
                         HttpMethod.GET,
