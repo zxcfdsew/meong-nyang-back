@@ -46,5 +46,5 @@ spring:
       on-profile: common
 
 mybatis:
-  mapper-location:
+  mapper-locations:
     - mappers/*.xml
