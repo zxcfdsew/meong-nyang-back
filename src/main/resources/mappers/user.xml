@@ -13,6 +13,7 @@
         <result property="name" column="name" />
         <result property="phone" column="phone" />
         <result property="membershipLevelId" column="membership_level_id" />
+        <result property="provider" column="provider" />
         <collection property="userRoles" javaType="java.util.Set" resultMap="userRoleResultMap" />
     </resultMap>
 
@@ -30,7 +31,7 @@
 
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
         insert into user_tb
-        values(default, #{username}, #{password}, #{name}, #{phone}, #{membershipLevelId}, now())
+        values(default, #{username}, #{password}, #{name}, #{phone}, #{membershipLevelId}, now(), #{provider})
     </insert>
 
     <select id="findByUsername" resultMap="userResultMap">
@@ -42,6 +43,7 @@
             u.phone,
             u.membership_level_id,
             u.create_date,
+            u.provider,
             ur.id as ur_id,
             ur.user_id as ur_user_id,
             ur.role_id as ur_role_id,
@@ -63,6 +65,7 @@
             u.phone,
             u.membership_level_id,
             u.create_date,
+            u.provider,
             ur.id as ur_id,
             ur.user_id as ur_user_id,
             ur.role_id as ur_role_id,

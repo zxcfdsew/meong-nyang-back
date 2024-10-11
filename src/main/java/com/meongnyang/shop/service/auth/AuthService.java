@@ -1,12 +1,14 @@
-package com.meongnyang.shop.service;
+package com.meongnyang.shop.service.auth;
 
+import com.meongnyang.shop.dto.request.ReqAdminSigninDto;
 import com.meongnyang.shop.dto.request.ReqUserSigninDto;
 import com.meongnyang.shop.dto.request.ReqUserSignupDto;
+import com.meongnyang.shop.dto.response.RespAdminSigninDto;
 import com.meongnyang.shop.dto.response.RespSigninDto;
 import com.meongnyang.shop.entity.Role;
 import com.meongnyang.shop.entity.User;
 import com.meongnyang.shop.entity.UserRole;
-import com.meongnyang.shop.exception.JoinException;
+import com.meongnyang.shop.exception.SignupException;
 import com.meongnyang.shop.repository.*;
 import com.meongnyang.shop.security.jwt.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Set;
 
 @Service
-public class UserService {
+public class AuthService {
 
     @Autowired
     private UserMapper userMapper;
@@ -42,7 +44,20 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    @Transactional(rollbackFor = JoinException.class)
+    public RespAdminSigninDto adminSignin(ReqAdminSigninDto dto) {
+        User user = userMapper.findByUsername(dto.getUsername());
+        if(user == null) {
+            throw new UsernameNotFoundException("관리자 정보를 확인하세요");
+        }
+        if(!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            throw new BadCredentialsException("관리자 정보를 확인하세요");
+        }
+        return RespAdminSigninDto.builder()
+                .token(jwtProvider.generateToken(user))
+                .build();
+    }
+
+    @Transactional(rollbackFor = SignupException.class)
     public void signup(ReqUserSignupDto dto) {
         try {
             User user = dto.toEntityByUser(passwordEncoder);
@@ -70,7 +85,7 @@ public class UserService {
                 petMapper.save(dto.toEntityByPet(user.getId()));
             }
         } catch (Exception e) {
-            throw new JoinException(e.getMessage());
+            throw new SignupException(e.getMessage());
         }
     }
     //유저가 중복되면 false

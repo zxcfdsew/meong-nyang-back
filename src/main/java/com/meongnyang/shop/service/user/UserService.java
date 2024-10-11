@@ -51,7 +51,7 @@ public class UserService {
         Pet pet = petMapper.findPetById(id);
 
         return RespPetInfoDto.builder()
-                .petId(pet.getPetId())
+                .petId(pet.getId())
                 .petName(pet.getPetName())
                 .petAge(pet.getPetAge())
                 .petType(pet.getPetType())

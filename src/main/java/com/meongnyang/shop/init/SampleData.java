@@ -3,17 +3,15 @@ package com.meongnyang.shop.init;
 import com.meongnyang.shop.entity.Role;
 import com.meongnyang.shop.entity.User;
 import com.meongnyang.shop.entity.UserRole;
-import com.meongnyang.shop.exception.JoinException;
+import com.meongnyang.shop.exception.SignupException;
 import com.meongnyang.shop.repository.RoleMapper;
 import com.meongnyang.shop.repository.UserMapper;
 import com.meongnyang.shop.repository.UserRoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.beans.Transient;
 import java.util.Set;
 
 public class SampleData implements CommandLineRunner {
@@ -30,7 +28,7 @@ public class SampleData implements CommandLineRunner {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Transactional(rollbackFor = JoinException.class)
+    @Transactional(rollbackFor = SignupException.class)
     @Override
     public void run(String... args) throws Exception {
         try {
@@ -59,7 +57,7 @@ public class SampleData implements CommandLineRunner {
                 user.setUserRoles(Set.of(userRole));
             }
         } catch (Exception e) {
-            throw new JoinException(e.getMessage());
+            throw new SignupException(e.getMessage());
         }
     }
 }

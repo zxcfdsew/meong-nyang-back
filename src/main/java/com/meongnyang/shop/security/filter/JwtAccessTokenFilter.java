@@ -27,7 +27,6 @@ public class JwtAccessTokenFilter extends GenericFilter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        System.out.println("필터실행");
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String bearerToken = request.getHeader("Authorization");
 
@@ -42,8 +41,6 @@ public class JwtAccessTokenFilter extends GenericFilter {
         //변환할 때 예외처리
         try {
             claims = jwtProvider.getClaims(accessToken);
-            System.out.println(claims + "필터1");
-            System.out.println(claims.get("userId") + "필터2");
             Long userId = ((Integer) claims.get("userId")).longValue(); //Object -> Integer -> Long
             User user =  userMapper.findById(userId);
             if (user == null) {

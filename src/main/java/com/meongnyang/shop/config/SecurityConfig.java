@@ -1,6 +1,8 @@
 package com.meongnyang.shop.config;
 
 import com.meongnyang.shop.security.filter.JwtAccessTokenFilter;
+import com.meongnyang.shop.security.handler.OAuth2SuccessHandler;
+import com.meongnyang.shop.service.auth.OAuth2Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,6 +18,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtAccessTokenFilter jwtAccessTokenFilter;
+
+    @Autowired
+    private OAuth2Service oAuth2Service;
+
+    @Autowired
+    private OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -43,6 +51,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated();
+
+        http.oauth2Login()
+                .successHandler(oAuth2SuccessHandler)
+                .userInfoEndpoint()
+                .userService(oAuth2Service);
 
         http.addFilterBefore(jwtAccessTokenFilter, UsernamePasswordAuthenticationFilter.class);
 

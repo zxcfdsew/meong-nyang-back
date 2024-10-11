@@ -20,6 +20,7 @@ public class User {
     private String name;
     private String phone;
     private int membershipLevelId;
+    private String provider;
 
     private Set<UserRole> userRoles;
 
