@@ -1,5 +1,6 @@
 package com.meongnyang.shop.controller.user;
 
+import com.meongnyang.shop.dto.request.ReqUpdatePetDto;
 import com.meongnyang.shop.dto.request.ReqUpdateUserDto;
 import com.meongnyang.shop.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,10 @@ public class MypageController {
         return ResponseEntity.ok().body(userService.getPetInfo(petId));
     }
 
-    // 반려동물정보 조회
-    public ResponseEntity<?> updatePet(@RequestBody ReqUpdateUserDto dto) {
-        userService.updateUser(dto);
+    // 반려동물정보 수정
+    @PutMapping("/user/pet/{petId}")
+    public ResponseEntity<?> updatePet(@RequestBody ReqUpdatePetDto dto, @PathVariable Long petId) {
+        userService.updatePet(dto);
         System.out.println(dto);
         return ResponseEntity.ok().body(true);
     }

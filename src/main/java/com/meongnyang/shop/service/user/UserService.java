@@ -1,5 +1,6 @@
 package com.meongnyang.shop.service.user;
 
+import com.meongnyang.shop.dto.request.ReqUpdatePetDto;
 import com.meongnyang.shop.dto.request.ReqUpdateUserDto;
 import com.meongnyang.shop.dto.response.RespPetInfoDto;
 import com.meongnyang.shop.dto.response.RespUserInfoDto;
@@ -55,5 +56,9 @@ public class UserService {
                 .petAge(pet.getPetAge())
                 .petType(pet.getPetType())
                 .build();
+    }
+
+    public void updatePet(ReqUpdatePetDto dto) {
+        petMapper.updatePetById(dto.toEntity());
     }
 }

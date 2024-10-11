@@ -5,13 +5,39 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.meongnyang.shop.repository.UserMapper">
+    <resultMap id="userResultMap" type="com.meongnyang.shop.entity.User">
+        <id property="id" column="user_id" />
+        <result property="username" column="username" />
+        <result property="password" column="password" />
+        <result property="name" column="name" />
+        <result property="phone" column="phone" />
+        <result property="membershipLevelId" column="membership_level_id" />
+        <collection property="userRoles" javaType="java.util.Set" resultMap="userRoleResultMap" />
+    </resultMap>
+
+    <resultMap id="userRoleResultMap" type="com.meongnyang.shop.entity.UserRole">
+        <id property="id" column="role_id" />
+        <result property="userId" column="user_id" />
+        <result property="roleId" column="role_id" />
+        <association property="role" resultMap="roleResultMap" />
+    </resultMap>
+
+    <resultMap id="roleResultMap" type="com.meongnyang.shop.entity.Role">
+        <id property="id" column="role_id" />
+        <result property="roleName" column="role_name" />
+    </resultMap>
+
+
+
+
+
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
         insert into user_tb
         values(default, #{username}, #{password}, #{name}, #{phone}, #{membershipLevelId}, now())
     </insert>
 
 
-    <select id="findByUsername" resultType="com.meongnyang.shop.entity.User">
+    <select id="findByUsername" resultMap="userResultMap">
         select
             id,
             username,
@@ -25,7 +51,7 @@
         where
             username = #{username}
     </select>
-    <select id="findById" resultType="com.meongnyang.shop.entity.User">
+    <select id="findById" resultMap="userResultMap">
         select
             id,
             username,

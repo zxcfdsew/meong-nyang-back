@@ -21,4 +21,15 @@
         where
             id = #{petId}
     </select>
+
+    <update id="updatePetById">
+        update
+            pet_tb
+        set
+            pet_name = #{petName},
+            pet_age = #{petAge},
+            pet_type = #{petType}
+        where
+            id = #{petId}
+    </update>
 </mapper>
