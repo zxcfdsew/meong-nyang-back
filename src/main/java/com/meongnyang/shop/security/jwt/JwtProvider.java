@@ -1,6 +1,9 @@
 package com.meongnyang.shop.security.jwt;
 
+import com.meongnyang.shop.entity.User;
 import com.meongnyang.shop.entity.admin.Admin;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -16,25 +19,22 @@ public class JwtProvider {
 
     private Key key;
 
-    private Key adminKey;
-
-    public JwtProvider(@Value("${jwt.secret}") String secret, @Value("${jwt.admin}") String adminSecret) {
+    public JwtProvider(@Value("${jwt.secret}") String secret) {
         this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
-        this.adminKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(adminSecret));
     }
 
     public Date getExpireDate() {
         return new Date(new Date().getTime() + (1000L * 60 * 60 * 24 * 30));
     }
 
-    //관리자 로그인 토큰 생성
-    public String generateTokenByAdmin(Admin admin) {
+    //토큰 생성
+    public String generateToken(User user) {
+        System.out.println("userId" + user.getId());
         return Jwts.builder()
-                .claim("adminId", admin.getId())
+                .claim("userId", user.getId())
                 .expiration(getExpireDate())
-                .signWith(adminKey, SignatureAlgorithm.HS256)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
-
     }
 
     public String removeBearer(String bearerAccessToken) {
@@ -43,6 +43,14 @@ public class JwtProvider {
             throw new RuntimeException();
         }
         return bearerAccessToken.substring(bearerLength);
+    }
+
+    public Claims getClaims(String token) {
+        JwtParser jwtParser = Jwts.parser()
+                .setSigningKey(key)
+                .build();
+        Claims claims = jwtParser.parseClaimsJws(token).getPayload(); //페이로드 = claims
+        return claims;
     }
 
 }
