@@ -4,15 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Pet {
+public class Address {
     private Long id;
     private Long userId;
-    private String petName;
-    private Long petAge;
-    private String petType;
+    private Long zipcode;
+    private String addressDefault;
+    private String addressDetail;
+    private String request;
 }

@@ -12,33 +12,38 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Builder
 @Data
+@Builder
 public class PrincipalUser implements UserDetails {
-
     private Long id;
     private String username;
     private String password;
-    private Set<UserRole> roles;
+    private Set<UserRole> userRoles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(
-                ur -> new SimpleGrantedAuthority(ur.getRole().getRoleName())
+        System.out.println(userRoles);
+
+        return userRoles.stream().map(
+                userRole -> new SimpleGrantedAuthority(userRole.getRole().getRoleName())
         ).collect(Collectors.toSet());
     }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
+  
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
+
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
+  
     @Override
     public boolean isEnabled() {
         return true;
