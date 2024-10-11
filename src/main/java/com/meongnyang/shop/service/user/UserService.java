@@ -1,5 +1,6 @@
 package com.meongnyang.shop.service.user;
 
+import com.meongnyang.shop.dto.request.ReqUpdateUserDto;
 import com.meongnyang.shop.dto.response.RespUserInfoDto;
 import com.meongnyang.shop.entity.User;
 import com.meongnyang.shop.repository.UserMapper;
@@ -26,5 +27,9 @@ public class UserService {
                 .id(user.getId())
                 .username(user.getUsername())
                 .build();
+    }
+
+    public int updateUser(ReqUpdateUserDto dto) {
+        return userMapper.updateUserById(dto.toEntity());
     }
 }

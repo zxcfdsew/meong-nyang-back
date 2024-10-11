@@ -10,6 +10,7 @@
         values(default, #{username}, #{password}, #{name}, #{phone}, #{membershipLevelId}, now())
     </insert>
 
+
     <select id="findByUsername" resultType="com.meongnyang.shop.entity.User">
         select
             id,
@@ -38,4 +39,15 @@
         where
             id = #{id}
     </select>
+    <update id="updateUserById">
+        update
+            user_tb
+        set
+            username = #{username},
+            password = #{password},
+            name = #{name},
+            phone = #{phone}
+        where
+            id = #{id}
+    </update>
 </mapper>
