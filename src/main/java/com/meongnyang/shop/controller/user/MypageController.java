@@ -16,14 +16,29 @@ public class MypageController {
     @GetMapping("/user/{id}")
     public ResponseEntity<?> getUser(@PathVariable Long id) {
         System.out.println("회원정보 조회 완료");
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok().body(userService.getUserInfo(id));
     }
 
     // 회원정보 수정
-    @PutMapping("/user/{id}")
+    @PutMapping("/user")
     public ResponseEntity<?> updateUser(@RequestBody ReqUpdateUserDto dto) {
-        System.out.println("dto");
-        return ResponseEntity.ok().body(userService.updateUser(dto));
+        userService.updateUser(dto);
+        System.out.println(dto);
+        return ResponseEntity.ok().body(true);
+    }
+
+    // 반려동물정보 조회
+    @GetMapping("/user/pet/{petId}")
+    public ResponseEntity<?> getPet(@PathVariable Long petId) {
+        System.out.println("반려동물정보 조회 완료");
+        return ResponseEntity.ok().body(userService.getPetInfo(petId));
+    }
+
+    // 반려동물정보 조회
+    public ResponseEntity<?> updatePet(@RequestBody ReqUpdateUserDto dto) {
+        userService.updateUser(dto);
+        System.out.println(dto);
+        return ResponseEntity.ok().body(true);
     }
 
 

@@ -27,7 +27,7 @@
     </select>
     <select id="findById" resultType="com.meongnyang.shop.entity.User">
         select
-        id,
+            id,
             username,
             password,
             name,

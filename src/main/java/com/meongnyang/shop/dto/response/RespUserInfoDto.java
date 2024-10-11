@@ -10,6 +10,9 @@ import java.util.Set;
 public class RespUserInfoDto {
     private Long id;
     private String username;
+    private String password;
     private String name;
+    private String phone;
+    private int membershipLevelId;
     private Set<String> roles;
 }
