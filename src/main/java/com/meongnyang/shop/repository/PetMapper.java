@@ -6,4 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface PetMapper {
     int save(Pet pet);
+    Pet findPetById(Long id);
+    int updatePetById(Pet pet);
 }

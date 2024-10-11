@@ -75,4 +75,15 @@
         where
             u.id = #{id}
     </select>
+    <update id="updateUserById">
+          update
+              user_tb
+          set
+              username = #{username},
+              password = #{password},
+              name = #{name},
+              phone = #{phone}
+          where
+              id = #{id}
+      </update>
 </mapper>

@@ -5,9 +5,33 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.meongnyang.shop.repository.PetMapper">
-
-    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save">
         insert into pet_tb
-        values(default, #{userId}, #{petName}, #{petAge}, #{petType})
+        values(default, #{petName}, #{petAge}, #{petType})
     </insert>
+
+    <select id="findPetById" resultType="com.meongnyang.shop.entity.Pet">
+        select
+            id,
+            pet_name,
+            pet_age,
+            pet_type
+        from
+            pet_tb
+        where
+            id = #{petId}
+    </select>
+
+    <update id="updatePetById">
+        update
+            pet_tb
+        set
+            pet_name = #{petName},
+            pet_age = #{petAge},
+            pet_type = #{petType}
+        where
+            id = #{petId}
+    </update>
 </mapper>
+
+
