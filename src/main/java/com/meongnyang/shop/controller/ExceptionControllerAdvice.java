@@ -1,5 +1,6 @@
 package com.meongnyang.shop.controller;
 
+import com.meongnyang.shop.exception.RegisterException;
 import com.meongnyang.shop.exception.SignupException;
 import com.meongnyang.shop.exception.ValidException;
 import org.springframework.http.ResponseEntity;
@@ -23,5 +24,10 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<?> authenticationException(AuthenticationException e) {
         return ResponseEntity.internalServerError().body(e.getMessage());
+    }
+
+    @ExceptionHandler(RegisterException.class)
+    public ResponseEntity<?> registerException(RegisterException e) {
+        return ResponseEntity.badRequest().body(e.getMessage() + "등록");
     }
 }

@@ -81,8 +81,4 @@ public class OAuth2Service implements OAuth2UserService {
             throw new SignupException(e.getMessage());
         }
     }
-
-//    public void oauth2Signin(Req) {
-//
-//    }
 }

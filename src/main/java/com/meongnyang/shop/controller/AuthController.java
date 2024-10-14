@@ -57,7 +57,6 @@ public class AuthController {
     @ValidAop
     @PostMapping("/oauth2/signin")
     public ResponseEntity<?> oauth2Signin(@Valid @RequestBody ReqOauth2SignupDto dto, BindingResult bindingResult) {
-       //oAuth2Service.signin(dto);
         return ResponseEntity.ok().body(null);
     }
 
