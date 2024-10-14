@@ -1,8 +1,9 @@
 package com.meongnyang.shop.aspect;
 
+import com.meongnyang.shop.dto.request.ReqOauth2SignupDto;
 import com.meongnyang.shop.dto.request.ReqUserSignupDto;
 import com.meongnyang.shop.exception.ValidException;
-import com.meongnyang.shop.service.UserService;
+import com.meongnyang.shop.service.auth.AuthService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -13,14 +14,12 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-import javax.validation.ValidationException;
-
 @Component
 @Aspect
 public class ValidAspect {
 
     @Autowired
-    private UserService userService;
+    private AuthService userService;
 
     @Pointcut("@annotation(com.meongnyang.shop.aspect.annotation.ValidAop)")
     public void pointcut() {}
@@ -42,6 +41,9 @@ public class ValidAspect {
             case "signup":
                 signupValid(args, bindingResult);
                 break;
+            case "oauth2Signup":
+                signupValid(args, bindingResult);
+                break;
         }
 
         if (bindingResult.hasErrors()) {
@@ -60,6 +62,19 @@ public class ValidAspect {
                     fieldError = new FieldError("checkPassword", "checkPassword", "비밀번호를 확인해주세요");
                     bindingResult.addError(fieldError);
                 }
+                if (!userService.isDuplicationUsername(dto.getUsername())) {
+                    fieldError = new FieldError("username", "username", "중복된 아이디입니다.");
+                    bindingResult.addError(fieldError);
+                }
+            }
+        }
+    }
+
+    private void oauth2SignupValid(Object[] args, BindingResult bindingResult) {
+        for(Object arg : args) {
+            if (arg instanceof ReqOauth2SignupDto) {
+                ReqOauth2SignupDto dto = (ReqOauth2SignupDto) arg;
+                FieldError fieldError = null;
                 if (!userService.isDuplicationUsername(dto.getUsername())) {
                     fieldError = new FieldError("username", "username", "중복된 아이디입니다.");
                     bindingResult.addError(fieldError);

@@ -7,7 +7,7 @@
 <mapper namespace="com.meongnyang.shop.repository.PetMapper">
     <insert id="save">
         insert into pet_tb
-        values(default, #{petName}, #{petAge}, #{petType})
+        values(default, #{userId}, #{petName}, #{petAge}, #{petType})
     </insert>
 
     <select id="findPetById" resultType="com.meongnyang.shop.entity.Pet">

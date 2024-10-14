@@ -16,35 +16,4 @@ import org.springframework.stereotype.Service;
 @Service
 public class AdminAuthService {
 
-    @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private RoleMapper roleMapper;
-
-    @Autowired
-    private UserRoleMapper userRoleMapper;
-
-    @Autowired
-    private JwtProvider jwtProvider;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    public RespAdminSigninDto adminSignin(ReqAdminSigninDto dto) {
-        User user = userMapper.findByUsername(dto.getUsername());
-        if(user == null) {
-            throw new UsernameNotFoundException("관리자 정보를 확인하세요");
-        }
-        if(!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            throw new BadCredentialsException("관리자 정보를 확인하세요");
-        }
-        return generateToken(user);
-    }
-
-    public RespAdminSigninDto generateToken(User user) {
-        return RespAdminSigninDto.builder()
-                .token(jwtProvider.generateToken(user))
-                .build();
-    }
 }

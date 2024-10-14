@@ -12,7 +12,7 @@ public class ReqUpdatePetDto {
 
     public Pet toEntity() {
         return Pet.builder()
-                .petId(petId)
+                .id(petId)
                 .petName(petName)
                 .petAge(petAge)
                 .petType(petType)
