@@ -10,6 +10,19 @@
         insert into stock_tb
         values(default, #{productId}, #{currentStock}, #{expectedStock}, #{arrivalDate}, #{arrivalQuantity}, #{minAlertQuantity}, #{alertSetting}, #{outOfStock})
     </insert>
+    <update id="modifyStockByProductId">
+        update stock_tb
+        set
+            current_stock = #{currentStock},
+            expected_stock = #{expectedStock},
+            arrival_date = #{arrivalDate},
+            arrival_quantity = #{arrivalQuantity},
+            min_alert_quantity = #{minAlertQuantity},
+            alert_setting = #{alertSetting},
+            out_of_stock = #{outOfStock}
+        where
+            product_id = #{productId}
+    </update>
 </mapper>
 
 
