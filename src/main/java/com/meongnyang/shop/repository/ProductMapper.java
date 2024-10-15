@@ -16,4 +16,5 @@ public interface ProductMapper {
     int modifyProduct(Product product);
     Product findProductById(Long id);
     int deleteProductAll();
+    int deleteProductById(List<Long> idList);
 }

@@ -1,9 +1,9 @@
 package com.meongnyang.shop.service.auth;
 
-import com.meongnyang.shop.dto.request.ReqAdminSigninDto;
+import com.meongnyang.shop.dto.request.admin.ReqAdminSigninDto;
 import com.meongnyang.shop.dto.request.ReqUserSigninDto;
 import com.meongnyang.shop.dto.request.ReqUserSignupDto;
-import com.meongnyang.shop.dto.response.RespAdminSigninDto;
+import com.meongnyang.shop.dto.response.admin.RespAdminSigninDto;
 import com.meongnyang.shop.dto.response.RespSigninDto;
 import com.meongnyang.shop.entity.Role;
 import com.meongnyang.shop.entity.User;

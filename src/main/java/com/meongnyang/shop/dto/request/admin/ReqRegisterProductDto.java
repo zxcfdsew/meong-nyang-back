@@ -1,8 +1,11 @@
-package com.meongnyang.shop.dto.request;
+package com.meongnyang.shop.dto.request.admin;
 
 import com.meongnyang.shop.entity.Product;
 import com.meongnyang.shop.entity.Stock;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Data
 public class ReqRegisterProductDto {
@@ -18,6 +21,8 @@ public class ReqRegisterProductDto {
     private Long recommendation;
     private Long currentStock; //현재재고
     private Long expectedStock; //가재고
+
+    private List<MultipartFile> productImage;
 
     public Product toEntity() {
         return Product.builder()

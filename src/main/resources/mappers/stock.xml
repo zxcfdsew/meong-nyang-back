@@ -23,6 +23,16 @@
         where
             product_id = #{productId}
     </update>
+    <delete id="deleteStockByProductId">
+        delete
+        from
+            stock_tb
+        where
+            product_id = #{productId}
+    </delete>
+    <delete id="deleteStockAll">
+        truncate table stock_tb;
+    </delete>
 </mapper>
 
 

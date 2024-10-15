@@ -1,36 +1,43 @@
 package com.meongnyang.shop.init;
 
-import com.meongnyang.shop.entity.Role;
-import com.meongnyang.shop.entity.User;
-import com.meongnyang.shop.entity.UserRole;
+import com.meongnyang.shop.entity.*;
 import com.meongnyang.shop.exception.SignupException;
-import com.meongnyang.shop.repository.RoleMapper;
-import com.meongnyang.shop.repository.UserMapper;
-import com.meongnyang.shop.repository.UserRoleMapper;
+import com.meongnyang.shop.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 public class SampleData implements CommandLineRunner {
 
     @Autowired
     private UserMapper userMapper;
-
     @Autowired
     private RoleMapper roleMapper;
-
     @Autowired
     private UserRoleMapper userRoleMapper;
-
+    @Autowired
+    private PetGroupMapper petGroupMapper;
+    @Autowired
+    private CategoryMapper categoryMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Transactional(rollbackFor = SignupException.class)
+
     @Override
     public void run(String... args) throws Exception {
+        registerAdmin();
+        registerCategory();
+    }
+
+    @Transactional(rollbackFor = SignupException.class)
+    public void registerAdmin() {
         try {
             User user = userMapper.findByUsername("admin");
             if (user == null) {
@@ -55,9 +62,43 @@ public class SampleData implements CommandLineRunner {
                 userRoleMapper.save(userRole);
 
                 user.setUserRoles(Set.of(userRole));
+
+
             }
         } catch (Exception e) {
             throw new SignupException(e.getMessage());
         }
     }
+
+    public void registerCategory() {
+        try {
+            PetGroup petGroup = petGroupMapper.findPetGroupByName("강아지");
+            if(petGroup == null) {
+                petGroupMapper.save( PetGroup.builder()
+                        .categoryGroupName("강아지")
+                        .build());
+            }
+            petGroup = petGroupMapper.findPetGroupByName("고양이");
+            if(petGroup == null) {
+                petGroupMapper.save(PetGroup.builder()
+                        .categoryGroupName("고양이")
+                        .build());
+            }
+
+            List<String> categorys = new ArrayList<>(Arrays.asList("간식/영양제", "미용/목욕", "위생/배변", "하네스/목줄", "장난감"));
+            Category category = null;
+            for(String categoryName : categorys) {
+                category = categoryMapper.findCategoryByName(categoryName);
+                if(category == null) {
+                    categoryMapper.save(Category.builder()
+                            .categoryName(categoryName)
+                            .build());
+                }
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

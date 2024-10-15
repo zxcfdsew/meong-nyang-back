@@ -5,6 +5,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.meongnyang.shop.repository.ProductMapper">
+
     <resultMap id="productResultMap" type="com.meongnyang.shop.entity.Product">
         <id property="id" column="id"/>
         <result property="productName" column="product_name" />
@@ -16,9 +17,19 @@
         <result property="productBrand" column="product_brand" />
         <result property="productModel" column="product_model" />
         <result property="productMemo" column="product_memo" />
+        <result property="productCreateDate" column="product_create_date" />
+        <result property="productUpdateDate" column="product_update_date" />
         <result property="recommendation" column="recommendation" />
         <association property="petGroup" resultMap="petGroupResultMap" />
         <association property="category" resultMap="categoryResultMap" />
+        <collection property="imgUrls" javaType="java.util.List" resultMap="imgUrlResultMap" />
+    </resultMap>
+
+    <resultMap id="imgUrlResultMap" type="com.meongnyang.shop.entity.ImgUrl" >
+        <id property="id" column="iu_id" />
+        <result property="productId" column="iu_product_id" />
+        <result property="imgPath" column="img_path" />
+        <result property="imgName" column="img_name" />
     </resultMap>
 
     <resultMap id="petGroupResultMap" type="com.meongnyang.shop.entity.PetGroup" >
@@ -48,12 +59,22 @@
             product_brand = #{productBrand},
             product_model = #{productModel},
             product_memo = #{productMemo},
+            product_update_date = now(),
             recommendation = #{recommendation}
         where
             id = #{id}
     </update>
     <delete id="deleteProductAll">
         truncate table product_tb
+    </delete>
+    <delete id="deleteProductById">
+        delete
+        from
+            product_tb
+        where id in
+        <foreach item="id" collection="idList" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </delete>
     <select id="findProductsCount" resultType="java.lang.Integer">
         select
@@ -73,15 +94,22 @@
             p.product_brand,
             p.product_model,
             p.product_memo,
+            p.product_create_date,
+            p.product_update_date,
             p.recommendation,
             pg.id as pg_id,
             pg.category_group_name,
             c.id as c_id,
-            c.category_name
+            c.category_name,
+            iu.id as iu_id,
+            iu.product_id as iu_product_id,
+            iu.img_path,
+            iu.img_name
         from
             product_tb p
             left outer join pet_group_tb pg on(p.pet_group_id = pg.id)
             left outer join category_tb c on(p.category_id = c.id)
+            left outer join img_url_tb iu on(p.id = iu.product_id)
     </select>
     <select id="findProductsCountByOption" resultType="java.lang.Integer">
         select
@@ -103,20 +131,27 @@
             p.product_brand,
             p.product_model,
             p.product_memo,
+            p.product_create_date,
+            p.product_update_date,
             p.recommendation,
             pg.id as pg_id,
             pg.category_group_name,
             c.id as c_id,
-            c.category_name
+            c.category_name,
+            iu.id as iu_id,
+            iu.product_id as iu_product_id,
+            iu.img_path,
+            iu.img_name
         from
             product_tb p
             left outer join pet_group_tb pg on(p.pet_group_id = pg.id)
             left outer join category_tb c on(p.category_id = c.id)
+            left outer join img_url_tb iu on(p.id = iu.product_id)
         where
             CASE
                 WHEN #{option} = '상품명' THEN p.product_name LIKE CONCAT('%', #{searchWord}, '%')
                 WHEN #{option} = 'product_brand' THEN p.product_brand LIKE CONCAT('%', #{searchWord}, '%')
-                WHEN #{option} = 'product_model' THEN p.product_model LIKE CONCAT('%', #{searchWord}, '%')
+                WHEN #{option} = 'produ ct_model' THEN p.product_model LIKE CONCAT('%', #{searchWord}, '%')
                 ELSE FALSE
             END;
     </select>

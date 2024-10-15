@@ -1,6 +1,6 @@
 package com.meongnyang.shop.service.auth;
 
-import com.meongnyang.shop.dto.request.ReqOauth2SignupDto;
+import com.meongnyang.shop.dto.request.admin.ReqOauth2SignupDto;
 import com.meongnyang.shop.entity.Role;
 import com.meongnyang.shop.entity.User;
 import com.meongnyang.shop.entity.UserRole;

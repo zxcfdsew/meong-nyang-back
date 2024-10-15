@@ -7,4 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface StockMapper {
     int save(Stock stock);
     int modifyStockByProductId(Stock stock);
+    int deleteStockByProductId(Long productId);
+    int deleteStockAll();
 }

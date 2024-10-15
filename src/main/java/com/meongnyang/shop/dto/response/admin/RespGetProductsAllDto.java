@@ -1,4 +1,4 @@
-package com.meongnyang.shop.dto.response;
+package com.meongnyang.shop.dto.response.admin;
 
 import com.meongnyang.shop.entity.Product;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import java.util.List;
 @Data
 @Builder
 public class RespGetProductsAllDto {
-    private List<Product> products;
+    private List<RespProductDto> products;
     private int productsCount;
 }

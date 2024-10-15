@@ -1,12 +1,11 @@
 package com.meongnyang.shop.controller;
 
 import com.meongnyang.shop.aspect.annotation.ValidAop;
-import com.meongnyang.shop.dto.request.ReqAdminSigninDto;
-import com.meongnyang.shop.dto.request.ReqOauth2SignupDto;
+import com.meongnyang.shop.dto.request.admin.ReqAdminSigninDto;
+import com.meongnyang.shop.dto.request.admin.ReqOauth2SignupDto;
 import com.meongnyang.shop.dto.request.ReqUserSigninDto;
 import com.meongnyang.shop.dto.request.ReqUserSignupDto;
 import com.meongnyang.shop.service.auth.AuthService;
-import com.meongnyang.shop.service.admin.AdminAuthService;
 import com.meongnyang.shop.service.auth.OAuth2Service;
 import com.meongnyang.shop.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

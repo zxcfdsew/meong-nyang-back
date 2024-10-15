@@ -1,10 +1,12 @@
-package com.meongnyang.shop.dto.request;
+package com.meongnyang.shop.dto.request.admin;
 
 import com.meongnyang.shop.entity.Product;
 import com.meongnyang.shop.entity.Stock;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class ReqModifyProductDto {
@@ -20,6 +22,7 @@ public class ReqModifyProductDto {
     private String productModel;
     private String productMemo;
     private Long recommendation;
+    private List<MultipartFile> productImage;
 
     //재고 테이블
     private Long currentStock;

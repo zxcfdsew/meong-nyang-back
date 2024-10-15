@@ -1,7 +1,6 @@
 package com.meongnyang.shop.security.jwt;
 
 import com.meongnyang.shop.entity.User;
-import com.meongnyang.shop.entity.admin.Admin;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;

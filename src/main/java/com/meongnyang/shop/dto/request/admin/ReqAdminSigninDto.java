@@ -1,7 +1,6 @@
-package com.meongnyang.shop.dto.request;
+package com.meongnyang.shop.dto.request.admin;
 
 import com.meongnyang.shop.entity.User;
-import com.meongnyang.shop.entity.admin.Admin;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
