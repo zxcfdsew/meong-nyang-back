@@ -1,4 +1,4 @@
-package com.meongnyang.shop.dto.response;
+package com.meongnyang.shop.dto.response.admin;
 
 import lombok.Builder;
 import lombok.Data;

@@ -1,11 +1,17 @@
-package com.meongnyang.shop.dto.request;
+package com.meongnyang.shop.dto.request.admin;
 
 import com.meongnyang.shop.entity.Product;
 import com.meongnyang.shop.entity.Stock;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
-public class ReqRegisterProductDto {
+public class ReqModifyProductDto {
+    //상품 테이블
+    private Long id;
     private String productName;
     private Long petGroupId;
     private Long categoryId;
@@ -16,11 +22,20 @@ public class ReqRegisterProductDto {
     private String productModel;
     private String productMemo;
     private Long recommendation;
-    private Long currentStock; //현재재고
-    private Long expectedStock; //가재고
+    private List<MultipartFile> productImage;
+
+    //재고 테이블
+    private Long currentStock;
+    private Long expectedStock;
+    private LocalDateTime arrivalDate;
+    private Long arrivalQuantity;
+    private Long minAlertQuantity;
+    private Long alertSetting;
+    private Long outOfStock;
 
     public Product toEntity() {
         return Product.builder()
+                .id(id)
                 .productName(productName)
                 .petGroupId(petGroupId)
                 .categoryId(categoryId)
@@ -34,11 +49,15 @@ public class ReqRegisterProductDto {
                 .build();
     }
 
-    public Stock toEntity(Long productId) {
+    public Stock toEntityStock() {
         return Stock.builder()
-                .productId(productId)
+                .productId(id)
                 .currentStock(currentStock)
                 .expectedStock(expectedStock)
+                .arrivalDate(arrivalDate)
+                .arrivalQuantity(arrivalQuantity)
+                .alertSetting(alertSetting)
+                .outOfStock(outOfStock)
                 .build();
     }
 }

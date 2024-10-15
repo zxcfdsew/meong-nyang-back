@@ -1,6 +1,6 @@
 package com.meongnyang.shop.aspect;
 
-import com.meongnyang.shop.dto.request.ReqOauth2SignupDto;
+import com.meongnyang.shop.dto.request.admin.ReqOauth2SignupDto;
 import com.meongnyang.shop.dto.request.ReqUserSignupDto;
 import com.meongnyang.shop.exception.ValidException;
 import com.meongnyang.shop.service.auth.AuthService;

@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class ImgUrl {
     private Long id;
     private Long productId;
-    private String imgUrl;
+    private String imgPath;
+    private String imgName;
 }
