@@ -22,6 +22,19 @@
         where
             product_id = #{productId}
     </update>
+    <update id="modifyStockById">
+        update stock_tb
+        set
+            current_stock = #{currentStock},
+            expected_stock = #{expectedStock},
+            arrival_date = #{arrivalDate},
+            arrival_quantity = #{arrivalQuantity},
+            min_alert_quantity = #{minAlertQuantity},
+            alert_setting = #{alertSetting},
+            out_of_stock = #{outOfStock}
+        where
+            id = #{id}
+    </update>
     <delete id="deleteStockByProductId">
         delete
         from
@@ -47,6 +60,40 @@
         from
             stock_tb s
             left outer join product_tb p on(s.product_id = p.id)
+    </select>
+    <select id="findStockByOption" resultType="com.meongnyang.shop.entity.Stock">
+        select
+            s.id,
+            s.product_id as productId,
+            p.product_name as productName,
+            s.current_stock as currentStock,
+            s.expected_stock as expectedStock,
+            s.arrival_date as arrivalDate,
+            s.arrival_quantity as arrivalQuantity,
+            s.min_alert_quantity as minAlertQuantity,
+            s.alert_setting as alertSetting,
+            s.out_of_stock as outOfStock
+        from
+            stock_tb s
+            left outer join product_tb p on(s.product_id = p.id)
+        where
+            1 = 1
+            <if test='option.equals("전체")'>
+                and (
+                    s.product_id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                    or p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                )
+            </if>
+            <if test='option.equals("상품코드")'>
+                and (
+                    s.product_id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                )
+            </if>
+            <if test='option.equals("상품명")'>
+                and (
+                    p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                )
+            </if>
     </select>
 </mapper>
 
