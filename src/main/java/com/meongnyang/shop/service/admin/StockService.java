@@ -1,5 +1,6 @@
 package com.meongnyang.shop.service.admin;
 
+import com.meongnyang.shop.dto.request.admin.ReqModifyStockListDto;
 import com.meongnyang.shop.dto.response.admin.RespGetStocksDto;
 import com.meongnyang.shop.entity.Stock;
 import com.meongnyang.shop.repository.StockMapper;
@@ -20,5 +21,20 @@ public class StockService {
                 .stockList(stockList)
                 .stockListCount(stockList.size())
                 .build();
+    }
+
+    public RespGetStocksDto getProductsStockByOption(String option, String searchWord) {
+        List<Stock> stockList = stockMapper.findStockByOption(option, searchWord);
+        return RespGetStocksDto.builder()
+                .stockList(stockList)
+                .stockListCount(stockList.size())
+                .build();
+    }
+
+    public void modifyStock(ReqModifyStockListDto dto) {
+        List<Stock> stockList = dto.getModifyStockList();
+        for(Stock stock : stockList) {
+            stockMapper.modifyStockById(stock);
+        }
     }
 }

@@ -27,7 +27,7 @@ public class ReqModifyProductDto {
     //재고 테이블
     private Long currentStock;
     private Long expectedStock;
-    private LocalDateTime arrivalDate;
+    private String arrivalDate;
     private Long arrivalQuantity;
     private Long minAlertQuantity;
     private Long alertSetting;
@@ -54,10 +54,11 @@ public class ReqModifyProductDto {
                 .productId(id)
                 .currentStock(currentStock)
                 .expectedStock(expectedStock)
-                .arrivalDate(arrivalDate)
+                .arrivalDate(LocalDateTime.parse(arrivalDate))
                 .arrivalQuantity(arrivalQuantity)
                 .alertSetting(alertSetting)
                 .outOfStock(outOfStock)
                 .build();
     }
+
 }
