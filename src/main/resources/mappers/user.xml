@@ -14,6 +14,7 @@
         <result property="phone" column="phone" />
         <result property="membershipLevelId" column="membership_level_id" />
         <result property="provider" column="provider" />
+        <association property="membership" resultMap="membershipResultMap" />
         <collection property="userRoles" javaType="java.util.Set" resultMap="userRoleResultMap" />
     </resultMap>
 
@@ -27,6 +28,11 @@
     <resultMap id="roleResultMap" type="com.meongnyang.shop.entity.Role">
         <id property="id" column="r_id" />
         <result property="roleName" column="r_role_name" />
+    </resultMap>
+
+    <resultMap id="membershipResultMap" type="com.meongnyang.shop.entity.Membership">
+        <id property="id" column="ml_id" />
+        <result property="membershipLevelName" column="membership_level_name" />
     </resultMap>
 
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
@@ -48,11 +54,14 @@
             ur.user_id as ur_user_id,
             ur.role_id as ur_role_id,
             r.id as r_id,
-            r.role_name as r_role_name
+            r.role_name as r_role_name,
+            ml.id as ml_id,
+            ml.membership_level_name
         from
             user_tb u
             left outer join user_role_tb ur on(u.id = ur.user_id)
             left outer join role_tb r on(r.id = ur.role_id)
+            left outer join membership_level_tb ml on(ml.id = u.membership_level_id)
         where
             username = #{username}
     </select>
@@ -70,13 +79,81 @@
             ur.user_id as ur_user_id,
             ur.role_id as ur_role_id,
             r.id as r_id,
-            r.role_name as r_role_name
+            r.role_name as r_role_name,
+            ml.id as ml_id,
+            ml.membership_level_name
         from
             user_tb u
             left outer join user_role_tb ur on(u.id = ur.user_id)
             left outer join role_tb r on(r.id = ur.role_id)
+            left outer join membership_level_tb ml on(ml.id = u.membership_level_id)
         where
             u.id = #{id}
+    </select>
+    <select id="findAll" resultMap="userResultMap">
+        select
+            u.id as u_id,
+            u.username,
+            u.password,
+            u.name,
+            u.phone,
+            u.membership_level_id,
+            u.create_date,
+            u.provider,
+            ur.id as ur_id,
+            ur.user_id as ur_user_id,
+            ur.role_id as ur_role_id,
+            r.id as r_id,
+            r.role_name as r_role_name,
+            ml.id as ml_id,
+            ml.membership_level_name
+        from
+            user_tb u
+            left outer join user_role_tb ur on(u.id = ur.user_id)
+            left outer join role_tb r on(r.id = ur.role_id)
+            left outer join membership_level_tb ml on(ml.id = u.membership_level_id)
+    </select>
+    <select id="findUserByOption" resultMap="userResultMap">
+        select
+            u.id as u_id,
+            u.username,
+            u.password,
+            u.name,
+            u.phone,
+            u.membership_level_id,
+            u.create_date,
+            u.provider,
+            ur.id as ur_id,
+            ur.user_id as ur_user_id,
+            ur.role_id as ur_role_id,
+            r.id as r_id,
+            r.role_name as r_role_name,
+            ml.id as ml_id,
+            ml.membership_level_name
+        from
+            user_tb u
+            left outer join user_role_tb ur on(u.id = ur.user_id)
+            left outer join role_tb r on(r.id = ur.role_id)
+            left outer join membership_level_tb ml on(ml.id = u.membership_level_id)
+        where
+            1 = 1
+            <if test='option.equals("전체")'>
+                and(
+                    u.username like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                    or u.name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                )
+            </if>
+            <if test='option.equals("아이디")'>
+                and(
+                    u.username like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                )
+            </if>
+            <if test='option.equals("이름")'>
+                and(
+                    u.name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                )
+            </if>
+
     </select>
     <update id="updateUserById">
           update

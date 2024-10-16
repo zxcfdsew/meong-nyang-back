@@ -1,0 +1,35 @@
+package com.meongnyang.shop.controller.admin;
+
+import com.meongnyang.shop.dto.request.admin.ReqModifyMembershipLevelDto;
+import com.meongnyang.shop.service.admin.AdminUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/admin")
+public class UserInfoController {
+
+    @Autowired
+    private AdminUserService adminUserService;
+
+    @GetMapping("/users")
+    public ResponseEntity<?> getUsersAll() {
+        return ResponseEntity.ok().body(adminUserService.getUsers());
+    }
+
+    @GetMapping("/users/search")
+    public ResponseEntity<?> getUsersByOption(@RequestParam String option, @RequestParam String searchWord) {
+        return ResponseEntity.ok().body(adminUserService.getUsersByOption(option, searchWord));
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getUserDetail(@PathVariable Long userId) {
+        return ResponseEntity.ok().body(null);
+    }
+
+    @PutMapping("/user/{userId}/membership")
+    public ResponseEntity<?> modifyUserByMembership(@RequestBody ReqModifyMembershipLevelDto dto) {
+        return ResponseEntity.ok().body(null);
+    }
+}

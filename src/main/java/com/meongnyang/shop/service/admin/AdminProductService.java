@@ -23,7 +23,7 @@ import java.util.Base64;
 import java.util.List;
 
 @Service
-public class ProductService {
+public class AdminProductService {
 
     @Autowired
     private ProductMapper productMapper;
@@ -72,8 +72,8 @@ public class ProductService {
             }
 
         return RespGetProductsAllDto.builder()
-                .productsCount(products.size())
-                .products(productDtos)
+                .productListCount(products.size())
+                .productList(productDtos)
                 .build();
     }
 
@@ -93,8 +93,8 @@ public class ProductService {
         }
 
         return RespGetProductsAllDto.builder()
-                .products(productDtos)
-                .productsCount(products.size())
+                .productList(productDtos)
+                .productListCount(products.size())
                 .build();
     }
 

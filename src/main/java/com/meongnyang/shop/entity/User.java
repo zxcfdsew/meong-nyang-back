@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.tomcat.jni.Local;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
@@ -20,8 +22,10 @@ public class User {
     private String name;
     private String phone;
     private int membershipLevelId;
+    private LocalDateTime createDate;
     private String provider;
 
+    private Membership membership;
     private Set<UserRole> userRoles;
 
     public PrincipalUser toPrincipal() {
