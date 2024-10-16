@@ -59,11 +59,16 @@ public class ProductService {
         List<Product> products = null;
         List<RespProductDto> productDtos = new ArrayList<>();;
 
-            products = productMapper.findProducts();
+            try {
+                products = productMapper.findProducts();
 
-            for(Product product : products) {
-                List<String> imgs = convertImagesToBase64(product);
-                productDtos.add(product.toDto(imgs));
+                for(Product product : products) {
+                    List<String> imgs = convertImagesToBase64(product);
+                    productDtos.add(product.toDto(imgs));
+                }
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
 
         return RespGetProductsAllDto.builder()
@@ -74,9 +79,15 @@ public class ProductService {
 
     public RespGetProductsAllDto getProductsByOption(String option, String search) {
         List<Product> products = null;
-        List<RespProductDto> productDtos = null;
+        List<RespProductDto> productDtos = new ArrayList<>();;
         try {
             products = productMapper.findProductsByOption(option, search);
+
+            for(Product product : products) {
+                List<String> imgs = convertImagesToBase64(product);
+                productDtos.add(product.toDto(imgs));
+            }
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
