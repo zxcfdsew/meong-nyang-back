@@ -148,12 +148,31 @@
             left outer join category_tb c on(p.category_id = c.id)
             left outer join img_url_tb iu on(p.id = iu.product_id)
         where
-            CASE
-                WHEN #{option} = '상품명' THEN p.product_name LIKE CONCAT('%', #{searchWord}, '%')
-                WHEN #{option} = 'product_brand' THEN p.product_brand LIKE CONCAT('%', #{searchWord}, '%')
-                WHEN #{option} = 'produ ct_model' THEN p.product_model LIKE CONCAT('%', #{searchWord}, '%')
-                ELSE FALSE
-            END;
+            1 = 1
+            <if test='option.equals("전체")'>
+                and (
+                    p.id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                    or p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                    or pg.category_group_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                    or c.category_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                )
+            </if>
+            <if test='option.equals("상품코드")'>
+                and (
+                    p.id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                )
+            </if>
+            <if test='option.equals("상품명")'>
+                and (
+                    p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                )
+            </if>
+            <if test='option.equals("카테고리명")'>
+                and (
+                    pg.category_group_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                    or c.category_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                )
+            </if>
     </select>
     <select id="findProductById" resultType="com.meongnyang.shop.entity.Product">
         select

@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class Stock {
     private Long id;
     private Long productId;
+    private String productName;
     private Long currentStock;
     private Long expectedStock;
     private LocalDateTime arrivalDate;
