@@ -41,9 +41,7 @@ public class AuthController {
     @ValidAop
     @PostMapping("/signin")
     public ResponseEntity<?> signin(@Valid @RequestBody ReqUserSigninDto dto, BindingResult bindingResult) {
-        System.out.println(dto);
-        authService.signin(dto);
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok().body(authService.signin(dto));
     }
 
     @ValidAop

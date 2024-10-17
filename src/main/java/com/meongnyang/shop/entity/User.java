@@ -1,12 +1,15 @@
 package com.meongnyang.shop.entity;
 
+import com.meongnyang.shop.dto.response.admin.RespGetUserDetailDto;
 import com.meongnyang.shop.security.principal.PrincipalUser;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.tomcat.jni.Local;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
@@ -20,8 +23,11 @@ public class User {
     private String name;
     private String phone;
     private int membershipLevelId;
+    private LocalDateTime createDate;
     private String provider;
 
+    private Address address;
+    private Membership membership;
     private Set<UserRole> userRoles;
 
     public PrincipalUser toPrincipal() {
@@ -31,5 +37,18 @@ public class User {
                 .password(password)
                 .userRoles(userRoles)
                 .build();
+    }
+
+    public RespGetUserDetailDto toDto() {
+        return RespGetUserDetailDto.builder()
+                .id(id)
+                .username(username)
+                .name(name)
+                .phone(phone)
+                .createDate(createDate.toString())
+                .membership(membership)
+                .address(address)
+                .build();
+
     }
 }

@@ -2,7 +2,9 @@ package com.meongnyang.shop.aspect;
 
 import com.meongnyang.shop.dto.request.admin.ReqOauth2SignupDto;
 import com.meongnyang.shop.dto.request.ReqUserSignupDto;
+import com.meongnyang.shop.dto.request.admin.ReqRegisterProductDto;
 import com.meongnyang.shop.exception.ValidException;
+import com.meongnyang.shop.service.admin.AdminProductService;
 import com.meongnyang.shop.service.auth.AuthService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -20,6 +22,7 @@ public class ValidAspect {
 
     @Autowired
     private AuthService userService;
+    private AdminProductService adminProductService;
 
     @Pointcut("@annotation(com.meongnyang.shop.aspect.annotation.ValidAop)")
     public void pointcut() {}
@@ -43,6 +46,9 @@ public class ValidAspect {
                 break;
             case "oauth2Signup":
                 signupValid(args, bindingResult);
+                break;
+            case "registerProduct":
+                registerProductValid(args, bindingResult);
                 break;
         }
 
@@ -77,6 +83,22 @@ public class ValidAspect {
                 FieldError fieldError = null;
                 if (!userService.isDuplicationUsername(dto.getUsername())) {
                     fieldError = new FieldError("username", "username", "중복된 아이디입니다.");
+                    bindingResult.addError(fieldError);
+                }
+            }
+        }
+    }
+    public void registerProductValid(Object[] args, BindingResult bindingResult) {
+        for(Object arg : args) {
+            if (arg instanceof ReqRegisterProductDto) {
+                ReqRegisterProductDto dto = (ReqRegisterProductDto) arg;
+                FieldError fieldError = null;
+                if(!adminProductService.isPetGroupId(dto.getPetGroupId())) {
+                    fieldError = new FieldError("petGroupId", "petGroupId", "존재하지 않는 카테고리입니다.");
+                    bindingResult.addError(fieldError);
+                }
+                if(!adminProductService.isCategoryId(dto.getCategoryId())) {
+                    fieldError = new FieldError("categoryId", "categoryId", "존재하지 않는 카테고리입니다.");
                     bindingResult.addError(fieldError);
                 }
             }

@@ -21,9 +21,10 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class ProductService {
+public class AdminProductService {
 
     @Autowired
     private ProductMapper productMapper;
@@ -72,8 +73,8 @@ public class ProductService {
             }
 
         return RespGetProductsAllDto.builder()
-                .productsCount(products.size())
-                .products(productDtos)
+                .productListCount(products.size())
+                .productList(productDtos)
                 .build();
     }
 
@@ -93,8 +94,8 @@ public class ProductService {
         }
 
         return RespGetProductsAllDto.builder()
-                .products(productDtos)
-                .productsCount(products.size())
+                .productList(productDtos)
+                .productListCount(products.size())
                 .build();
     }
 
@@ -162,6 +163,25 @@ public class ProductService {
         } catch (Exception e) {
             throw new DeleteException(e.getMessage());
         }
+    }
+
+    //그룹아이디가 존재하면 true
+    public Boolean isPetGroupId(Long id) {
+        for(PetGroup petGroup : petGroupMapper.findPetGroup()) {
+            if(petGroup.getId() == id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Boolean isCategoryId(Long id) {
+        for(Category category : categoryMapper.findCategory()) {
+            if(category.getId() == id) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public RespGetCategorysDto getCategorys() {

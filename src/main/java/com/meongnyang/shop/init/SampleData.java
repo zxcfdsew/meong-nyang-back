@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+
 public class SampleData implements CommandLineRunner {
 
     @Autowired
@@ -27,6 +28,8 @@ public class SampleData implements CommandLineRunner {
     @Autowired
     private CategoryMapper categoryMapper;
     @Autowired
+    private MembershipMapper membershipMapper;
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
 
@@ -34,6 +37,7 @@ public class SampleData implements CommandLineRunner {
     public void run(String... args) throws Exception {
         registerAdmin();
         registerCategory();
+        registerMembership();
     }
 
     @Transactional(rollbackFor = SignupException.class)
@@ -98,6 +102,19 @@ public class SampleData implements CommandLineRunner {
 
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void registerMembership() {
+        List<String> membershipList = new ArrayList<>(Arrays.asList("VIP", "일반", "블랙", "휴먼계정"));
+        Membership membership = null;
+        for(String membershipName : membershipList) {
+            membership = membershipMapper.findMembershipByName(membershipName);
+            if(membership == null) {
+                membershipMapper.save(Membership.builder()
+                        .membershipLevelName(membershipName)
+                        .build());
+            }
         }
     }
 

@@ -37,11 +37,11 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         //oauth회원가입
         if (user == null) {
-            response.sendRedirect("http://localhost:3000/user/join/oauth2?oAuth2Name=" + oAuth2Name + "&provider=" + provider);
+            response.sendRedirect("http://localhost:3000/user/signup/oauth2?oAuth2Name=" + oAuth2Name + "&provider=" + provider);
             return;
         }
         //oauth로그인
         String accessToken = jwtProvider.generateToken(user);
-        response.sendRedirect("http://localhost:3000/user/login/oauth2?accessToken=" + accessToken);
+        response.sendRedirect("http://localhost:3000/user/signin/oauth2?accessToken=" + accessToken);
     }
 }
