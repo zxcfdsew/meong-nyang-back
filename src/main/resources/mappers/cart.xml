@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.meongnyang.shop.repository.CartMapper">
+
+    <resultMap id="productResultMap" type="com.meongnyang.shop.entity.Product">
+        <id property="id" column="id"/>
+        <result property="productName" column="product_name" />
+        <result property="petGroupId" column="pet_group_id" />
+        <result property="categoryId" column="category_id" />
+        <result property="productPrice" column="product_price" />
+        <result property="productPriceDiscount" column="product_price_discount" />
+        <result property="productDetail" column="product_detail" />
+        <result property="productBrand" column="product_brand" />
+        <result property="productModel" column="product_model" />
+        <result property="productMemo" column="product_memo" />
+        <result property="productCreateDate" column="product_create_date" />
+        <result property="productUpdateDate" column="product_update_date" />
+        <result property="recommendation" column="recommendation" />
+    </resultMap>
+
+    <resultMap id="cartResultMap" type="com.meongnyang.shop.entity.Cart">
+        <id property="id" column="id" />
+        <result property="userId" column="user_id" />
+        <result property="productId" column="product_id" />
+        <result property="cartProductCount" column="cart_product_count" />
+        <association property="product" resultMap="productResultMap" />
+    </resultMap>
+    <insert id="saveCart" useGeneratedKeys="true" keyProperty="id">
+        insert into
+            cart_tb
+        values
+            (0, #{userId}, #{productId}, #{cartProductCount})
+    </insert>
+
+    <select id="getCart" resultMap="cartResultMap">
+        select
+            c.id,
+            c.user_id,
+            c.product_id,
+            c.cart_product_count,
+            p.product_name,
+            p.product_price
+        from
+            cart_tb c
+            left outer join product_tb p on(p.id = c.product_id)
+        where
+            user_id = #{userId}
+    </select>
+
+    <delete id="deleteCarts">
+        delete
+        from
+            cart_tb
+        where
+            id in (
+        <foreach collection="cartIds" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </delete>
+</mapper>
