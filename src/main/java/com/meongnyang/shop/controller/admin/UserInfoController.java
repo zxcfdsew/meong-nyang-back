@@ -25,7 +25,7 @@ public class UserInfoController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getUserDetail(@PathVariable Long userId) {
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok().body(adminUserService.getUserDetail(userId));
     }
 
     @PutMapping("/user/{userId}/membership")

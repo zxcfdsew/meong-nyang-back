@@ -1,11 +1,13 @@
 package com.meongnyang.shop.controller.admin;
 
+import com.meongnyang.shop.aspect.annotation.ValidAop;
 import com.meongnyang.shop.dto.request.admin.ReqDeleteProductDto;
 import com.meongnyang.shop.dto.request.admin.ReqModifyProductDto;
 import com.meongnyang.shop.dto.request.admin.ReqRegisterProductDto;
 import com.meongnyang.shop.service.admin.AdminProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -17,8 +19,9 @@ public class AdminProductController {
     @Autowired
     private AdminProductService adminProductService;
 
+    @ValidAop
     @PostMapping("/product")
-    public ResponseEntity<?> registerProduct(@ModelAttribute ReqRegisterProductDto dto) {
+    public ResponseEntity<?> registerProduct(@ModelAttribute ReqRegisterProductDto dto, BindingResult bindingResult) {
         adminProductService.registerProduct(dto);
         return ResponseEntity.ok().body(true);
     }

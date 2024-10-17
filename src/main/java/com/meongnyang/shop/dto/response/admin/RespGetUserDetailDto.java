@@ -25,4 +25,6 @@ public class RespGetUserDetailDto {
     private Address address;
     private List<Pet> pets;
     //주문내역
+
+
 }

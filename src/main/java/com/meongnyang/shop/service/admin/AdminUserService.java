@@ -1,7 +1,9 @@
 package com.meongnyang.shop.service.admin;
 
+import com.meongnyang.shop.dto.response.admin.RespGetUserDetailDto;
 import com.meongnyang.shop.dto.response.admin.RespGetUsersDto;
 import com.meongnyang.shop.entity.User;
+import com.meongnyang.shop.exception.NotFoundUserException;
 import com.meongnyang.shop.repository.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,8 +41,12 @@ public class AdminUserService {
                 .userListCount(userList.size())
                 .build();
     }
-    
-    public RespGetUsersDto getUsersByRole(String userId) {
-        return RespGetUsersDto.builder().build();
+
+    public RespGetUserDetailDto getUserDetail(Long userId) {
+        User user = userMapper.findUserDetailById(userId);
+        if (user == null) {
+            throw new NotFoundUserException("사용자 정보를 찾을 수 없습니다.");
+        }
+        return user.toDto();
     }
 }

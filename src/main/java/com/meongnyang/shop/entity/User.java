@@ -1,5 +1,6 @@
 package com.meongnyang.shop.entity;
 
+import com.meongnyang.shop.dto.response.admin.RespGetUserDetailDto;
 import com.meongnyang.shop.security.principal.PrincipalUser;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,7 @@ public class User {
     private LocalDateTime createDate;
     private String provider;
 
+    private Address address;
     private Membership membership;
     private Set<UserRole> userRoles;
 
@@ -35,5 +37,18 @@ public class User {
                 .password(password)
                 .userRoles(userRoles)
                 .build();
+    }
+
+    public RespGetUserDetailDto toDto() {
+        return RespGetUserDetailDto.builder()
+                .id(id)
+                .username(username)
+                .name(name)
+                .phone(phone)
+                .createDate(createDate.toString())
+                .membership(membership)
+                .address(address)
+                .build();
+
     }
 }

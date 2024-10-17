@@ -18,6 +18,29 @@
         <collection property="userRoles" javaType="java.util.Set" resultMap="userRoleResultMap" />
     </resultMap>
 
+    <resultMap id="userDetailResultMap" type="com.meongnyang.shop.entity.User">
+        <id property="id" column="u_id"/>
+        <result property="username" column="username" />
+        <result property="password" column="password" />
+        <result property="name" column="name" />
+        <result property="phone" column="phone" />
+        <result property="createDate" column="create_date" />
+        <result property="membershipLevelId" column="membership_level_id" />
+        <result property="provider" column="provider" />
+        <association property="address" resultMap="addressResultMap" />
+        <association property="membership" resultMap="membershipResultMap" />
+        <collection property="userRoles" javaType="java.util.Set" resultMap="userRoleResultMap" />
+    </resultMap>
+
+    <resultMap id="addressResultMap" type="com.meongnyang.shop.entity.Address">
+        <id property="id" column="a_id" />
+        <result property="userId" column="a_user_id" />
+        <result property="zipcode" column="zipcode" />
+        <result property="addressDefault" column="address_default" />
+        <result property="addressDetail" column="address_detail" />
+        <result property="request" column="request" />
+    </resultMap>
+
     <resultMap id="userRoleResultMap" type="com.meongnyang.shop.entity.UserRole">
         <id property="id" column="ur_id" />
         <result property="userId" column="ur_user_id"/>
@@ -154,6 +177,38 @@
                 )
             </if>
 
+    </select>
+    <select id="findUserDetailById" resultMap="userDetailResultMap">
+        select
+            u.id as u_id,
+            u.username,
+            u.password,
+            u.name,
+            u.phone,
+            u.membership_level_id,
+            u.create_date,
+            u.provider,
+            ur.id as ur_id,
+            ur.user_id as ur_user_id,
+            ur.role_id as ur_role_id,
+            r.id as r_id,
+            r.role_name as r_role_name,
+            a.id as a_id,
+            a.user_id as a_user_id,
+            a.zipcode,
+            a.address_default,
+            a.address_detail,
+            a.request,
+            ml.id as ml_id,
+            ml.membership_level_name
+        from
+            user_tb u
+            left outer join user_role_tb ur on(u.id = ur.user_id)
+            left outer join role_tb r on(r.id = ur.role_id)
+            left outer join address_tb a on(u.id = a.user_id)
+            left outer join membership_level_tb ml on(ml.id = u.membership_level_id)
+        where
+            u.id = #{id}
     </select>
     <update id="updateUserById">
           update
