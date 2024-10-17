@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
@@ -21,7 +22,7 @@ public class AdminProductController {
 
     @ValidAop
     @PostMapping("/product")
-    public ResponseEntity<?> registerProduct(@ModelAttribute ReqRegisterProductDto dto, BindingResult bindingResult) {
+    public ResponseEntity<?> registerProduct(@Valid @ModelAttribute ReqRegisterProductDto dto, BindingResult bindingResult) {
         adminProductService.registerProduct(dto);
         return ResponseEntity.ok().body(true);
     }
@@ -36,9 +37,12 @@ public class AdminProductController {
         return ResponseEntity.ok().body(adminProductService.getProductsByOption(option, searchWord));
     }
 
+
+    @ValidAop
     @PutMapping("/product/{productId}")
-    public ResponseEntity<?> modifyProduct(@ModelAttribute ReqModifyProductDto dto) {
+    public ResponseEntity<?> modifyProduct(@Valid @ModelAttribute ReqModifyProductDto dto, BindingResult bindingResult) {
         System.out.println(dto);
+//        System.out.println(dto.getArrivalDate().getClass().getName());
         adminProductService.modifyProduct(dto);
         return ResponseEntity.ok().body(true);
     }

@@ -1,5 +1,6 @@
 package com.meongnyang.shop.aspect;
 
+import com.meongnyang.shop.dto.request.admin.ReqModifyProductDto;
 import com.meongnyang.shop.dto.request.admin.ReqOauth2SignupDto;
 import com.meongnyang.shop.dto.request.ReqUserSignupDto;
 import com.meongnyang.shop.dto.request.admin.ReqRegisterProductDto;
@@ -16,12 +17,17 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 @Component
 @Aspect
 public class ValidAspect {
 
     @Autowired
     private AuthService userService;
+    @Autowired
     private AdminProductService adminProductService;
 
     @Pointcut("@annotation(com.meongnyang.shop.aspect.annotation.ValidAop)")
@@ -35,20 +41,21 @@ public class ValidAspect {
         for (Object arg : args) {
             if (arg instanceof BeanPropertyBindingResult) {
                 bindingResult = (BeanPropertyBindingResult) arg;
+                System.out.println(bindingResult.getFieldErrors());
                 break;
             }
         }
         switch (joinPoint.getSignature().getName()) {
-            case "adminSignin":
-                break;
             case "signup":
                 signupValid(args, bindingResult);
                 break;
             case "oauth2Signup":
-                signupValid(args, bindingResult);
+                oauth2SignupValid(args, bindingResult);
                 break;
-            case "registerProduct":
+            case "registerProduct" :
                 registerProductValid(args, bindingResult);
+            case "modifyProduct":
+                modifyProductValid(args, bindingResult);
                 break;
         }
 
@@ -88,10 +95,28 @@ public class ValidAspect {
             }
         }
     }
-    public void registerProductValid(Object[] args, BindingResult bindingResult) {
+
+    private void registerProductValid(Object[] args, BindingResult bindingResult) {
         for(Object arg : args) {
             if (arg instanceof ReqRegisterProductDto) {
                 ReqRegisterProductDto dto = (ReqRegisterProductDto) arg;
+                FieldError fieldError = null;
+                if(!adminProductService.isPetGroupId(dto.getPetGroupId())) {
+                    fieldError = new FieldError("petGroupId", "petGroupId", "존재하지 않는 카테고리입니다.");
+                    bindingResult.addError(fieldError);
+                }
+                if(!adminProductService.isCategoryId(dto.getCategoryId())) {
+                    fieldError = new FieldError("categoryId", "categoryId", "존재하지 않는 카테고리입니다.");
+                    bindingResult.addError(fieldError);
+                }
+            }
+        }
+    }
+
+    private void modifyProductValid(Object[] args, BindingResult bindingResult) {
+        for(Object arg : args) {
+            if (arg instanceof ReqRegisterProductDto) {
+                ReqModifyProductDto dto = (ReqModifyProductDto) arg;
                 FieldError fieldError = null;
                 if(!adminProductService.isPetGroupId(dto.getPetGroupId())) {
                     fieldError = new FieldError("petGroupId", "petGroupId", "존재하지 않는 카테고리입니다.");

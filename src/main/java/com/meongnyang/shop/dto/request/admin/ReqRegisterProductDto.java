@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -27,11 +28,17 @@ public class ReqRegisterProductDto {
     private String productMemo;
     @NotNull
     @Pattern(regexp = "^[12]$", message = "값은 1 또는 2여야 합니다.")
-    private Long recommendation;
+    private String recommendation;
     @NotNull
     private Long currentStock; //현재재고
     @NotNull
     private Long expectedStock; //가재고
+    @Pattern(regexp = "^(|\\d{4}-\\d{2}-\\d{2})$", message = "빈 값이거나 'yyyy-MM-dd' 형식이어야 합니다.")
+    private String arrivalDate;
+    private Long arrivalQuantity;
+    private Long minAlertQuantity;
+    private Long alertSetting;
+    private Long outOfStock;
 
     private List<MultipartFile> productImage;
 
@@ -46,7 +53,7 @@ public class ReqRegisterProductDto {
                 .productBrand(productBrand)
                 .productModel(productModel)
                 .productMemo(productMemo)
-                .recommendation(recommendation)
+                .recommendation(Long.valueOf(recommendation))
                 .build();
     }
 
@@ -55,6 +62,10 @@ public class ReqRegisterProductDto {
                 .productId(productId)
                 .currentStock(currentStock)
                 .expectedStock(expectedStock)
+                .arrivalDate(arrivalDate)
+                .arrivalQuantity(arrivalQuantity)
+                .alertSetting(alertSetting)
+                .outOfStock(outOfStock)
                 .build();
     }
 }

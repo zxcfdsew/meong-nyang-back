@@ -6,6 +6,62 @@
 
 <mapper namespace="com.meongnyang.shop.repository.OrderMapper">
 
+    <resultMap id="orderResultMap" type="com.meongnyang.shop.entity.Order" >
+        <id property="id" column="o_id"/>
+        <result property="userId" column="user_id" />
+        <result property="totalPrice" column="total_price" />
+        <result property="orderItemCount" column="order_item_count" />
+        <result property="orderDate" column="order_date" />
+        <result property="orderStatus" column="order_status" />
+        <result property="orderName" column="order_name" />
+        <result property="zipcode" column="zipcode" />
+        <result property="addressDefault" column="address_default" />
+        <result property="addressDetail" column="address_detail" />
+        <result property="phone" column="phone" />
+        <collection property="orderDetails" resultMap="orderDetailResultMap" />
+    </resultMap>
+
+    <resultMap id="orderDetailResultMap" type="com.meongnyang.shop.entity.OrderDetail" >
+        <id property="id" column="od_id"/>
+        <result property="orderId" column="order_id" />
+        <result property="productId" column="product_id" />
+        <result property="productPrice" column="product_total_price" />
+        <result property="productCount" column="product_count" />
+        <association property="product" resultMap="productResultMap" />
+    </resultMap>
+
+    <resultMap id="productResultMap" type="com.meongnyang.shop.entity.Product" >
+        <id property="id" column="o_id"/>
+        <result property="productName" column="product_name" />
+        <result property="productPrice" column="product_price" />
+    </resultMap>
+    <select id="findOrderAll" resultMap="orderResultMap">
+        select
+            o.id as o_id,
+            o.user_id,
+            o.total_price,
+            o.order_item_count,
+            o.order_date,
+            o.order_status,
+            o.order_name,
+            o.zipcode,
+            o.address_default,
+            o.address_detail,
+            o.phone,
+            od.id as od_id,
+            od.order_id,
+            od.product_id,
+            od.product_price as product_total_price,
+            od.product_count,
+            p.id as p_id,
+            p.product_name,
+            p.product_price
+        from
+            order_tb o
+            left outer join order_detail_tb od on(o.id = od.order_id)
+            left outer join product_tb p on(od.product_id = p.id)
+
+    </select>
 </mapper>
 
 

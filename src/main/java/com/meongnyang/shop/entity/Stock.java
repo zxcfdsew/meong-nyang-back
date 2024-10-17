@@ -17,7 +17,7 @@ public class Stock {
     private String productName;
     private Long currentStock;
     private Long expectedStock;
-    private LocalDateTime arrivalDate;
+    private String arrivalDate;
     private Long arrivalQuantity;
     private Long minAlertQuantity;
     private Long alertSetting;

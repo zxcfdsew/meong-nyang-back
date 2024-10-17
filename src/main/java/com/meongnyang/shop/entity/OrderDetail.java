@@ -15,4 +15,6 @@ public class OrderDetail {
     private Long productId;
     private Long productPrice;
     private Long productCount;
+
+    private Product product;
 }
