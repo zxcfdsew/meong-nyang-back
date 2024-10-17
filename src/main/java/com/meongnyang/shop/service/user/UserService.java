@@ -48,7 +48,7 @@ public class UserService {
 
     // 반려동물정보 조회
     public RespPetInfoDto getPetInfo(Long id) {
-        Pet pet = petMapper.findPetById(id);
+        Pet pet = petMapper.findPetByUserid(id);
 
         return RespPetInfoDto.builder()
                 .petId(pet.getId())

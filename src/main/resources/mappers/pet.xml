@@ -5,21 +5,30 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.meongnyang.shop.repository.PetMapper">
+
+    <resultMap id="petResultMap" type="com.meongnyang.shop.entity.Pet">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id" />
+        <result property="petName" column="pet_name" />
+        <result property="petAge" column="pet_age" />
+        <result property="petType" column="pet_type" />
+    </resultMap>
     <insert id="save">
         insert into pet_tb
-        values(default, #{userId}, #{petName}, #{petAge}, #{petType})
+        values(default, #{userId}, #{pet_name}, #{pet_age}, #{pet_type})
     </insert>
 
-    <select id="findPetById" resultType="com.meongnyang.shop.entity.Pet">
+    <select id="findPetByUserid" resultMap="petResultMap">
         select
             id,
+            user_id,
             pet_name,
             pet_age,
             pet_type
         from
             pet_tb
         where
-            id = #{petId}
+            user_id = #{userId}
     </select>
 
     <update id="updatePetById">
@@ -30,8 +39,6 @@
             pet_age = #{petAge},
             pet_type = #{petType}
         where
-            id = #{petId}
+            id = #{id}
     </update>
 </mapper>
-
-

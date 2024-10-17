@@ -174,7 +174,26 @@
                 )
             </if>
     </select>
-    <select id="findProductById" resultType="com.meongnyang.shop.entity.Product">
+
+    <select id="findAllByStartIndexAndLimit" resultType="com.meongnyang.shop.entity.ProductList">
+        select
+            id,
+            product_name as productName,
+            product_price as productPrice,
+            product_brand as productBrand
+        from
+            product_tb
+        order by
+            id desc
+        limit #{startIndex}, #{limit}
+    </select>
+    <select id="getProductsCount" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            product_tb
+    </select>
+    <select id="findProductById" resultMap="productResultMap">
         select
             id,
             product_name,
@@ -186,12 +205,47 @@
             product_brand,
             product_model,
             product_memo,
+            product_create_date,
+            product_update_date,
             recommendation
         from
             product_tb
         where
             id = #{id}
     </select>
+    <select id="findProductByCategoryId" resultMap="productResultMap">
+        select
+            id,
+            product_name,
+            pet_group_id,
+            category_id,
+            product_price,
+            product_price_discount,
+            product_detail,
+            product_brand,
+            product_model,
+            product_memo,
+            product_create_date,
+            product_update_date,
+            recommendation
+        from
+            product_tb
+        where
+            category_id = #{categoryId}
+    </select>
+    <select id="findAllByCategoryId" resultType="com.meongnyang.shop.entity.CategoryProductList">
+        select
+        id,
+            category_id as categoryId,
+            product_name as productName,
+            product_price as productPrice,
+            product_brand as productBrand
+        from
+            product_tb
+        where
+            category_id = #{categoryId}
+    </select>
+
 </mapper>
 
 
