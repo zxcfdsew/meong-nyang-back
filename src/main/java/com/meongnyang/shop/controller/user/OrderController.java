@@ -32,6 +32,7 @@ public class OrderController {
         return ResponseEntity.ok(true);
     }
 
+    // 주문 수정
     @ValidAop
     @PutMapping("/user/order")
     public ResponseEntity<?> modifyProductsOrder(@Valid @RequestBody ReqModifyOrderDto dto, BindingResult bindingResult) {
