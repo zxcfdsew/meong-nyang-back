@@ -6,6 +6,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.format.DateTimeParseException;
+
 @RestControllerAdvice
 public class ExceptionControllerAdvice {
 
@@ -35,7 +37,18 @@ public class ExceptionControllerAdvice {
     }
 
     @ExceptionHandler(NotFoundUserException.class)
-    public ResponseEntity<?> userNotFoundException(NotFoundUserException e) {
+    public ResponseEntity<?> notFoundUserException(NotFoundUserException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+
+    @ExceptionHandler(DateTimeParseException.class)
+    public ResponseEntity<?> dateTimeParseException(DateTimeParseException e) {
+        return ResponseEntity.badRequest().body("날짜형식이 유효하지 않습니다.");
+    }
+
+    @ExceptionHandler(AccessTokenException.class)
+    public ResponseEntity<?> accessTokenException(AccessTokenException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

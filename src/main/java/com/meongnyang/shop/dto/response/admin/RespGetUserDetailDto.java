@@ -3,6 +3,7 @@ package com.meongnyang.shop.dto.response.admin;
 import com.meongnyang.shop.entity.Address;
 import com.meongnyang.shop.entity.Membership;
 import com.meongnyang.shop.entity.Pet;
+import com.meongnyang.shop.entity.UserOrder;
 import lombok.Builder;
 import lombok.Data;
 
@@ -24,7 +25,7 @@ public class RespGetUserDetailDto {
     private Membership membership;
     private Address address;
     private List<Pet> pets;
+
     //주문내역
-
-
+    private List<UserOrder> orders;
 }

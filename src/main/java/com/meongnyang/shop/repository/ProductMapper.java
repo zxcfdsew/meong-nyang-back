@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface ProductMapper {
@@ -14,7 +15,7 @@ public interface ProductMapper {
     int findProductsCount();
     int findProductsCountByOption(@Param("option") String option, @Param("searchWord") String searchWord);
     List<Product> findProducts();
-    List<Product> findProductsByOption(@Param("option") String option, @Param("searchWord") String searchWord);
+    List<Product> findProductsByOption(Map<String, Object> params);
     int modifyProduct(Product product);
     int deleteProductAll();
     int deleteProductById(List<Long> idList);

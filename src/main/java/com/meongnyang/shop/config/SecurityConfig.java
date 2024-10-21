@@ -1,6 +1,7 @@
 package com.meongnyang.shop.config;
 
 import com.meongnyang.shop.security.filter.JwtAccessTokenFilter;
+import com.meongnyang.shop.security.handler.AuthenticationHandler;
 import com.meongnyang.shop.security.handler.OAuth2SuccessHandler;
 import com.meongnyang.shop.service.auth.OAuth2Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private OAuth2SuccessHandler oAuth2SuccessHandler;
 
+    @Autowired
+    private AuthenticationHandler authenticationHandler;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin().disable();
@@ -34,6 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.headers().frameOptions().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.exceptionHandling().authenticationEntryPoint(authenticationHandler);
 
         http.authorizeRequests()
                 .antMatchers("/auth/**",
