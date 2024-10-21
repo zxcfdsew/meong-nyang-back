@@ -1,11 +1,10 @@
 package com.meongnyang.shop.controller.admin;
 
+import com.meongnyang.shop.dto.request.admin.ReqSearchDto;
 import com.meongnyang.shop.service.admin.AdminOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin")
@@ -16,7 +15,11 @@ public class AdminOrderController {
 
     @GetMapping("/orders")
     public ResponseEntity<?> getOrdersAll() {
-
         return ResponseEntity.ok().body(adminOrderService.getOrders());
+    }
+
+    @GetMapping("/orders/search")
+    public ResponseEntity<?> getOrdersByOption(@RequestBody ReqSearchDto dto) {
+        return ResponseEntity.ok().body(adminOrderService.getOrdersByOption(dto));
     }
 }

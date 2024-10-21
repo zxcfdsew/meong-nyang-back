@@ -54,6 +54,7 @@ public class ValidAspect {
                 break;
             case "registerProduct" :
                 registerProductValid(args, bindingResult);
+                break;
             case "modifyProduct":
                 modifyProductValid(args, bindingResult);
                 break;
@@ -77,6 +78,10 @@ public class ValidAspect {
                 }
                 if (!userService.isDuplicationUsername(dto.getUsername())) {
                     fieldError = new FieldError("username", "username", "중복된 아이디입니다.");
+                    bindingResult.addError(fieldError);
+                }
+                if(dto.getZipcode() == 0 || dto.getAddressDefault().equals("")) {
+                    fieldError = new FieldError("address", "address", "주소정보를 확인하세요");
                     bindingResult.addError(fieldError);
                 }
             }

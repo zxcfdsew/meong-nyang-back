@@ -62,6 +62,59 @@
             left outer join product_tb p on(od.product_id = p.id)
 
     </select>
+    <select id="findOrderByOption" resultMap="orderResultMap">
+        select
+            o.id as o_id,
+            o.user_id,
+            o.total_price,
+            o.order_item_count,
+            o.order_date,
+            o.order_status,
+            o.order_name,
+            o.zipcode,
+            o.address_default,
+            o.address_detail,
+            o.phone,
+            od.id as od_id,
+            od.order_id,
+            od.product_id,
+            od.product_price as product_total_price,
+            od.product_count,
+            p.id as p_id,
+            p.product_name,
+            p.product_price
+        from
+            order_tb o
+            left outer join order_detail_tb od on(o.id = od.order_id)
+            left outer join product_tb p on(od.product_id = p.id)
+        where
+            1 = 1
+        <if test='option.equals("all")'>
+            and (
+                p.id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                or p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                or pg.category_group_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                or c.category_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            )
+        </if>
+        <if test='option.equals("number")'>
+            and (
+                p.id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            )
+        </if>
+        <if test='option.equals("name")'>
+            and (
+                p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            )
+        </if>
+        <if test='option.equals("date")'>
+            and (
+                DATE(o.order_date) between #{startDate} and #{endDate}
+            )
+        </if>
+        limit #{startIndex}, #{limit}
+
+    </select>
 </mapper>
 
 

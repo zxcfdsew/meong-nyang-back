@@ -1,6 +1,7 @@
 package com.meongnyang.shop.controller.admin;
 
 import com.meongnyang.shop.dto.request.admin.ReqModifyMembershipLevelDto;
+import com.meongnyang.shop.dto.request.admin.ReqSearchDto;
 import com.meongnyang.shop.service.admin.AdminUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,8 @@ public class UserInfoController {
     }
 
     @GetMapping("/users/search")
-    public ResponseEntity<?> getUsersByOption(@RequestParam String option, @RequestParam String searchWord) {
-        return ResponseEntity.ok().body(adminUserService.getUsersByOption(option, searchWord));
+    public ResponseEntity<?> getUsersByOption(@RequestBody ReqSearchDto dto) {
+        return ResponseEntity.ok().body(adminUserService.getUsersByOption(dto));
     }
 
     @GetMapping("/user/{userId}")

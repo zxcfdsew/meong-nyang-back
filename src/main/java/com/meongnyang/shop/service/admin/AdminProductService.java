@@ -3,6 +3,7 @@ package com.meongnyang.shop.service.admin;
 import com.meongnyang.shop.dto.request.admin.ReqDeleteProductDto;
 import com.meongnyang.shop.dto.request.admin.ReqModifyProductDto;
 import com.meongnyang.shop.dto.request.admin.ReqRegisterProductDto;
+import com.meongnyang.shop.dto.request.admin.ReqSearchDto;
 import com.meongnyang.shop.dto.response.admin.RespGetCategorysDto;
 import com.meongnyang.shop.dto.response.admin.RespGetProductsAllDto;
 import com.meongnyang.shop.dto.response.admin.RespProductDto;
@@ -11,6 +12,7 @@ import com.meongnyang.shop.exception.DeleteException;
 import com.meongnyang.shop.exception.RegisterException;
 import com.meongnyang.shop.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,15 +20,14 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class AdminProductService {
 
+    @Value("${file.path}")
+    private String filePath;
     @Autowired
     private ProductMapper productMapper;
     @Autowired
@@ -45,8 +46,10 @@ public class AdminProductService {
             productMapper.save(product);
 
             List<MultipartFile> imgs = dto.getProductImage();
-            for(MultipartFile img : imgs) {
-                registerImgUrl(img,product.getId());
+            if(!imgs.get(0).isEmpty()) {
+                for(MultipartFile img : imgs) {
+                    registerImgUrl(img,product.getId());
+                }
             }
 
             Stock stock = dto.toEntity(product.getId());
@@ -58,45 +61,28 @@ public class AdminProductService {
     }
 
     public RespGetProductsAllDto getProductsAll() throws IOException {
-        List<Product> products = null;
-        List<RespProductDto> productDtos = new ArrayList<>();;
-
-            try {
-                products = productMapper.findProducts();
-
-                for(Product product : products) {
-                    List<String> imgs = convertImagesToBase64(product);
-                    productDtos.add(product.toDto(imgs));
-                }
-
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
+        List<Product> productList = productMapper.findProducts();
         return RespGetProductsAllDto.builder()
-                .productListCount(products.size())
-                .productList(productDtos)
+                .productListCount(productList.size())
+                .productList(productList)
                 .build();
     }
 
-    public RespGetProductsAllDto getProductsByOption(String option, String search) {
-        List<Product> products = null;
-        List<RespProductDto> productDtos = new ArrayList<>();;
-        try {
-            products = productMapper.findProductsByOption(option, search);
+    public RespGetProductsAllDto getProductsByOption(ReqSearchDto dto) {
+        Long startIndex = (dto.getPage() - 1) * dto.getLimit();
 
-            for(Product product : products) {
-                List<String> imgs = convertImagesToBase64(product);
-                productDtos.add(product.toDto(imgs));
-            }
+        Map<String, Object> params = new java.util.HashMap<>(Map.of(
+                "startIndex", startIndex,
+                "limit", dto.getLimit(),
+                "searchWord", dto.getSearch() == null ? "" : dto.getSearch(),
+                "option", dto.getOption() == null || dto.getOption().isBlank() ? "all" : dto.getOption()
+        ));
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        List<Product> productList = productMapper.findProductsByOption(params);
 
         return RespGetProductsAllDto.builder()
-                .productList(productDtos)
-                .productListCount(products.size())
+                .productList(productList)
+                .productListCount(productList.size())
                 .build();
     }
 
@@ -193,13 +179,12 @@ public class AdminProductService {
     }
 
     public void registerImgUrl(MultipartFile img, Long productId) throws IOException {
-            String path = "C:\\mn_imgs\\";
             String imgName = img.getOriginalFilename();
-            img.transferTo(new File(path + imgName));
+            img.transferTo(new File(filePath + imgName));
 
             ImgUrl imgUrl = ImgUrl.builder()
                     .productId(productId)
-                    .imgPath(path)
+                    .imgPath(filePath)
                     .imgName(imgName)
                     .build();
 
@@ -213,19 +198,5 @@ public class AdminProductService {
             deleteImgUrlIds.add(imgUrl.getId());
         }
         imgUrlMapper.deleteImgUrlById(deleteImgUrlIds);
-    }
-
-    public List<String> convertImagesToBase64(Product product) throws IOException {
-            List<String> imgs = new ArrayList<>();
-            String base64String = null;
-            if (!product.getImgUrls().isEmpty()) {
-                for (ImgUrl imgUrl : product.getImgUrls()) {
-                    File img = new File(imgUrl.getImgPath() + imgUrl.getImgName());
-                    byte[] fileContent = Files.readAllBytes(img.toPath());
-                    base64String = Base64.getEncoder().encodeToString(fileContent);
-                    imgs.add(base64String);
-                }
-            }
-        return imgs;
     }
 }

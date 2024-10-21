@@ -28,7 +28,6 @@ public class JwtProvider {
 
     //토큰 생성
     public String generateToken(User user) {
-        System.out.println("userId" + user.getId());
         return Jwts.builder()
                 .claim("userId", user.getId())
                 .expiration(getExpireDate())

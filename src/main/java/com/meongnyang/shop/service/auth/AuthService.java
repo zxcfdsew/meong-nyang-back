@@ -75,7 +75,6 @@ public class AuthService {
                     .build();
             userRoleMapper.save(userRole);
             user.setUserRoles(Set.of(userRole));
-
             //주소가 들어있다면
             if(dto.getZipcode() != 0 || !dto.getAddressDefault().isBlank()) {
                 addressMapper.save(dto.toEntityByAddress(user.getId()));

@@ -149,7 +149,7 @@
             left outer join img_url_tb iu on(p.id = iu.product_id)
         where
             1 = 1
-            <if test='option.equals("전체")'>
+            <if test='option.equals("all")'>
                 and (
                     p.id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
                     or p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
@@ -157,22 +157,23 @@
                     or c.category_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
                 )
             </if>
-            <if test='option.equals("상품코드")'>
+            <if test='option.equals("code")'>
                 and (
                     p.id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
                 )
             </if>
-            <if test='option.equals("상품명")'>
+            <if test='option.equals("product")'>
                 and (
                     p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
                 )
             </if>
-            <if test='option.equals("카테고리명")'>
+            <if test='option.equals("category")'>
                 and (
                     pg.category_group_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
                     or c.category_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
                 )
             </if>
+        limit #{startIndex}, #{limit}
     </select>
 
     <select id="findAllByStartIndexAndLimit" resultType="com.meongnyang.shop.entity.ProductList">
