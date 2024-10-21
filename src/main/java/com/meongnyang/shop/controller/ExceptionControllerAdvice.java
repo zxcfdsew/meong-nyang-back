@@ -42,13 +42,13 @@ public class ExceptionControllerAdvice {
     }
 
 
-    @ExceptionHandler(DateTimeParseException.class)
-    public ResponseEntity<?> dateTimeParseException(DateTimeParseException e) {
-        return ResponseEntity.badRequest().body("날짜형식이 유효하지 않습니다.");
-    }
+//    @ExceptionHandler(DateTimeParseException.class)
+//    public ResponseEntity<?> dateTimeParseException(DateTimeParseException e) {
+//        return ResponseEntity.badRequest().body("날짜형식이 유효하지 않습니다.");
+//    }
 
     @ExceptionHandler(AccessTokenException.class)
     public ResponseEntity<?> accessTokenException(AccessTokenException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
+        return ResponseEntity.badRequest().body(false);
     }
 }
