@@ -25,7 +25,6 @@ public class MypageController {
     @PutMapping("/user")
     public ResponseEntity<?> updateUser(@RequestBody ReqUpdateUserDto dto) {
         userService.updateUser(dto);
-        System.out.println(dto);
         return ResponseEntity.ok().body(true);
     }
 
