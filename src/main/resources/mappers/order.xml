@@ -35,6 +35,18 @@
         <result property="productName" column="product_name" />
         <result property="productPrice" column="product_price" />
     </resultMap>
+    <delete id="deleteOrderById">
+        delete
+        from
+            order_tb
+        where id in
+        <foreach item="id" collection="idList" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <delete id="deleteOrderAll">
+        delete from order_tb;
+    </delete>
     <select id="findOrderAll" resultMap="orderResultMap">
         select
             o.id as o_id,

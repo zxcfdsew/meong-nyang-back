@@ -16,4 +16,5 @@ public interface UserMapper {
     int updateUserById(User user);
     List<User> findAll();
     List<User> findUserByOption(Map<String, Object> params);
+
 }

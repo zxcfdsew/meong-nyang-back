@@ -60,4 +60,8 @@ public class AdminUserService {
         }
         return user.toDto();
     }
+
+    public void modifyUserMembership() {
+        User user = userMapper.findUserDetailById(1L);
+    }
 }

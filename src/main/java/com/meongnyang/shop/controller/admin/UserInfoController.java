@@ -33,4 +33,5 @@ public class UserInfoController {
     public ResponseEntity<?> modifyUserByMembership(@RequestBody ReqModifyMembershipLevelDto dto) {
         return ResponseEntity.ok().body(null);
     }
+
 }

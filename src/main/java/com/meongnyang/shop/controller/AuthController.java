@@ -33,7 +33,6 @@ public class AuthController {
     @ValidAop
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody ReqUserSignupDto dto, BindingResult bindingResult) {
-        System.out.println(dto);
         authService.signup(dto);
         return ResponseEntity.ok().body(null);
     }
@@ -50,12 +49,6 @@ public class AuthController {
         oAuth2Service.oauth2Signup(dto);
         return ResponseEntity.ok().body(null);
     }
-
-//    @ValidAop
-//    @PostMapping("/oauth2/signin")
-//    public ResponseEntity<?> oauth2Signin(@Valid @RequestBody ReqOauth2SignupDto dto, BindingResult bindingResult) {
-//        return ResponseEntity.ok().body(null);
-//    }
 
     @ValidAop
     @PostMapping("/admin/signin")

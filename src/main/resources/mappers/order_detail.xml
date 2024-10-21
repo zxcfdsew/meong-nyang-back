@@ -6,6 +6,9 @@
 
 <mapper namespace="com.meongnyang.shop.repository.OrderDetailMapper">
 
+    <delete id="deleteOrderDetailAll">
+        truncate table order_detail_tb;
+    </delete>
 </mapper>
 
 
