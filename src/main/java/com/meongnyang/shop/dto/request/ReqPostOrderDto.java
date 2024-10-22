@@ -1,6 +1,7 @@
 package com.meongnyang.shop.dto.request;
 
 import com.meongnyang.shop.entity.Order;
+import com.meongnyang.shop.entity.Product;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -19,7 +20,6 @@ public class ReqPostOrderDto {
     @NotBlank(message = "상세주소를 입력해주세요")
     private String addressDetail;
     private String phone;
-
 
     public Order toEntity() {
         return Order.builder()

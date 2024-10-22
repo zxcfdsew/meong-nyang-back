@@ -24,9 +24,10 @@ public class User {
     private int membershipLevelId;
     private LocalDate createDate;
     private String provider;
-
     private Pet pet;
+
     private List<Order> orders;
+  
     private Address address;
     private Membership membership;
     private Set<UserRole> userRoles;
