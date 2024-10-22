@@ -1,5 +1,6 @@
 package com.meongnyang.shop.repository;
 
+import com.meongnyang.shop.entity.Membership;
 import com.meongnyang.shop.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -16,5 +17,6 @@ public interface UserMapper {
     int updateUserById(User user);
     List<User> findAll();
     List<User> findUserByOption(Map<String, Object> params);
-
+    int updateUserMembershipById(@Param("id")Long id, @Param("membershipId")Long membershipId);
+    int deleteUserById(Long id);
 }

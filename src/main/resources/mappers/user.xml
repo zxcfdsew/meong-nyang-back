@@ -93,6 +93,13 @@
         insert into user_tb
         values(default, #{username}, #{password}, #{name}, #{phone}, #{membershipLevelId}, now(), #{provider})
     </insert>
+    <delete id="deleteUserById">
+        delete
+        from
+            user_tb
+        where
+            id = #{id}
+    </delete>
 
     <select id="findByUsername" resultMap="userResultMap">
         select
@@ -251,7 +258,7 @@
             user_tb u
             left outer join address_tb a on(u.id = a.user_id)
             left outer join membership_level_tb ml on(ml.id = u.membership_level_id)
-            left outer join order_tb o
+            left outer join order_tb o on(o.user_id = u.id)
             left outer join order_detail_tb od on(o.id = od.order_id)
             left outer join product_tb p on(od.product_id = p.id)
         where
@@ -268,4 +275,12 @@
           where
               id = #{id}
       </update>
+    <update id="updateUserMembershipById">
+        update
+            user_tb
+        set
+            membership_level_id = #{membershipId}
+        where
+            id = #{id}
+    </update>
 </mapper>

@@ -21,5 +21,5 @@ public class Stock {
     private Long arrivalQuantity;
     private Long minAlertQuantity;
     private Long alertSetting;
-    private Long outOfStock;
+    private int outOfStock;
 }

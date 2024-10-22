@@ -30,6 +30,7 @@ public class MypageController {
     }
 
     // 반려동물정보 조회
+
     @GetMapping("/user/pet/{userId}")
     public ResponseEntity<?> getPet(@PathVariable Long userId) {
         System.out.println("반려동물정보 조회 완료");
@@ -44,12 +45,16 @@ public class MypageController {
         return ResponseEntity.ok().body(true);
     }
 
+    @DeleteMapping("/user/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.ok().body(true);
+    }
     // 주문/배송 내역 조회
     @GetMapping("/product/orders")
     public ResponseEntity<?> getUserOrder(ReqGetUserOrderDto dto) {
         System.out.println(dto);
         return ResponseEntity.ok(userService.getUserOrders(dto));
     }
-
 
 }

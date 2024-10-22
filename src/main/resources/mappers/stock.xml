@@ -95,6 +95,24 @@
                 )
             </if>
     </select>
+    <select id="findStockByProductId" resultType="com.meongnyang.shop.entity.Stock">
+        select
+            s.id,
+            s.product_id as productId,
+            p.product_name as productName,
+            s.current_stock as currentStock,
+            s.expected_stock as expectedStock,
+            s.arrival_date as arrivalDate,
+            s.arrival_quantity as arrivalQuantity,
+            s.min_alert_quantity as minAlertQuantity,
+            s.alert_setting as alertSetting,
+            s.out_of_stock as outOfStock
+        from
+            stock_tb s
+            left outer join product_tb p on(s.product_id = p.id)
+        where
+            product_id = #{productId}
+    </select>
 </mapper>
 
 

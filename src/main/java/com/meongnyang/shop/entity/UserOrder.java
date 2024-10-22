@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -17,6 +17,6 @@ public class UserOrder {
     private int buyCount;
     private int productPrice;
     private int totalPrice;
-    private LocalDateTime latelyOrderDate;
+    private LocalDate latelyOrderDate;
 }
 

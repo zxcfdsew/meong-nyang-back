@@ -18,7 +18,7 @@ public class RespProductDto {
     private Long petGroupId;
     private Long categoryId;
     private Long productPrice;
-    private Long productPriceDiscount;
+    private int productPriceDiscount;
     private String productDetail;
     private String productBrand;
     private String productModel;

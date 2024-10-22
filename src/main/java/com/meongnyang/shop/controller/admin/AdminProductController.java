@@ -25,7 +25,6 @@ public class AdminProductController {
     @PostMapping("/product")
     public ResponseEntity<?> registerProduct(@Valid @ModelAttribute ReqRegisterProductDto dto, BindingResult bindingResult) {
         adminProductService.registerProduct(dto);
-
         return ResponseEntity.ok().body(true);
     }
 
@@ -39,6 +38,10 @@ public class AdminProductController {
         return ResponseEntity.ok().body(adminProductService.getProductsByOption(dto));
     }
 
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<?> getProduct(@PathVariable Long productId) {
+        return ResponseEntity.ok().body(adminProductService.getProductDetail(productId));
+    }
 
     @ValidAop
     @PutMapping("/product/{productId}")
