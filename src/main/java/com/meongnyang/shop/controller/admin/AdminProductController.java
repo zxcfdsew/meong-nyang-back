@@ -4,12 +4,14 @@ import com.meongnyang.shop.aspect.annotation.ValidAop;
 import com.meongnyang.shop.dto.request.admin.ReqDeleteProductDto;
 import com.meongnyang.shop.dto.request.admin.ReqModifyProductDto;
 import com.meongnyang.shop.dto.request.admin.ReqRegisterProductDto;
+import com.meongnyang.shop.dto.request.admin.ReqSearchDto;
 import com.meongnyang.shop.service.admin.AdminProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
@@ -21,8 +23,9 @@ public class AdminProductController {
 
     @ValidAop
     @PostMapping("/product")
-    public ResponseEntity<?> registerProduct(@ModelAttribute ReqRegisterProductDto dto, BindingResult bindingResult) {
+    public ResponseEntity<?> registerProduct(@Valid @ModelAttribute ReqRegisterProductDto dto, BindingResult bindingResult) {
         adminProductService.registerProduct(dto);
+
         return ResponseEntity.ok().body(true);
     }
 
@@ -32,13 +35,14 @@ public class AdminProductController {
     }
 
     @GetMapping("/products/search")
-    public ResponseEntity<?> getProductsByOption(@RequestParam String option, @RequestParam String searchWord) {
-        return ResponseEntity.ok().body(adminProductService.getProductsByOption(option, searchWord));
+    public ResponseEntity<?> getProductsByOption(@RequestBody ReqSearchDto dto) {
+        return ResponseEntity.ok().body(adminProductService.getProductsByOption(dto));
     }
 
+
+    @ValidAop
     @PutMapping("/product/{productId}")
-    public ResponseEntity<?> modifyProduct(@ModelAttribute ReqModifyProductDto dto) {
-        System.out.println(dto);
+    public ResponseEntity<?> modifyProduct(@Valid @ModelAttribute ReqModifyProductDto dto, BindingResult bindingResult) {
         adminProductService.modifyProduct(dto);
         return ResponseEntity.ok().body(true);
     }

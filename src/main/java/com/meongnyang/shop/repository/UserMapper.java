@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface UserMapper {
@@ -14,5 +15,6 @@ public interface UserMapper {
     User findUserDetailById(Long id);
     int updateUserById(User user);
     List<User> findAll();
-    List<User> findUserByOption(@Param("option") String option, @Param("searchWord") String searchWord);
+    List<User> findUserByOption(Map<String, Object> params);
+
 }

@@ -75,13 +75,12 @@ public class AuthService {
                     .build();
             userRoleMapper.save(userRole);
             user.setUserRoles(Set.of(userRole));
-
             //주소가 들어있다면
-            if(dto.getZipcode() != 0 || !dto.getAddressDefault().isBlank()) {
+            if(dto.getZipcode() != 0 && !dto.getAddressDefault().isBlank()) {
                 addressMapper.save(dto.toEntityByAddress(user.getId()));
             }
             //반려동물 이름이 있다면
-            if (!dto.getPetName().isBlank()) {
+            if (dto.getPetName() != null && !dto.getPetName().isBlank()) {
                 petMapper.save(dto.toEntityByPet(user.getId()));
             }
         } catch (Exception e) {

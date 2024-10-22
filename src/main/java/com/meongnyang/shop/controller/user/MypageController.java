@@ -18,7 +18,8 @@ public class MypageController {
     @GetMapping("/user/{id}")
     public ResponseEntity<?> getUser(@PathVariable Long id) {
         System.out.println("회원정보 조회 완료");
-        return ResponseEntity.ok().body(userService.getUserInfo(id));
+        return ResponseEntity.ok().body(userService.
+                getUserInfo(id));
     }
 
     // 회원정보 수정

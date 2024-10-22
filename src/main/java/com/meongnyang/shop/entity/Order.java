@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Data
 @Builder
@@ -28,6 +29,7 @@ public class Order {
     private String addressDetail;
     private String phone;
 
+  
     private Product product;
     private User user;
 
@@ -52,4 +54,6 @@ public class Order {
                 .addressDetail(addressDetail)
                 .build();
     }
+  
+    private List<OrderDetail> orderDetails;
 }

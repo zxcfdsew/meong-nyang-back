@@ -10,6 +10,7 @@ import org.apache.tomcat.jni.Local;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -27,6 +28,8 @@ public class User {
     private String provider;
 
 
+    private List<Order> orders;
+  
     private Address address;
     private Membership membership;
     private Set<UserRole> userRoles;

@@ -5,6 +5,6 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ReqDeleteProductDto {
-    private List<Long> productIds;
+public class ReqDeleteOrderDto {
+    private List<Long> orderIds;
 }

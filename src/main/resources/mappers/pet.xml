@@ -13,9 +13,10 @@
         <result property="petAge" column="pet_age" />
         <result property="petType" column="pet_type" />
     </resultMap>
+
     <insert id="save">
         insert into pet_tb
-        values(default, #{userId}, #{pet_name}, #{pet_age}, #{pet_type})
+        values(default, #{userId}, #{petName}, #{petAge}, #{petType})
     </insert>
 
     <select id="findPetByUserid" resultMap="petResultMap">
