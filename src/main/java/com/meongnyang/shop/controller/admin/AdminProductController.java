@@ -25,7 +25,6 @@ public class AdminProductController {
     @PostMapping("/product")
     public ResponseEntity<?> registerProduct(@Valid @ModelAttribute ReqRegisterProductDto dto, BindingResult bindingResult) {
         adminProductService.registerProduct(dto);
-
         return ResponseEntity.ok().body(true);
     }
 

@@ -46,11 +46,14 @@ public class AdminProductService {
             productMapper.save(product);
 
             List<MultipartFile> imgs = dto.getProductImage();
-            if(!imgs.get(0).isEmpty()) {
-                for(MultipartFile img : imgs) {
-                    registerImgUrl(img,product.getId());
+            if(imgs.size() > 0) {
+                if(!imgs.get(0).isEmpty()) {
+                    for(MultipartFile img : imgs) {
+                        registerImgUrl(img,product.getId());
+                    }
                 }
             }
+
 
             Stock stock = dto.toEntity(product.getId());
             stockMapper.save(stock);
