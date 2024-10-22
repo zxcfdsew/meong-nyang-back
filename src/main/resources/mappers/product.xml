@@ -246,6 +246,23 @@
         where
             category_id = #{categoryId}
     </select>
+  
+    <select id="getCategoriesCount" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            product_tb p
+        where
+            1 = 1
+            <if test="petGroupId != 0">
+                AND p.pet_group_id = #{petGroupId}
+            </if>
+            <if test="categoryId != 0">
+                and p.category_id = #{categoryId}
+            </if>
+            <if test="searchWord != null and searchWord != ''">
+                AND p.product_name LIKE CONCAT('%', #{searchWord}, '%')
+            </if>
     <select id="findProductDetailById" resultMap="productResultMap">
         select
             p.id,

@@ -34,6 +34,17 @@
         <result property="productName" column="product_name" />
         <result property="productPrice" column="product_price" />
     </resultMap>
+
+    <resultMap id="userResultMap" type="com.meongnyang.shop.entity.User">
+        <id property="id" column="u_id"/>
+        <result property="username" column="username" />
+        <result property="password" column="password" />
+        <result property="name" column="name" />
+        <result property="phone" column="phone" />
+        <result property="membershipLevelId" column="membership_level_id" />
+        <result property="provider" column="provider" />
+    </resultMap>
+
     <delete id="deleteOrderById">
         delete
         from
@@ -144,49 +155,6 @@
             product_id
     </select>
 
-
-    <resultMap id="orderResultMap" type="com.meongnyang.shop.entity.Order">
-        <id property="id" column="o_id"/>
-        <result property="productId" column="product_id" />
-        <result property="userId" column="user_id" />
-        <result property="totalPrice" column="total_price" />
-        <result property="orderItemCount" column="order_item_count" />
-        <result property="orderDate" column="order_date" />
-        <result property="orderStatus" column="order_status" />
-        <result property="orderName" column="order_name" />
-        <result property="zipcode" column="zipcode" />
-        <result property="addressDefault" column="address_default" />
-        <result property="addressDetail" column="address_detail" />
-        <result property="phone" column="phone" />
-        <association property="product" resultMap="productResultMap" />
-        <association property="user" resultMap="userResultMap" />
-    </resultMap>
-
-    <resultMap id="productResultMap" type="com.meongnyang.shop.entity.Product">
-        <id property="id" column="p_id"/>
-        <result property="productName" column="product_name" />
-        <result property="petGroupId" column="pet_group_id" />
-        <result property="categoryId" column="category_id" />
-        <result property="productPrice" column="product_price" />
-        <result property="productPriceDiscount" column="product_price_discount" />
-        <result property="productDetail" column="product_detail" />
-        <result property="productBrand" column="product_brand" />
-        <result property="productModel" column="product_model" />
-        <result property="productMemo" column="product_memo" />
-        <result property="productCreateDate" column="product_create_date" />
-        <result property="productUpdateDate" column="product_update_date" />
-        <result property="recommendation" column="recommendation" />
-    </resultMap>
-
-    <resultMap id="userResultMap" type="com.meongnyang.shop.entity.User">
-        <id property="id" column="u_id"/>
-        <result property="username" column="username" />
-        <result property="password" column="password" />
-        <result property="name" column="name" />
-        <result property="phone" column="phone" />
-        <result property="membershipLevelId" column="membership_level_id" />
-        <result property="provider" column="provider" />
-    </resultMap>
 
     <select id="getUserOrders" resultMap="orderResultMap">
         select
