@@ -6,10 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.tomcat.jni.Local;
 
-import java.security.Principal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -24,9 +22,10 @@ public class User {
     private String name;
     private String phone;
     private int membershipLevelId;
-    private LocalDateTime createDate;
+    private LocalDate createDate;
     private String provider;
 
+    private Pet pet;
     private List<Order> orders;
     private Address address;
     private Membership membership;
@@ -41,7 +40,7 @@ public class User {
                 .build();
     }
 
-    public RespGetUserDetailDto toDto() {
+    public RespGetUserDetailDto toDto(List<UserOrder> orders, Pet pet) {
         return RespGetUserDetailDto.builder()
                 .id(id)
                 .username(username)
@@ -50,6 +49,8 @@ public class User {
                 .createDate(createDate.toString())
                 .membership(membership)
                 .address(address)
+                .orders(orders)
+                .pet(pet)
                 .build();
 
     }

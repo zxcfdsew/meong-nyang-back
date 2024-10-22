@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -17,7 +17,7 @@ public class Order {
     private Long userId;
     private Long totalPrice;
     private Long orderItemCount;
-    private LocalDateTime orderDate;
+    private LocalDate orderDate;
     private String orderStatus;
     private String orderName;
     private Long zipcode;

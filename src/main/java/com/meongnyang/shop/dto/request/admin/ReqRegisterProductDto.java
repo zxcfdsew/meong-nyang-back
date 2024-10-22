@@ -20,7 +20,7 @@ public class ReqRegisterProductDto {
     private Long categoryId;
     @NotNull
     private Long productPrice;
-    private Long productPriceDiscount;
+    private int productPriceDiscount;
     private String productDetail;
     private String productBrand;
     private String productModel;

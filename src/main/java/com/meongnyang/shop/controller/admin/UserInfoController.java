@@ -31,7 +31,14 @@ public class UserInfoController {
 
     @PutMapping("/user/{userId}/membership")
     public ResponseEntity<?> modifyUserByMembership(@RequestBody ReqModifyMembershipLevelDto dto) {
-        return ResponseEntity.ok().body(null);
+        adminUserService.modifyUserMembership(dto);
+        return ResponseEntity.ok().body(true);
     }
+
+    @GetMapping("/memberships")
+    public ResponseEntity<?> getMemberships() {
+        return ResponseEntity.ok().body(adminUserService.getMemberships());
+    }
+
 
 }

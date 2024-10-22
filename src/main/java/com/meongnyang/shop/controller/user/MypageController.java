@@ -29,11 +29,11 @@ public class MypageController {
     }
 
     // 반려동물정보 조회
-    @GetMapping("/user/pet/{petId}")
-    public ResponseEntity<?> getPet(@PathVariable Long petId) {
-        System.out.println("반려동물정보 조회 완료");
-        return ResponseEntity.ok().body(userService.getPetInfo(petId));
-    }
+//    @GetMapping("/user/pet/{petId}")
+//    public ResponseEntity<?> getPet(@PathVariable Long petId) {
+//        System.out.println("반려동물정보 조회 완료");
+//        return ResponseEntity.ok().body(userService.getPetInfo(petId));
+//    }
 
     // 반려동물정보 수정
     @PutMapping("/user/pet/{petId}")
@@ -43,5 +43,10 @@ public class MypageController {
         return ResponseEntity.ok().body(true);
     }
 
+    @DeleteMapping("/user/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.ok().body(true);
+    }
 
 }

@@ -6,8 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.File;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -20,13 +19,13 @@ public class Product {
     private Long petGroupId;
     private Long categoryId;
     private Long productPrice;
-    private Long productPriceDiscount;
+    private int productPriceDiscount;
     private String productDetail;
     private String productBrand;
     private String productModel;
     private String productMemo;
-    private LocalDateTime productCreateDate;
-    private LocalDateTime productUpdateDate;
+    private LocalDate productCreateDate;
+    private LocalDate productUpdateDate;
     private Long recommendation;
 
     private List<ImgUrl> imgUrls;

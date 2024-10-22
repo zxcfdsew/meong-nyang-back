@@ -38,9 +38,13 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler(NotFoundUserException.class)
     public ResponseEntity<?> notFoundUserException(NotFoundUserException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
+        return ResponseEntity.badRequest().body(false);
     }
 
+    @ExceptionHandler(NotFoundMembershipException.class)
+    public ResponseEntity<?> notFoundMembershipException(NotFoundMembershipException e) {
+        return ResponseEntity.badRequest().body(false);
+    }
 
 //    @ExceptionHandler(DateTimeParseException.class)
 //    public ResponseEntity<?> dateTimeParseException(DateTimeParseException e) {
@@ -50,5 +54,10 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(AccessTokenException.class)
     public ResponseEntity<?> accessTokenException(AccessTokenException e) {
         return ResponseEntity.badRequest().body(false);
+    }
+
+    @ExceptionHandler(InvalidUserException.class)
+    public ResponseEntity<?> invalidUserException(InvalidUserException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

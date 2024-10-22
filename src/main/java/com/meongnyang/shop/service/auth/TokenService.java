@@ -39,7 +39,6 @@ public class TokenService {
 
     public RespTokenUserInfoDto getUserMe() {
         PrincipalUser principalUser = (PrincipalUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        System.out.println(principalUser.getId());
         User user = userMapper.findById(principalUser.getId());
 
         return RespTokenUserInfoDto.builder()

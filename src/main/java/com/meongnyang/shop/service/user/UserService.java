@@ -6,11 +6,15 @@ import com.meongnyang.shop.dto.response.RespPetInfoDto;
 import com.meongnyang.shop.dto.response.RespUserInfoDto;
 import com.meongnyang.shop.entity.Pet;
 import com.meongnyang.shop.entity.User;
+import com.meongnyang.shop.exception.InvalidUserException;
 import com.meongnyang.shop.repository.PetMapper;
 import com.meongnyang.shop.repository.UserMapper;
+import com.meongnyang.shop.security.principal.PrincipalUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,7 +50,7 @@ public class UserService {
         userMapper.updateUserById(dto.toEntity());
     }
 
-    // 반려동물정보 조회
+//     반려동물정보 조회
     public RespPetInfoDto getPetInfo(Long id) {
         Pet pet = petMapper.findPetByUserid(id);
 
@@ -61,4 +65,19 @@ public class UserService {
     public void updatePet(ReqUpdatePetDto dto) {
         petMapper.updatePetById(dto.toEntity());
     }
+
+
+    public void deleteUser(Long id) {
+        PrincipalUser principalUser = (PrincipalUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principalUser.getUserRoles().stream()
+                .anyMatch(role -> role.getRole().getRoleName().equals("ROLE_ADMIN"))) {
+            throw new InvalidUserException("사용자 정보를 삭제할 수 없습니다.");
+        }
+        if (id != principalUser.getId()) {
+            throw new InvalidUserException("사용자 정보를 삭제할 수 없습니다.");
+        }
+        userMapper.deleteUserById(id);
+    }
+
 }

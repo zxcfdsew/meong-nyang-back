@@ -126,6 +126,24 @@
         limit #{startIndex}, #{limit}
 
     </select>
+    <select id="findOrderById" resultType="com.meongnyang.shop.entity.UserOrder">
+        select
+            p.id as productId,
+            p.product_name as productName,
+            count(product_id) as buyCount,
+            p.product_price as productPrice,
+            count(product_id) * p.product_price as totalPrice,
+            o.order_date as latelyOrderDate
+        from
+            order_tb o
+            left outer join order_detail_tb od on(o.id = od.order_id)
+            left outer join product_tb p on(p.id = od.product_id)
+        where
+            user_id = #{id}
+        group by
+            product_id
+    </select>
+
 
     <insert id="postProductsOrder"
             parameterType="list"

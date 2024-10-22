@@ -50,5 +50,4 @@ public class AuthController {
     public ResponseEntity<?> adminSignin(@Valid @RequestBody ReqAdminSigninDto dto, BindingResult bindingResult) {
         return ResponseEntity.ok().body(authService.adminSignin(dto));
     }
-
 }
