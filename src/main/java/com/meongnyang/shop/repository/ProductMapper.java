@@ -27,4 +27,8 @@ public interface ProductMapper {
     Product findProductById(Long id);
     Product findProductByCategoryId(Long categoryId);
     List<CategoryProductList> findAllByCategoryId(Long categoryId);
+    int getCategoriesCount(
+            @Param("productCategoryId") int productCategoryId,
+            @Param("petGroupId") int petGroupId,
+            @Param("searchWord") String searchWord);
 }

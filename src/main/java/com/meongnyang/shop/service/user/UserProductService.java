@@ -1,7 +1,9 @@
 package com.meongnyang.shop.service.user;
 
+import com.meongnyang.shop.dto.request.ReqGetProductCountDto;
 import com.meongnyang.shop.dto.request.ReqProductListDto;
 import com.meongnyang.shop.dto.response.RespCategoryProductListDto;
+import com.meongnyang.shop.dto.response.RespGetProductCountDto;
 import com.meongnyang.shop.dto.response.RespProductDetailDto;
 import com.meongnyang.shop.dto.response.RespProductListDto;
 import com.meongnyang.shop.entity.CategoryProductList;
@@ -28,6 +30,19 @@ public class UserProductService {
         return RespProductListDto.builder()
                 .products(productLists)
                 .totalCount(productTotalCount)
+                .build();
+    }
+
+    public RespGetProductCountDto getCategoriesCount(ReqGetProductCountDto dto) {
+        int productCount = productMapper.getCategoriesCount(
+                dto.getCategoryId(),
+                dto.getPetGroupId(),
+                dto.getSearchWord());
+        int maxPageNumber = (int) Math.ceil(((double) productCount) / dto.getCount());
+
+        return RespGetProductCountDto.builder()
+                .totalCount(productCount)
+                .maxPageNumber(maxPageNumber)
                 .build();
     }
 
@@ -64,4 +79,6 @@ public class UserProductService {
                 .recommendation(product.getRecommendation())
                 .build();
     }
+
+
 }

@@ -1,5 +1,6 @@
 package com.meongnyang.shop.controller.user;
 
+import com.meongnyang.shop.dto.request.ReqGetProductCountDto;
 import com.meongnyang.shop.dto.request.ReqProductListDto;
 import com.meongnyang.shop.service.user.UserProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,12 @@ public class ProductController {
     @GetMapping("/products/categories/{categoryId}")
     public ResponseEntity<?> getCategories(@PathVariable Long categoryId) {
         return ResponseEntity.ok().body(userProductService.getCategoryProductList(categoryId));
+    }
+
+    // 카테고리별 상품 갯수 조회
+    @GetMapping("/products/count")
+    public ResponseEntity<?> getCategoriesCount(ReqGetProductCountDto dto) {
+        return ResponseEntity.ok(userProductService.getCategoriesCount(dto));
     }
 
     // 상세 내용 조회
