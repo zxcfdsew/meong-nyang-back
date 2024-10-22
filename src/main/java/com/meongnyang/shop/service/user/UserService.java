@@ -1,16 +1,21 @@
 package com.meongnyang.shop.service.user;
 
+import com.meongnyang.shop.dto.request.ReqGetUserOrderDto;
 import com.meongnyang.shop.dto.request.ReqUpdatePetDto;
 import com.meongnyang.shop.dto.request.ReqUpdateUserDto;
+import com.meongnyang.shop.dto.response.RespGetUserOrdersDto;
 import com.meongnyang.shop.dto.response.RespPetInfoDto;
 import com.meongnyang.shop.dto.response.RespUserInfoDto;
+import com.meongnyang.shop.entity.Order;
 import com.meongnyang.shop.entity.Pet;
 import com.meongnyang.shop.entity.User;
+import com.meongnyang.shop.repository.OrderMapper;
 import com.meongnyang.shop.repository.PetMapper;
 import com.meongnyang.shop.repository.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,6 +26,8 @@ public class UserService {
     private UserMapper userMapper;
     @Autowired
     private PetMapper petMapper;
+    @Autowired
+    private OrderMapper orderMapper;
 
     // 회원정보 조회
     public RespUserInfoDto getUserInfo(Long id) {
@@ -60,5 +67,10 @@ public class UserService {
 
     public void updatePet(ReqUpdatePetDto dto) {
         petMapper.updatePetById(dto.toEntity());
+    }
+
+    public List<RespGetUserOrdersDto> getUserOrders(ReqGetUserOrderDto dto) {
+        List<Order> list = orderMapper.getUserOrders(dto.getUserId());
+        return list.stream().map(Order::toRespGetUserOrdersDto).collect(Collectors.toList());
     }
 }

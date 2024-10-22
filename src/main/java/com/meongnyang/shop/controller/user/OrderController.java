@@ -3,7 +3,7 @@ package com.meongnyang.shop.controller.user;
 import com.meongnyang.shop.aspect.annotation.ValidAop;
 import com.meongnyang.shop.dto.request.ReqModifyOrderDto;
 import com.meongnyang.shop.dto.request.ReqPostOrderDto;
-import com.meongnyang.shop.service.user.OrderService;
+import com.meongnyang.shop.service.user.UserOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -16,19 +16,19 @@ import java.util.List;
 public class OrderController {
 
     @Autowired
-    private OrderService orderService;
+    private UserOrderService userOrderService;
 
     // 주문 등록
     @PostMapping("/order")
     public ResponseEntity<?> postProductsOrder(@RequestBody List<ReqPostOrderDto> dto) {
-        orderService.postProductsOrder(dto);
+        userOrderService.postProductsOrder(dto);
         return ResponseEntity.ok(true);
     }
 
     // 주문 삭제
     @DeleteMapping("/user/orders")
     public ResponseEntity<?> deleteProductsOrder(@RequestBody List<Integer> orderId) {
-        orderService.deleteProductsOrder(orderId);
+        userOrderService.deleteProductsOrder(orderId);
         return ResponseEntity.ok(true);
     }
 
@@ -36,7 +36,7 @@ public class OrderController {
     @ValidAop
     @PutMapping("/user/order")
     public ResponseEntity<?> modifyProductsOrder(@Valid @RequestBody ReqModifyOrderDto dto, BindingResult bindingResult) {
-        orderService.modifyProductsOrder(dto);
+        userOrderService.modifyProductsOrder(dto);
         return ResponseEntity.ok(true);
     }
 }
