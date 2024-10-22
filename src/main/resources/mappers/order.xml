@@ -133,7 +133,7 @@
             count(product_id) as buyCount,
             p.product_price as productPrice,
             count(product_id) * p.product_price as totalPrice,
-            o.order_date as latelyOrderDate
+            MAX(o.order_date) as latelyOrderDate
         from
             order_tb o
             left outer join order_detail_tb od on(o.id = od.order_id)
