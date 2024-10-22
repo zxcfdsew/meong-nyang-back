@@ -13,6 +13,7 @@ public interface StockMapper {
     int modifyStockById(Stock stock);
     int deleteStockByProductId(Long productId);
     int deleteStockAll();
+    Stock findStockByProductId(Long productId);
     List<Stock> findStockAll();
     List<Stock> findStockByOption(@Param("option") String option, @Param("searchWord") String searchWord);
 }

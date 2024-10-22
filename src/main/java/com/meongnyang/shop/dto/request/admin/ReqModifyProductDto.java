@@ -26,7 +26,7 @@ public class ReqModifyProductDto {
     private Long categoryId;
     @NotNull
     private Long productPrice;
-    private Long productPriceDiscount;
+    private int productPriceDiscount;
     private String productDetail;
     private String productBrand;
     private String productModel;
@@ -46,7 +46,7 @@ public class ReqModifyProductDto {
     private Long arrivalQuantity;
     private Long minAlertQuantity;
     private Long alertSetting;
-    private Long outOfStock;
+    private int outOfStock;
 
     public Product toEntity() {
         return Product.builder()

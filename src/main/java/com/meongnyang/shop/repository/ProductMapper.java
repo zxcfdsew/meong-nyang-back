@@ -19,6 +19,7 @@ public interface ProductMapper {
     int modifyProduct(Product product);
     int deleteProductAll();
     int deleteProductById(List<Long> idList);
+    Product findProductDetailById(Long id);
 
     List<ProductList> findAllByStartIndexAndLimit(
             @Param("startIndex") Long startIndex,

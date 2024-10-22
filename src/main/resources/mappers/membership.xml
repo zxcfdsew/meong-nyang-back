@@ -12,11 +12,25 @@
     <select id="findMembershipByName" resultType="com.meongnyang.shop.entity.Membership">
         select
             id,
-            membership_level_name
+            membership_level_name as membershipLevelName
         from
             membership_level_tb
         where
             membership_level_name = #{name}
     </select>
+    <select id="findMembershipId" resultType="java.lang.Long">
+        select
+            id
+        from
+            membership_level_tb
+    </select>
+    <select id="findMembershipAll" resultType="com.meongnyang.shop.entity.Membership">
+        select
+            id,
+            membership_level_name as membershipLevelName
+        from
+            membership_level_tb
+    </select>
+
 
 </mapper>

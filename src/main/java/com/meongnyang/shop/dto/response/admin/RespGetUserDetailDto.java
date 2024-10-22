@@ -24,7 +24,7 @@ public class RespGetUserDetailDto {
 
     private Membership membership;
     private Address address;
-    private List<Pet> pets;
+    private Pet pet;
 
     //주문내역
     private List<UserOrder> orders;
