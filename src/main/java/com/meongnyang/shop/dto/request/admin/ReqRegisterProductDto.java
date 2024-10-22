@@ -37,7 +37,7 @@ public class ReqRegisterProductDto {
     private Long arrivalQuantity;
     private Long minAlertQuantity;
     private Long alertSetting;
-    private Long outOfStock;
+    private int outOfStock;
 
     private List<MultipartFile> productImage;
 

@@ -31,6 +31,7 @@ public class Product {
     private List<ImgUrl> imgUrls;
     private PetGroup petGroup;
     private Category category;
+    private Stock stock;
     //재고 테이블
 
     public RespProductDto toDto(List<String> imgs) {

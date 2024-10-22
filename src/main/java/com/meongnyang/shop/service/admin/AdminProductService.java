@@ -38,6 +38,8 @@ public class AdminProductService {
     private PetGroupMapper petGroupMapper;
     @Autowired
     private CategoryMapper categoryMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     @Transactional(rollbackFor = RegisterException.class)
     public void registerProduct(ReqRegisterProductDto dto) {
@@ -60,7 +62,7 @@ public class AdminProductService {
 
     }
 
-    public RespGetProductsAllDto getProductsAll() throws IOException {
+    public RespGetProductsAllDto getProductsAll() {
         List<Product> productList = productMapper.findProducts();
         return RespGetProductsAllDto.builder()
                 .productListCount(productList.size())
@@ -84,6 +86,17 @@ public class AdminProductService {
                 .productList(productList)
                 .productListCount(productList.size())
                 .build();
+    }
+
+    public Product getProductDetail(Long id) {
+        Product product = productMapper.findProductDetailById(id);
+        System.out.println(product.getImgUrls());
+        if(product == null) {
+            throw new RegisterException("존재하지 않는 상품입니다.");
+        }
+
+        product.setStock(stockMapper.findStockByProductId(product.getId()));
+        return product;
     }
 
     @Transactional(rollbackFor = RegisterException.class)

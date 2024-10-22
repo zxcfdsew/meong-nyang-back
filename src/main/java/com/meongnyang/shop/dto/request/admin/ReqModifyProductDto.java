@@ -46,7 +46,7 @@ public class ReqModifyProductDto {
     private Long arrivalQuantity;
     private Long minAlertQuantity;
     private Long alertSetting;
-    private Long outOfStock;
+    private int outOfStock;
 
     public Product toEntity() {
         return Product.builder()
