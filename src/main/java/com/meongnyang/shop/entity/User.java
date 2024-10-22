@@ -26,6 +26,7 @@ public class User {
     private LocalDateTime createDate;
     private String provider;
 
+
     private Address address;
     private Membership membership;
     private Set<UserRole> userRoles;

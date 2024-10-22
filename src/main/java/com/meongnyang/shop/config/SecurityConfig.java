@@ -40,6 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/user/**",
                         "/order/**",
                         "/orders/**",
+                        "/product/**",
                         "/swagger-ui.html/**/**",
                         "/webjars/**",
                         "/swagger-resources/**",

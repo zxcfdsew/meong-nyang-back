@@ -1,5 +1,6 @@
 package com.meongnyang.shop.controller.user;
 
+import com.meongnyang.shop.dto.request.ReqGetUserOrderDto;
 import com.meongnyang.shop.dto.request.ReqUpdatePetDto;
 import com.meongnyang.shop.dto.request.ReqUpdateUserDto;
 import com.meongnyang.shop.service.user.UserService;
@@ -28,10 +29,10 @@ public class MypageController {
     }
 
     // 반려동물정보 조회
-    @GetMapping("/user/pet/{petId}")
-    public ResponseEntity<?> getPet(@PathVariable Long petId) {
+    @GetMapping("/user/pet/{userId}")
+    public ResponseEntity<?> getPet(@PathVariable Long userId) {
         System.out.println("반려동물정보 조회 완료");
-        return ResponseEntity.ok().body(userService.getPetInfo(petId));
+        return ResponseEntity.ok().body(userService.getPetInfo(userId));
     }
 
     // 반려동물정보 수정
@@ -40,6 +41,13 @@ public class MypageController {
         userService.updatePet(dto);
         System.out.println(dto);
         return ResponseEntity.ok().body(true);
+    }
+
+    // 주문/배송 내역 조회
+    @GetMapping("/product/orders")
+    public ResponseEntity<?> getUserOrder(ReqGetUserOrderDto dto) {
+        System.out.println(dto);
+        return ResponseEntity.ok(userService.getUserOrders(dto));
     }
 
 
