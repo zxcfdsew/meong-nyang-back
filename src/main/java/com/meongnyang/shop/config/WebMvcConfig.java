@@ -29,7 +29,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         WebMvcConfigurer.super.addResourceHandlers(registry);
-        registry.addResourceHandler("/admin/images/**")  // /image로 들어오는 모든 GET요청
+        registry.addResourceHandler("/images/**")  // /image로 들어오는 모든 GET요청
                 .addResourceLocations("file:///" + filePath)
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver() {
