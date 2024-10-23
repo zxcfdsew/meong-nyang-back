@@ -39,7 +39,7 @@ public class AdminProductController {
     }
 
     @GetMapping("/product/{productId}")
-    public ResponseEntity<?> getProduct(@PathVariable Long productId) {
+    public ResponseEntity<?> getProductDetail(@PathVariable Long productId) {
         return ResponseEntity.ok().body(adminProductService.getProductDetail(productId));
     }
 

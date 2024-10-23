@@ -19,7 +19,7 @@
         values(default, #{userId}, #{petName}, #{petAge}, #{petType})
     </insert>
 
-    <select id="findPetByUserid" resultMap="petResultMap">
+    <select id="findPetByUserId" resultMap="petResultMap">
         select
             id,
             user_id,
@@ -31,15 +31,4 @@
         where
             user_id = #{userId}
     </select>
-
-    <update id="updatePetById">
-        update
-            pet_tb
-        set
-            pet_name = #{petName},
-            pet_age = #{petAge},
-            pet_type = #{petType}
-        where
-            id = #{id}
-    </update>
 </mapper>

@@ -1,6 +1,6 @@
 package com.meongnyang.shop.service.auth;
 
-import com.meongnyang.shop.dto.request.ReqAccessDto;
+import com.meongnyang.shop.dto.request.auth.ReqAccessDto;
 import com.meongnyang.shop.dto.response.admin.RespTokenUserInfoDto;
 import com.meongnyang.shop.entity.User;
 import com.meongnyang.shop.exception.AccessTokenException;
@@ -27,7 +27,7 @@ public class TokenService {
             String token = jwtProvider.removeBearer(dto.getAccessToken());
             Claims claims = jwtProvider.getClaims(token);
             Long userId = ((Integer) claims.get("userId")).longValue();
-            User user = userMapper.findById(userId);
+            User user = userMapper.findUserById(userId);
             if(user == null) {
                 throw new RuntimeException();
             }
@@ -39,7 +39,7 @@ public class TokenService {
 
     public RespTokenUserInfoDto getUserMe() {
         PrincipalUser principalUser = (PrincipalUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userMapper.findById(principalUser.getId());
+        User user = userMapper.findUserById(principalUser.getId());
 
         return RespTokenUserInfoDto.builder()
                 .id(user.getId())

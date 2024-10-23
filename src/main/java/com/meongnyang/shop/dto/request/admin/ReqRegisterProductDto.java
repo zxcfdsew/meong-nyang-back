@@ -52,7 +52,7 @@ public class ReqRegisterProductDto {
                 .productBrand(productBrand)
                 .productModel(productModel)
                 .productMemo(productMemo)
-                .recommendation(Long.valueOf(recommendation))
+                .recommendation(Integer.parseInt(recommendation))
                 .build();
     }
 

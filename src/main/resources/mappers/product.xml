@@ -76,12 +76,6 @@
             #{id}
         </foreach>
     </delete>
-    <select id="findProductsCount" resultType="java.lang.Integer">
-        select
-            count(*)
-        from
-            product_tb
-    </select>
     <select id="findProducts" resultMap="productResultMap">
         select
             p.id,
@@ -111,14 +105,7 @@
             left outer join category_tb c on(p.category_id = c.id)
             left outer join img_url_tb iu on(p.id = iu.product_id)
     </select>
-    <select id="findProductsCountByOption" resultType="java.lang.Integer">
-        select
-            count(*)
-        from
-            product_tb
-        where
-            #{option} = #{searchWord}
-    </select>
+
     <select id="findProductsByOption" resultMap="productResultMap">
         select
             p.id,
@@ -176,93 +163,6 @@
         limit #{startIndex}, #{limit}
     </select>
 
-    <select id="findAllByStartIndexAndLimit" resultType="com.meongnyang.shop.entity.ProductList">
-        select
-            id,
-            product_name as productName,
-            product_price as productPrice,
-            product_brand as productBrand
-        from
-            product_tb
-        order by
-            id desc
-        limit #{startIndex}, #{limit}
-    </select>
-    <select id="getProductsCount" resultType="java.lang.Integer">
-        select
-            count(*)
-        from
-            product_tb
-    </select>
-    <select id="findProductById" resultMap="productResultMap">
-        select
-            id,
-            product_name,
-            pet_group_id,
-            category_id,
-            product_price,
-            product_price_discount,
-            product_detail,
-            product_brand,
-            product_model,
-            product_memo,
-            product_create_date,
-            product_update_date,
-            recommendation
-        from
-            product_tb
-        where
-            id = #{id}
-    </select>
-    <select id="findProductByCategoryId" resultMap="productResultMap">
-        select
-            id,
-            product_name,
-            pet_group_id,
-            category_id,
-            product_price,
-            product_price_discount,
-            product_detail,
-            product_brand,
-            product_model,
-            product_memo,
-            product_create_date,
-            product_update_date,
-            recommendation
-        from
-            product_tb
-        where
-            category_id = #{categoryId}
-    </select>
-    <select id="findAllByCategoryId" resultType="com.meongnyang.shop.entity.CategoryProductList">
-        select
-        id,
-            category_id as categoryId,
-            product_name as productName,
-            product_price as productPrice,
-            product_brand as productBrand
-        from
-            product_tb
-        where
-            category_id = #{categoryId}
-    </select>
-  
-    <select id="getCategoriesCount" resultType="java.lang.Integer">
-        select
-            count(*)
-        from
-            product_tb p
-        where
-            1 = 1
-            <if test="petGroupId != 0">
-                AND p.pet_group_id = #{petGroupId}
-            </if>
-            <if test="categoryId != 0">
-                and p.category_id = #{categoryId}
-            </if>
-            <if test="searchWord != null and searchWord != ''">
-                AND p.product_name LIKE CONCAT('%', #{searchWord}, '%')
-            </if>
     <select id="findProductDetailById" resultMap="productResultMap">
         select
             p.id,
@@ -293,6 +193,26 @@
             left outer join img_url_tb iu on(p.id = iu.product_id)
         where
             p.id = #{id}
+    </select>
+    <select id="findProductById" resultType="com.meongnyang.shop.entity.Product">
+        select
+            id,
+            product_name as productName,
+            pet_group_id as petGroupId,
+            category_id as categoryId,
+            product_price as productPrice,
+            product_price_discount as productPriceDiscount,
+            product_detail as productDetail,
+            product_brand as productBrand,
+            product_model as productModel,
+            product_memo as productMemo,
+            product_create_date as productCreateDate,
+            product_update_date as productUpdateDate,
+            recommendation
+        from
+            product_tb
+        where
+            id = #{id}
     </select>
 
 </mapper>

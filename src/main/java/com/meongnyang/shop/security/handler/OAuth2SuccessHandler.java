@@ -5,7 +5,6 @@ import com.meongnyang.shop.repository.UserMapper;
 import com.meongnyang.shop.security.jwt.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -33,7 +32,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String oAuth2Name = attributes.get("id").toString();
         String provider = attributes.get("provider").toString();
 
-        User user = userMapper.findByUsername(oAuth2Name);
+        User user = userMapper.findUserByUsername(oAuth2Name);
 
         //oauth회원가입
         if (user == null) {

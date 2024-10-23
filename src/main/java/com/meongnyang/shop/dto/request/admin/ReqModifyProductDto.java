@@ -1,6 +1,5 @@
 package com.meongnyang.shop.dto.request.admin;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.meongnyang.shop.entity.Product;
 import com.meongnyang.shop.entity.Stock;
 import lombok.Data;
@@ -9,8 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
+
 import java.util.List;
 
 @Data
@@ -60,7 +58,7 @@ public class ReqModifyProductDto {
                 .productBrand(productBrand)
                 .productModel(productModel)
                 .productMemo(productMemo)
-                .recommendation(Long.valueOf(recommendation))
+                .recommendation(Integer.parseInt(recommendation))
                 .build();
     }
 

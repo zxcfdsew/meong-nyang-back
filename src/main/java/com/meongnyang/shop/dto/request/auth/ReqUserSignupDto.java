@@ -1,4 +1,4 @@
-package com.meongnyang.shop.dto.request;
+package com.meongnyang.shop.dto.request.auth;
 
 import com.meongnyang.shop.entity.Address;
 import com.meongnyang.shop.entity.Pet;

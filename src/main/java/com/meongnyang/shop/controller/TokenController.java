@@ -1,6 +1,6 @@
 package com.meongnyang.shop.controller;
 
-import com.meongnyang.shop.dto.request.ReqAccessDto;
+import com.meongnyang.shop.dto.request.auth.ReqAccessDto;
 import com.meongnyang.shop.service.auth.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
