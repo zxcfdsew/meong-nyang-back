@@ -43,7 +43,7 @@ public class SampleData implements CommandLineRunner {
     @Transactional(rollbackFor = SignupException.class)
     public void registerAdmin() {
         try {
-            User user = userMapper.findByUsername("admin");
+            User user = userMapper.findUserByUsername("admin");
             if (user == null) {
                 user = User.builder()
                         .username("admin")

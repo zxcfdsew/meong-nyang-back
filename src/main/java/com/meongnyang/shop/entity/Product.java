@@ -1,6 +1,5 @@
 package com.meongnyang.shop.entity;
 
-import com.meongnyang.shop.dto.response.admin.RespProductDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,32 +25,10 @@ public class Product {
     private String productMemo;
     private LocalDate productCreateDate;
     private LocalDate productUpdateDate;
-    private Long recommendation;
+    private int recommendation;
 
     private List<ImgUrl> imgUrls;
     private PetGroup petGroup;
     private Category category;
     private Stock stock;
-    //재고 테이블
-
-    public RespProductDto toDto(List<String> imgs) {
-        return RespProductDto.builder()
-                .id(id)
-                .productName(productName)
-                .petGroupId(petGroupId)
-                .categoryId(categoryId)
-                .productPrice(productPrice)
-                .productPriceDiscount(productPriceDiscount)
-                .productDetail(productDetail)
-                .productBrand(productBrand)
-                .productModel(productModel)
-                .productMemo(productMemo)
-                .productCreateDate(productCreateDate.toString())
-                .productUpdateDate(productUpdateDate.toString())
-                .recommendation(recommendation)
-                .imgs(imgs)
-                .petGroup(petGroup)
-                .category(category)
-                .build();
-    }
 }

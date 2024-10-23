@@ -1,5 +1,6 @@
 package com.meongnyang.shop.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.meongnyang.shop.dto.response.admin.RespGetUserDetailDto;
 import com.meongnyang.shop.security.principal.PrincipalUser;
 import lombok.AllArgsConstructor;
@@ -18,19 +19,20 @@ import java.util.Set;
 public class User {
     private Long id;
     private String username;
+    @JsonIgnore
     private String password;
     private String name;
     private String phone;
     private int membershipLevelId;
     private LocalDate createDate;
     private String provider;
-    private Pet pet;
 
-    private List<Order> orders;
-  
     private Address address;
+    private Pet pet;
     private Membership membership;
+
     private Set<UserRole> userRoles;
+    private List<Order> orders;
 
     public PrincipalUser toPrincipal() {
         return PrincipalUser.builder()
@@ -40,7 +42,6 @@ public class User {
                 .userRoles(userRoles)
                 .build();
     }
-
     public RespGetUserDetailDto toDto(List<UserOrder> orders, Pet pet) {
         return RespGetUserDetailDto.builder()
                 .id(id)

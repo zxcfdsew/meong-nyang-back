@@ -1,10 +1,10 @@
 package com.meongnyang.shop.service.auth;
 
 import com.meongnyang.shop.dto.request.admin.ReqAdminSigninDto;
-import com.meongnyang.shop.dto.request.ReqUserSigninDto;
-import com.meongnyang.shop.dto.request.ReqUserSignupDto;
+import com.meongnyang.shop.dto.request.auth.ReqUserSigninDto;
+import com.meongnyang.shop.dto.request.auth.ReqUserSignupDto;
 import com.meongnyang.shop.dto.response.admin.RespAdminSigninDto;
-import com.meongnyang.shop.dto.response.RespSigninDto;
+import com.meongnyang.shop.dto.response.auth.RespGetTokenDto;
 import com.meongnyang.shop.entity.Role;
 import com.meongnyang.shop.entity.User;
 import com.meongnyang.shop.entity.UserRole;
@@ -45,7 +45,7 @@ public class AuthService {
     private BCryptPasswordEncoder passwordEncoder;
 
     public RespAdminSigninDto adminSignin(ReqAdminSigninDto dto) {
-        User user = userMapper.findByUsername(dto.getUsername());
+        User user = userMapper.findUserByUsername(dto.getUsername());
         if(user == null) {
             throw new UsernameNotFoundException("관리자 정보를 확인하세요");
         }
@@ -89,15 +89,15 @@ public class AuthService {
     }
     //유저가 중복되면 false
     public Boolean isDuplicationUsername(String username) {
-        User user = userMapper.findByUsername(username);
+        User user = userMapper.findUserByUsername(username);
         if (user == null)  {
             return true;
         }
         return false;
     }
 
-    public RespSigninDto signin(ReqUserSigninDto dto) {
-        User user = userMapper.findByUsername(dto.getUsername());
+    public RespGetTokenDto signin(ReqUserSigninDto dto) {
+        User user = userMapper.findUserByUsername(dto.getUsername());
         if(user == null) {
             throw new UsernameNotFoundException("사용자 정보를 확인하세요");
         }
@@ -107,9 +107,9 @@ public class AuthService {
         return generateToken(user);
     }
 
-    public RespSigninDto generateToken(User user) {
-        return RespSigninDto.builder()
-                .token(jwtProvider.generateToken(user))
+    public RespGetTokenDto generateToken(User user) {
+        return RespGetTokenDto.builder()
+                .accessToken(jwtProvider.generateToken(user))
                 .build();
     }
 }

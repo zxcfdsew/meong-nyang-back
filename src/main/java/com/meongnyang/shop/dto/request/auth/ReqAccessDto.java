@@ -1,4 +1,4 @@
-package com.meongnyang.shop.dto.request;
+package com.meongnyang.shop.dto.request.auth;
 
 import lombok.Data;
 

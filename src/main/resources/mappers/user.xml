@@ -93,15 +93,8 @@
         insert into user_tb
         values(default, #{username}, #{password}, #{name}, #{phone}, #{membershipLevelId}, now(), #{provider})
     </insert>
-    <delete id="deleteUserById">
-        delete
-        from
-            user_tb
-        where
-            id = #{id}
-    </delete>
 
-    <select id="findByUsername" resultMap="userResultMap">
+    <select id="findUserByUsername" resultMap="userResultMap">
         select
             u.id as u_id,
             u.username,
@@ -126,7 +119,7 @@
         where
             username = #{username}
     </select>
-    <select id="findById" resultMap="userResultMap">
+    <select id="findUserById" resultMap="userResultMap">
         select
             u.id as u_id,
             u.username,
@@ -264,17 +257,7 @@
         where
             u.id = #{id}
     </select>
-    <update id="updateUserById">
-          update
-              user_tb
-          set
-              username = #{username},
-              password = #{password},
-              name = #{name},
-              phone = #{phone}
-          where
-              id = #{id}
-      </update>
+
     <update id="updateUserMembershipById">
         update
             user_tb
