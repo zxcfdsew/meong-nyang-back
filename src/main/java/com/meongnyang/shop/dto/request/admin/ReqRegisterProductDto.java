@@ -65,6 +65,7 @@ public class ReqRegisterProductDto {
                 .arrivalQuantity(arrivalQuantity)
                 .alertSetting(alertSetting)
                 .outOfStock(outOfStock)
+                .minAlertQuantity(minAlertQuantity)
                 .build();
     }
 }
