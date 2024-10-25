@@ -1,5 +1,6 @@
 package com.meongnyang.shop.entity;
 
+import com.meongnyang.shop.dto.response.admin.RespProductDetailDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,4 +32,32 @@ public class Product {
     private PetGroup petGroup;
     private Category category;
     private Stock stock;
+
+    public RespProductDetailDto toProductDetailDto(Stock stock) {
+        return RespProductDetailDto.builder()
+                .id(id)
+                .productName(productName)
+                .petGroupId(petGroupId)
+                .categoryId(categoryId)
+                .petGroup(petGroup)
+                .category(category)
+                .productPrice(productPrice)
+                .productPriceDiscount(productPriceDiscount)
+                .productDetail(productDetail)
+                .productBrand(productBrand)
+                .productModel(productModel)
+                .productMemo(productMemo)
+                .productCreateDate(getProductCreateDate())
+                .productUpdateDate(getProductUpdateDate())
+                .recommendation(recommendation)
+                .imgUrls(imgUrls)
+                .currentStock(stock.getCurrentStock())
+                .expectedStock(stock.getExpectedStock())
+                .arrivalDate(stock.getArrivalDate())
+                .arrivalQuantity(stock.getArrivalQuantity())
+                .minAlertQuantity(stock.getMinAlertQuantity())
+                .alertSetting(stock.getAlertSetting())
+                .outOfStock(stock.getOutOfStock())
+                .build();
+    }
 }

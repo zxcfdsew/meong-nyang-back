@@ -148,11 +148,11 @@
         from
             order_tb o
             left outer join order_detail_tb od on(o.id = od.order_id)
-            left outer join product_tb p on(p.id = od.product_id)
+            left outer join product_tb p on(o.id = p.product_id)
         where
             user_id = #{id}
         group by
-            product_id
+            o.product_id
     </select>
 
 </mapper>

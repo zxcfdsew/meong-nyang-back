@@ -6,6 +6,7 @@ import com.meongnyang.shop.dto.request.admin.ReqRegisterProductDto;
 import com.meongnyang.shop.dto.request.admin.ReqSearchDto;
 import com.meongnyang.shop.dto.response.admin.RespGetCategorysDto;
 import com.meongnyang.shop.dto.response.admin.RespGetProductsAllDto;
+import com.meongnyang.shop.dto.response.admin.RespProductDetailDto;
 import com.meongnyang.shop.dto.response.admin.RespProductDto;
 import com.meongnyang.shop.entity.*;
 import com.meongnyang.shop.exception.DeleteException;
@@ -88,15 +89,13 @@ public class AdminProductService {
                 .build();
     }
 
-    public Product getProductDetail(Long id) {
+    public RespProductDetailDto getProductDetail(Long id) {
         Product product = productMapper.findProductDetailById(id);
         System.out.println(product.getImgUrls());
         if(product == null) {
             throw new RegisterException("존재하지 않는 상품입니다.");
         }
-
-        product.setStock(stockMapper.findStockByProductId(product.getId()));
-        return product;
+        return product.toProductDetailDto(stockMapper.findStockByProductId(product.getId()));
     }
 
     @Transactional(rollbackFor = RegisterException.class)
