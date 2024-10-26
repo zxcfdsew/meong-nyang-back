@@ -14,6 +14,7 @@ import java.util.Map;
 @Mapper
 public interface OrderMapper {
     List<Order> findOrderAll();
+    int getCountAll();
     List<Order> findOrderByOption(Map<String, Object> params);
     int deleteOrderById(List<Long> idList);
     int deleteOrderAll();

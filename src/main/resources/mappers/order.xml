@@ -115,8 +115,8 @@
             and (
                 p.id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
                 or p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-                or pg.category_group_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-                or c.category_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+<!--                or pg.category_group_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")-->
+<!--                or c.category_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")-->
             )
         </if>
         <if test='option.equals("number")'>
@@ -153,6 +153,12 @@
             user_id = #{id}
         group by
             o.product_id
+    </select>
+    <select id="getCountAll" resultType="java.lang.Integer">
+        select
+            count(*) as totalCount
+        from
+            order_tb o
     </select>
 
 </mapper>

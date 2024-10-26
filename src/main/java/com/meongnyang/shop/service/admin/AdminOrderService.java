@@ -39,7 +39,7 @@ public class AdminOrderService {
                 "option", dto.getOption() == null || dto.getOption().isBlank() ? "all" : dto.getOption()
         ));
 
-        if (dto.getOption().equals("date")) {
+        if (dto.getOption() != null && dto.getOption().equals("date")) {
             params.put("startDate", dto.getStartDate());
             params.put("endDate", dto.getEndDate());
         }
@@ -47,7 +47,7 @@ public class AdminOrderService {
         List<Order> orderList = orderMapper.findOrderByOption(params);
         return RespGetOrdersDto.builder()
                 .orderList(orderList)
-                .orderListCount(orderList.size())
+                .orderListCount(orderMapper.getCountAll())
                 .build();
     }
 
