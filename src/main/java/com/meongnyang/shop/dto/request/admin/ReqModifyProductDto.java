@@ -69,6 +69,7 @@ public class ReqModifyProductDto {
                 .expectedStock(expectedStock)
                 .arrivalDate(arrivalDate)
                 .arrivalQuantity(arrivalQuantity)
+                .minAlertQuantity(minAlertQuantity)
                 .alertSetting(alertSetting)
                 .outOfStock(outOfStock)
                 .build();

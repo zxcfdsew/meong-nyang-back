@@ -91,10 +91,10 @@ public class AdminProductService {
 
     public RespProductDetailDto getProductDetail(Long id) {
         Product product = productMapper.findProductDetailById(id);
-        System.out.println(product.getImgUrls());
         if(product == null) {
             throw new RegisterException("존재하지 않는 상품입니다.");
         }
+        System.out.println(product.toProductDetailDto(stockMapper.findStockByProductId(product.getId())));
         return product.toProductDetailDto(stockMapper.findStockByProductId(product.getId()));
     }
 
@@ -119,12 +119,15 @@ public class AdminProductService {
             }
             //이미지 추가
             List<MultipartFile> imgs = dto.getProductImage();
-            for(MultipartFile img : imgs) {
-                registerImgUrl(img,dto.getId());
+            if(imgs != null) {
+                for(MultipartFile img : imgs) {
+                    registerImgUrl(img,dto.getId());
+                }
             }
 
             //재고 테이블 수정
             Stock stock = dto.toEntityStock();
+            System.out.println(stock);
             stockMapper.modifyStockByProductId(stock);
 
         } catch (Exception e) {
