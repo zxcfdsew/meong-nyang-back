@@ -52,8 +52,7 @@ public class AdminProductController {
 
     @DeleteMapping("/products")
     public ResponseEntity<?> deleteProducts(ReqDeleteProductDto dto) {
-        System.out.println(dto);
-//        adminProductService.deleteProductById(dto);
+        adminProductService.deleteProductById(dto);
         return ResponseEntity.ok().body(true);
     }
 
