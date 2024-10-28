@@ -9,6 +9,7 @@ import com.meongnyang.shop.entity.User;
 import com.meongnyang.shop.repository.AddressMapper;
 import com.meongnyang.shop.repository.UserMapper;
 import com.meongnyang.shop.repository.user.MyPageMapper;
+import com.meongnyang.shop.repository.user.UserAddressMapper;
 import com.meongnyang.shop.security.principal.PrincipalUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -29,6 +30,9 @@ public class UserService {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserAddressMapper userAddressMapper;
 
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -75,13 +79,16 @@ public class UserService {
 
     public void updateUser(ReqUpdateUserDto dto) {
         User user = getCurrentUser();
+        Address address = getCurrentUser().getAddress();
 
         user.setName(dto.getName());
         user.setPhone(dto.getPhone());
-        user.setAddress(dto.toEntityAddress());
+        address.setZipcode(dto.getZipcode());
+        address.setAddressDefault(dto.getAddressDefault());
+        address.setAddressDetail(dto.getAddressDetail());
 
         myPageMapper.UpdateUserInfoById(user);
-        myPageMapper.UpdateAddressByUserId(user);
+        userAddressMapper.UpdateAddressByUserId(address);
     }
 
 //    public void editPassword(ReqUpdatePasswordDto dto) {
