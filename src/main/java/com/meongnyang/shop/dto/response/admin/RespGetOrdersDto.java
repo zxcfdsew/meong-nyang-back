@@ -11,4 +11,5 @@ import java.util.List;
 public class RespGetOrdersDto {
     private List<Order> orderList;
     private int orderListCount;
+    private int productCount;
 }

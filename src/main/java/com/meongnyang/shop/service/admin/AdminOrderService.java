@@ -47,12 +47,9 @@ public class AdminOrderService {
         List<Order> orderList = orderMapper.findOrderByOption(params);
         return RespGetOrdersDto.builder()
                 .orderList(orderList)
-                .orderListCount(orderMapper.getCountAll())
+                .orderListCount(orderMapper.getCountAll(params))
+                .productCount(orderMapper.getProductAllByOption(params))
                 .build();
-    }
-
-    public int getProductCountAll() {
-        return orderDetailMapper.getCountAll();
     }
 
     public void deleteOrder(ReqDeleteOrderDto dto) {
