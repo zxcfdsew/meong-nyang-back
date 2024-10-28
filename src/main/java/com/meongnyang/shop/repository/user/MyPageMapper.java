@@ -1,6 +1,5 @@
 package com.meongnyang.shop.repository.user;
 
-import com.meongnyang.shop.entity.Address;
 import com.meongnyang.shop.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,6 +9,4 @@ public interface MyPageMapper {
     User findUserByUsername(String username);
     Long UpdateUserInfoById(User user);
     Long editPassword(User user);
-
-
 }

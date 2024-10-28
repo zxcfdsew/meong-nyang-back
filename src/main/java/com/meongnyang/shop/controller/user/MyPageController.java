@@ -1,6 +1,7 @@
 package com.meongnyang.shop.controller.user;
 
 import com.meongnyang.shop.dto.request.user.ReqUpdatePasswordDto;
+import com.meongnyang.shop.dto.request.user.ReqUpdatePetDto;
 import com.meongnyang.shop.dto.request.user.ReqUpdateUserDto;
 import com.meongnyang.shop.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +32,15 @@ public class MyPageController {
 
     @Valid
     @PutMapping("/edit/password")
-    public ResponseEntity<?> editPassword (@Valid @RequestBody ReqUpdatePasswordDto dto, BindingResult bindingResult) {
+    public ResponseEntity<?> editPassword(@Valid @RequestBody ReqUpdatePasswordDto dto, BindingResult bindingResult) {
         userService.editPassword(dto);
         return ResponseEntity.ok(true);
+    }
+
+    @PutMapping("/user/pet/{userId}")
+    public ResponseEntity<?> modifyPet(@RequestBody ReqUpdatePetDto dto) {
+        userService.modifyPet(dto);
+        return ResponseEntity.ok().body(true);
     }
 
 }

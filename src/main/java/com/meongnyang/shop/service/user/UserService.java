@@ -1,6 +1,7 @@
 package com.meongnyang.shop.service.user;
 
 import com.meongnyang.shop.dto.request.user.ReqUpdatePasswordDto;
+import com.meongnyang.shop.dto.request.user.ReqUpdatePetDto;
 import com.meongnyang.shop.dto.request.user.ReqUpdateUserDto;
 import com.meongnyang.shop.dto.response.user.RespUserInfoDto;
 import com.meongnyang.shop.entity.Address;
@@ -11,6 +12,7 @@ import com.meongnyang.shop.repository.AddressMapper;
 import com.meongnyang.shop.repository.UserMapper;
 import com.meongnyang.shop.repository.user.MyPageMapper;
 import com.meongnyang.shop.repository.user.UserAddressMapper;
+import com.meongnyang.shop.repository.user.UserPetMapper;
 import com.meongnyang.shop.security.principal.PrincipalUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -34,6 +36,9 @@ public class UserService {
 
     @Autowired
     private UserAddressMapper userAddressMapper;
+
+    @Autowired
+    private UserPetMapper userPetMapper;
 
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -106,5 +111,15 @@ public class UserService {
         }
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         myPageMapper.editPassword(user);
+    }
+
+    public void modifyPet(ReqUpdatePetDto dto) {
+        Pet pet = getCurrentUser().getPet();
+
+        pet.setPetName(dto.getPetName());
+        pet.setPetAge(dto.getPetAge());
+        pet.setPetType(dto.getPetType());
+
+        userPetMapper.UpdatePetByUserId(pet);
     }
 }
