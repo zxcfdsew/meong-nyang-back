@@ -179,5 +179,13 @@
         where
             id = #{id}
     </update>
+    <update id="editPassword">
+        update
+            user_tb
+        set
+            password = #{password}
+        where
+            id =  #{id}
+    </update>
 
 </mapper>

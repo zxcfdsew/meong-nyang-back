@@ -9,7 +9,7 @@ public interface MyPageMapper {
     User findById(Long id);
     User findUserByUsername(String username);
     Long UpdateUserInfoById(User user);
-    Long UpdateAddressByUserId(User user);
+    Long editPassword(User user);
 
 
 }
