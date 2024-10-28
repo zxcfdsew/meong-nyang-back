@@ -1,17 +1,23 @@
 package com.meongnyang.shop.service.user;
 
+import com.meongnyang.shop.dto.request.user.ReqUpdatePasswordDto;
+import com.meongnyang.shop.dto.request.user.ReqUpdateUserDto;
 import com.meongnyang.shop.dto.response.user.RespUserInfoDto;
 import com.meongnyang.shop.entity.Address;
 import com.meongnyang.shop.entity.Pet;
 import com.meongnyang.shop.entity.User;
+import com.meongnyang.shop.repository.AddressMapper;
+import com.meongnyang.shop.repository.UserMapper;
 import com.meongnyang.shop.repository.user.MyPageMapper;
 import com.meongnyang.shop.security.principal.PrincipalUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,6 +26,14 @@ public class UserService {
 
     @Autowired
     private MyPageMapper myPageMapper;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    private User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return myPageMapper.findUserByUsername(authentication.getName());
+    }
 
     public RespUserInfoDto getUserInfo(Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -37,12 +51,6 @@ public class UserService {
         Address address = user.getAddress();
         Pet pet = user.getPet();
         System.out.println(user);
-//        if (address == null) {
-//            throw new IllegalStateException("주소 정보가 없습니다.");
-//        }
-//        if (pet == null) {
-//            throw new IllegalStateException("반려동물 정보가 없습니다.");
-//        }
 
         Set<String> roles = user.getUserRoles().stream().map(
                 userRole -> userRole.getRole().getRoleName()
@@ -64,4 +72,31 @@ public class UserService {
                 .roles(roles)
                 .build();
     }
+
+    public void updateUser(ReqUpdateUserDto dto) {
+        User user = getCurrentUser();
+
+        user.setName(dto.getName());
+        user.setPhone(dto.getPhone());
+        user.setAddress(dto.toEntityAddress());
+
+        myPageMapper.UpdateUserInfoById(user);
+        myPageMapper.UpdateAddressByUserId(user);
+    }
+
+//    public void editPassword(ReqUpdatePasswordDto dto) {
+//        User user = getCurrentUser();
+//
+//        if(!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
+//            throw new ValidException(Map.of("oldPassword", "비밀번호 인증에 실패하였습니다. 다시 입력하세요"));
+//        }
+//        if(!dto.getNewPassword().equals(dto.getNewPasswordCheck())) {
+//            throw new ValidException(Map.of("newPasswordCheck", "새로운 비밀번호가 서로 일치하지 않습니다. 다시 입력하세요"));
+//        }
+//        if(passwordEncoder.matches(dto.getNewPassword(), user.getPassword())) {
+//            throw new ValidException(Map.of("newPasswordCheck", "이전 비밀번호와 동일한 비밀번호는 사용하실 수 없습니다. 다시 입력하세요"));
+//        }
+//        user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+//        myPageMapper.editPassword(user);
+//    }
 }
