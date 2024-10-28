@@ -29,11 +29,11 @@ public class MyPageController {
         return ResponseEntity.ok().body(true);
     }
 
-//    @Valid
-//    @PutMapping("/edit/password")
-//    public ResponseEntity<?> editPassword (@Valid @RequestBody ReqUpdatePasswordDto dto, BindingResult bindingResult) {
-//        userService.editPassword(dto);
-//        return ResponseEntity.ok(true);
-//    }
+    @Valid
+    @PutMapping("/edit/password")
+    public ResponseEntity<?> editPassword (@Valid @RequestBody ReqUpdatePasswordDto dto, BindingResult bindingResult) {
+        userService.editPassword(dto);
+        return ResponseEntity.ok(true);
+    }
 
 }
