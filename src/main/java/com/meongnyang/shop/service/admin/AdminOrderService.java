@@ -51,6 +51,10 @@ public class AdminOrderService {
                 .build();
     }
 
+    public int getProductCountAll() {
+        return orderDetailMapper.getCountAll();
+    }
+
     public void deleteOrder(ReqDeleteOrderDto dto) {
         orderMapper.deleteOrderById(dto.getOrderIds());
     }

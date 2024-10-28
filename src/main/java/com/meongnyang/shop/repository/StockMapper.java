@@ -15,5 +15,15 @@ public interface StockMapper {
     int deleteStockAll();
     Stock findStockByProductId(Long productId);
     List<Stock> findStockAll();
-    List<Stock> findStockByOption(@Param("option") String option, @Param("searchWord") String searchWord);
+    int getAllCount(
+            @Param("option") String option,
+            @Param("searchWord") String search,
+            @Param("startIndex") int startIndex,
+            @Param("limit") int limit
+    );
+    List<Stock> findStockByOption(
+            @Param("option") String option,
+            @Param("searchWord") String search,
+            @Param("startIndex") int startIndex,
+            @Param("limit") int limit);
 }

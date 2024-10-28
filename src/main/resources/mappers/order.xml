@@ -121,7 +121,7 @@
         </if>
         <if test='option.equals("number")'>
             and (
-                p.id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                o.id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
             )
         </if>
         <if test='option.equals("name")'>
@@ -134,6 +134,9 @@
                 DATE(o.order_date) between #{startDate} and #{endDate}
             )
         </if>
+        order by
+            o.id desc,
+            od.id desc
         limit #{startIndex}, #{limit}
 
     </select>

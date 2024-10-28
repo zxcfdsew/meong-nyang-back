@@ -9,6 +9,12 @@
     <delete id="deleteOrderDetailAll">
         truncate table order_detail_tb;
     </delete>
+    <select id="getCountAll" resultType="java.lang.Integer">
+        select
+            count(*) as Count
+        from
+            order_detail_tb
+    </select>
 </mapper>
 
 

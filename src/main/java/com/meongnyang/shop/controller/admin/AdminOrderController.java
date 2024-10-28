@@ -24,6 +24,11 @@ public class AdminOrderController {
         return ResponseEntity.ok().body(adminOrderService.getOrdersByOption(dto));
     }
 
+    @GetMapping("/order/product/all")
+    public ResponseEntity<?> getProductCountAll() {
+        return ResponseEntity.ok().body(adminOrderService.getProductCountAll());
+    }
+
     @DeleteMapping("/orders")
     public ResponseEntity<?> deleteOrders(@RequestBody ReqDeleteOrderDto dto) {
         adminOrderService.deleteOrder(dto);
