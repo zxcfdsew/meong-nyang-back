@@ -24,7 +24,6 @@ public class AdminProductController {
     @ValidAop
     @PostMapping("/product")
     public ResponseEntity<?> registerProduct(@Valid @ModelAttribute ReqRegisterProductDto dto, BindingResult bindingResult) {
-        System.out.println(dto);
         adminProductService.registerProduct(dto);
         return ResponseEntity.ok().body(true);
     }
@@ -52,7 +51,7 @@ public class AdminProductController {
     }
 
     @DeleteMapping("/products")
-    public ResponseEntity<?> deleteProducts(@RequestBody ReqDeleteProductDto dto) {
+    public ResponseEntity<?> deleteProducts(ReqDeleteProductDto dto) {
         adminProductService.deleteProductById(dto);
         return ResponseEntity.ok().body(true);
     }

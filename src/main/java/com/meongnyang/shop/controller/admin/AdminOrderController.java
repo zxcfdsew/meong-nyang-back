@@ -20,7 +20,7 @@ public class AdminOrderController {
     }
 
     @GetMapping("/orders/search")
-    public ResponseEntity<?> getOrdersByOption(@RequestBody ReqSearchDto dto) {
+    public ResponseEntity<?> getOrdersByOption(ReqSearchDto dto) {
         return ResponseEntity.ok().body(adminOrderService.getOrdersByOption(dto));
     }
 
