@@ -4,12 +4,10 @@ import com.meongnyang.shop.dto.request.admin.ReqDeleteOrderDto;
 import com.meongnyang.shop.dto.request.admin.ReqSearchDto;
 import com.meongnyang.shop.dto.response.admin.RespGetOrdersDto;
 import com.meongnyang.shop.entity.Order;
-import com.meongnyang.shop.exception.DeleteException;
 import com.meongnyang.shop.repository.OrderDetailMapper;
 import com.meongnyang.shop.repository.OrderMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -47,8 +45,8 @@ public class AdminOrderService {
         List<Order> orderList = orderMapper.findOrderByOption(params);
         return RespGetOrdersDto.builder()
                 .orderList(orderList)
-                .orderListCount(orderMapper.getCountAll(params))
-                .productCount(orderMapper.getProductAllByOption(params))
+                .orderListCount(orderMapper.getOrderCountByOption(params))
+                .productCount(orderMapper.getProductCountByOption(params))
                 .build();
     }
 

@@ -9,25 +9,35 @@
     <sql id="searchOptionIf">
         <if test='option.equals("all")'>
             and (
-            p.id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-            or p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-            <!--                or pg.category_group_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")-->
-            <!--                or c.category_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")-->
+                p.id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                or p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                <!--                or pg.category_group_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")-->
+                <!--                or c.category_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")-->
             )
         </if>
         <if test='option.equals("number")'>
             and (
-            o.id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-            )
-        </if>
-        <if test='option.equals("name")'>
-            and (
-            p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                o.id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
             )
         </if>
         <if test='option.equals("date")'>
             and (
-            DATE(o.order_date) between #{startDate} and #{endDate}
+                DATE(o.order_date) between #{startDate} and #{endDate}
+            )
+        </if>
+        <if test='option.equals("productId")'>
+            and (
+                od.product_id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            )
+        </if>
+        <if test='option.equals("productName")'>
+            and (
+                p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            )
+        </if>
+        <if test='option.equals("status")'>
+            and (
+                o.order_status like concat('%', trim(ifnull(#{searchWord}, '')), "%")
             )
         </if>
     </sql>
@@ -162,7 +172,7 @@
         group by
             o.product_id
     </select>
-    <select id="getCountAll" resultType="java.lang.Integer">
+    <select id="getOrderCountByOption" resultType="java.lang.Integer">
         select
             count(*)
         from (
@@ -180,7 +190,7 @@
                 o.id
         ) as orderList
     </select>
-    <select id="getProductAllByOption" resultType="java.lang.Integer">
+    <select id="getProductCountByOption" resultType="java.lang.Integer">
         select
             count(*)
         from
