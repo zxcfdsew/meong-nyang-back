@@ -13,7 +13,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 public class Address {
     private Long id;
     private Long userId;
-    private Long zipcode;
+    private String zipcode;
     private String addressDefault;
     private String addressDetail;
     private String request;

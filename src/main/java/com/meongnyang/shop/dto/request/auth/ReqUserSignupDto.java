@@ -31,7 +31,7 @@ public class ReqUserSignupDto {
     @Pattern(regexp = "^(010-\\d{4}-\\d{4})$", message = "전화번호 형식이 올바르지 않습니다.")
     private String phone;
 
-    private Long zipcode;
+    private String zipcode;
     private String addressDefault;
     private String addressDetail;
     private String request;

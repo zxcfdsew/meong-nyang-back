@@ -26,6 +26,9 @@ public class AuthController {
     @ValidAop
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody ReqUserSignupDto dto, BindingResult bindingResult) {
+        System.out.println(dto.getZipcode().getClass().getName());
+        System.out.println(dto.getZipcode());
+        System.out.println(dto);
         authService.signup(dto);
         return ResponseEntity.ok().body(null);
     }
