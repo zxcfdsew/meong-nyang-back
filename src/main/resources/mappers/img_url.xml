@@ -28,9 +28,9 @@
     <select id="findImgUrlByProductId" resultType="com.meongnyang.shop.entity.ImgUrl">
         select
             id,
-            product_id,
-            img_path,
-            img_name
+            product_id as productId,
+            img_path as imgPath,
+            img_name as imgName
         from
             img_url_tb
         where
