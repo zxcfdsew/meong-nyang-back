@@ -1,9 +1,13 @@
 package com.meongnyang.shop.service.user;
 
+import com.meongnyang.shop.dto.request.admin.ReqDeleteProductDto;
+import com.meongnyang.shop.dto.request.user.ReqDeleteCartDto;
 import com.meongnyang.shop.dto.request.user.ReqGetCartDto;
 import com.meongnyang.shop.dto.response.user.RespGetCartDto;
 import com.meongnyang.shop.entity.Cart;
+import com.meongnyang.shop.entity.ImgUrl;
 import com.meongnyang.shop.entity.User;
+import com.meongnyang.shop.exception.DeleteException;
 import com.meongnyang.shop.exception.NotFoundUserException;
 import com.meongnyang.shop.exception.UpdateUserException;
 import com.meongnyang.shop.repository.user.MyPageMapper;
@@ -32,7 +36,6 @@ public class UserCartService {
         return myPageMapper.findUserByUsername(authentication.getName());
     }
 
-    @Transactional(rollbackFor = UpdateUserException.class)
     public List<RespGetCartDto> getCart(ReqGetCartDto dto) {
         User user = getCurrentUser();
         if (user.getId().equals(dto.getUserId())) {
@@ -40,6 +43,28 @@ public class UserCartService {
             return cart.stream().map(Cart::toDto).collect(Collectors.toList());
         } else {
             return Collections.emptyList();
+        }
+    }
+
+    @Transactional(rollbackFor = DeleteException.class)
+    public void deleteCartAll(List<Long> userIds) {
+        User user = getCurrentUser();
+        try {
+            if (userIds.contains(user.getId())) {
+                userCartMapper.deleteCartAll(Collections.singletonList(user.getId()));
+            }
+        } catch (Exception e) {
+            throw new DeleteException(e.getMessage());
+        }
+    }
+
+    public void deleteCart(ReqDeleteCartDto dto) {  //!
+        try {
+            List<Long> deleteCartIds = dto.getCartIds();
+            userCartMapper.deleteCartById(deleteCartIds);
+
+        } catch (Exception e) {
+            throw new DeleteException(e.getMessage());
         }
     }
 }

@@ -8,4 +8,6 @@ import java.util.List;
 @Mapper
 public interface UserCartMapper {
     List<Cart> getCart(Long userId);
+    Long deleteCartAll (List<Long> userIds);
+    int deleteCartById(List<Long> idList);
 }

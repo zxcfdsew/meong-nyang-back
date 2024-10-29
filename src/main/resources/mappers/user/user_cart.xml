@@ -29,7 +29,6 @@
         <result property="productUpdateDate" column="product_update_date" />
         <result property="recommendation" column="recommendation" />
     </resultMap>
-
     <select id="getCart" resultMap="cartResultMap">
         select
             c.id,
@@ -43,5 +42,28 @@
             left outer join product_tb p on(p.id = c.product_id)
         where
             user_id = #{userId}
+        order by
+            p.product_update_date DESC
     </select>
+
+    <delete id="deleteCartAll">
+        delete
+        from
+            cart_tb
+        where
+            user_id in (
+                <foreach collection="userIds" item="userId" separator=",">
+                    #{userId}
+                </foreach>
+            )
+    </delete>
+    <delete id="deleteCartById">
+        delete
+        from
+            cart_tb
+        where id in
+            <foreach item="id" collection="idList" open="(" separator=",">
+                #{id}
+            </foreach>
+    </delete>
 </mapper>
