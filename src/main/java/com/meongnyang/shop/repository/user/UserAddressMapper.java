@@ -6,6 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserAddressMapper {
     int saveAddress(Address address);
-    Long findAddressByUserId(Address address);
+    Long findAddressByUserId(Long userId);
     Long UpdateAddressByUserId(Address address);
 }

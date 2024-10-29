@@ -6,8 +6,10 @@ import com.meongnyang.shop.dto.request.user.ReqUpdateUserDto;
 import com.meongnyang.shop.dto.response.user.RespUserInfoDto;
 import com.meongnyang.shop.entity.Address;
 import com.meongnyang.shop.entity.Pet;
+import com.meongnyang.shop.entity.Product;
 import com.meongnyang.shop.entity.User;
-import com.meongnyang.shop.exception.NotFoundAddressException;
+import com.meongnyang.shop.exception.SignupException;
+import com.meongnyang.shop.exception.UpdateUserException;
 import com.meongnyang.shop.exception.ValidException;
 import com.meongnyang.shop.repository.user.MyPageMapper;
 import com.meongnyang.shop.repository.user.UserAddressMapper;
@@ -19,6 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Set;
@@ -81,31 +84,28 @@ public class UserService {
                 .build();
     }
 
+    @Transactional(rollbackFor = UpdateUserException.class)
     public void updateUser(ReqUpdateUserDto dto) {
-        User user = getCurrentUser();
-        Address address = getCurrentUser().getAddress();
+        try {
+            User user = getCurrentUser();
+            Address address = getCurrentUser().getAddress();
 
-        user.setName(dto.getName());
-        user.setPhone(dto.getPhone());
-        myPageMapper.UpdateUserInfoById(user);
+            user.setName(dto.toEntity().getName());
+            user.setPhone(dto.toEntity().getPhone());
+            address.setUserId(dto.toEntityAddress().getId());
+            address.setZipcode(dto.toEntityAddress().getZipcode());
+            address.setAddressDefault(dto.toEntityAddress().getAddressDefault());
+            address.setAddressDetail(dto.toEntityAddress().getAddressDetail());
+            myPageMapper.UpdateUserInfoById(user);
 
-        if (address == null) {
-            address = new Address();
-            address.setUserId(dto.getUserId());
-            address.setZipcode(dto.getZipcode());
-            address.setAddressDefault(dto.getAddressDefault());
-            address.setAddressDetail(dto.getAddressDetail());
-
-            userAddressMapper.saveAddress(address);
-        } else {
-            address.setZipcode(dto.getZipcode());
-            address.setAddressDefault(dto.getAddressDefault());
-            address.setAddressDetail(dto.getAddressDetail());
-
-            if (userAddressMapper.findAddressByUserId(address) == null) {
+            if (userAddressMapper.findAddressByUserId(user.getId()) == null) {
+                address = new Address();
                 userAddressMapper.saveAddress(address);
+            } else {
+                userAddressMapper.UpdateAddressByUserId(address);
             }
-            userAddressMapper.UpdateAddressByUserId(address);
+        } catch (Exception e) {
+            throw new UpdateUserException(e.getMessage());
         }
     }
 
@@ -126,21 +126,21 @@ public class UserService {
     }
 
     public void modifyPet(ReqUpdatePetDto dto) {
-        Pet pet = getCurrentUser().getPet();
+        try {
+            Pet pet = getCurrentUser().getPet();
+            pet.setUserId(dto.toEntity().getUserId());
+            pet.setPetName(dto.toEntity().getPetName());
+            pet.setPetAge(dto.toEntity().getPetAge());
+            pet.setPetType(dto.toEntity().getPetType());
 
-        if(pet == null) {
-            pet = new Pet();
-            pet.setUserId(dto.getUserId());
-            pet.setPetName(dto.getPetName());
-            pet.setPetAge(dto.getPetAge());
-            pet.setPetType(dto.getPetType());
-            userPetMapper.savePet(pet);
-        } else {
-            pet.setPetName(dto.getPetName());
-            pet.setPetAge(dto.getPetAge());
-            pet.setPetType(dto.getPetType());
-
-            userPetMapper.UpdatePetByUserId(pet);
+            if(userPetMapper.UpdatePetByUserId(dto.toEntity()) == null) {
+                pet = new Pet();
+                userPetMapper.savePet(pet);
+            } else {
+                userPetMapper.UpdatePetByUserId(pet);
+            }
+        } catch (Exception e) {
+            throw new UpdateUserException(e.getMessage());
         }
     }
 }

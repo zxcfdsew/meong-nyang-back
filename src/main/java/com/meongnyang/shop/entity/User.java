@@ -2,6 +2,7 @@ package com.meongnyang.shop.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.meongnyang.shop.dto.response.admin.RespGetUserDetailDto;
+import com.meongnyang.shop.dto.response.user.RespUpdateUserDto;
 import com.meongnyang.shop.security.principal.PrincipalUser;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -55,5 +56,9 @@ public class User {
                 .pet(pet)
                 .build();
 
+    }
+
+    public RespUpdateUserDto toDto() {
+        return RespUpdateUserDto.builder().build();
     }
 }

@@ -7,6 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserPetMapper {
     int savePet(Pet pet);
-    Long findPetByUserId(Pet pet);
+    Pet findPetByUserId(Pet pet);
     Long UpdatePetByUserId(Pet pet);
 }
