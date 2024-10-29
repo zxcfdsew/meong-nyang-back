@@ -70,41 +70,43 @@ public class UserService {
                 .name(user.getName())
                 .phone(user.getPhone())
                 .addressId(address != null ? address.getId() : null)
-                .zipcode(address != null ? address.getZipcode() : null)
+                .zipcode(address != null ? address.getZipcode().toString() : "")
                 .addressDefault(address != null ? address.getAddressDefault() : "")
                 .addressDetail(address != null ? address.getAddressDetail() : "")
                 .petId(pet != null ? pet.getId() : null)
                 .petName(pet != null ? pet.getPetName() : "")
-                .petAge(pet != null ? pet.getPetAge() : null)
+                .petAge(pet != null ? pet.getPetAge().toString() : "")
                 .petType(pet != null ? pet.getPetType() : "")
                 .roles(roles)
                 .build();
     }
 
     public void updateUser(ReqUpdateUserDto dto) {
-        try {
-            User user = getCurrentUser();
-            Address address = getCurrentUser().getAddress();
+        User user = getCurrentUser();
+        Address address = getCurrentUser().getAddress();
 
-            user.setName(dto.getName());
-            user.setPhone(dto.getPhone());
+        user.setName(dto.getName());
+        user.setPhone(dto.getPhone());
+        myPageMapper.UpdateUserInfoById(user);
 
-            myPageMapper.UpdateUserInfoById(user);
+        if (address == null) {
+            address = new Address();
+            address.setUserId(dto.getUserId());
+            address.setZipcode(dto.getZipcode());
+            address.setAddressDefault(dto.getAddressDefault());
+            address.setAddressDetail(dto.getAddressDetail());
 
+            userAddressMapper.saveAddress(address);
+        } else {
+            address.setZipcode(dto.getZipcode());
+            address.setAddressDefault(dto.getAddressDefault());
+            address.setAddressDetail(dto.getAddressDetail());
 
-
-            if(dto.getZipcode() != 0 && !dto.getAddressDefault().isBlank()) {
-                address.setZipcode(dto.getZipcode());
-                address.setAddressDefault(dto.getAddressDefault());
-                address.setAddressDetail(dto.getAddressDetail());
-
-                userAddressMapper.UpdateAddressByUserId(address);
+            if (userAddressMapper.findAddressByUserId(address) == null) {
+                userAddressMapper.saveAddress(address);
             }
+            userAddressMapper.UpdateAddressByUserId(address);
         }
-        catch(Exception e) {
-            throw new NotFoundAddressException(e.getMessage());
-        }
-
     }
 
     public void editPassword(ReqUpdatePasswordDto dto) {
@@ -126,10 +128,19 @@ public class UserService {
     public void modifyPet(ReqUpdatePetDto dto) {
         Pet pet = getCurrentUser().getPet();
 
-        pet.setPetName(dto.getPetName());
-        pet.setPetAge(dto.getPetAge());
-        pet.setPetType(dto.getPetType());
+        if(pet == null) {
+            pet = new Pet();
+            pet.setUserId(dto.getUserId());
+            pet.setPetName(dto.getPetName());
+            pet.setPetAge(dto.getPetAge());
+            pet.setPetType(dto.getPetType());
+            userPetMapper.savePet(pet);
+        } else {
+            pet.setPetName(dto.getPetName());
+            pet.setPetAge(dto.getPetAge());
+            pet.setPetType(dto.getPetType());
 
-        userPetMapper.UpdatePetByUserId(pet);
+            userPetMapper.UpdatePetByUserId(pet);
+        }
     }
 }

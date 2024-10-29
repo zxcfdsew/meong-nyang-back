@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ReqUpdatePetDto {
-    private Long id;
+    private Long userId;
     private String petName;
     private Long petAge;
     private String petType;

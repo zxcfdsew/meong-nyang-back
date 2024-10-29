@@ -6,10 +6,10 @@ import lombok.Data;
 
 @Data
 public class ReqUpdateUserDto {
-    private Long id;
+    private Long userId;
     private String name;
     private String phone;
-    private Long zipcode;
+    private String zipcode;
     private String addressDefault;
     private String addressDetail;
 

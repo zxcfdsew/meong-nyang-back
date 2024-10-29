@@ -76,11 +76,11 @@ public class ValidAspect {
                     fieldError = new FieldError("username", "username", "중복된 아이디입니다.");
                     bindingResult.addError(fieldError);
                 }
-                if((dto.getZipcode() == 0 && !dto.getAddressDefault().isBlank())
-                    || (dto.getZipcode() != 0 && dto.getAddressDefault().isBlank())) {
-                    fieldError = new FieldError("address", "address", "주소정보를 확인하세요");
-                    bindingResult.addError(fieldError);
-                }
+//                if((dto.getZipcode() == 0 && !dto.getAddressDefault().isBlank())
+//                    || (dto.getZipcode() != 0 && dto.getAddressDefault().isBlank())) {
+//                    fieldError = new FieldError("address", "address", "주소정보를 확인하세요");
+//                    bindingResult.addError(fieldError);
+//                }
 
             }
         }

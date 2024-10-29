@@ -6,12 +6,19 @@
 
 <mapper namespace="com.meongnyang.shop.repository.user.UserAddressMapper">
 
-    <update id="save">
+    <update id="saveAddress">
         insert into address_tb
         values(default, #{userId}, #{zipcode}, #{addressDefault}, #{addressDetail})
     </update>
 
-
+    <select id="findAddressByUserId" resultType="java.lang.Long">
+        select
+            *
+        from
+            address_tb
+        where
+            user_id = #{userId}
+    </select>
 
     <update id="UpdateAddressByUserId">
         update
