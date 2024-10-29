@@ -30,7 +30,9 @@ public class ProductService {
 
         Map<String, Object> params = Map.of(
                 "startIndex", startIndex,
-                "limit", dto.getLimit()
+                "limit", dto.getLimit(),
+                "petGroupId", dto.getPetGroupId(),
+                "categoryId", dto.getCategoryId()
         );
 
         List<Product> productList = userProductMapper.findProducts(params);

@@ -69,6 +69,21 @@
             left outer join img_url_tb iu on(p.id = iu.product_id)
             left outer join pet_group_tb pg on(p.pet_group_id = pg.id)
             left outer join category_tb c on(p.category_id = c.id)
+        where
+            1 = 1
+            <if test="petGroupId == 0 and categoryId != 0" >
+                and p.category_id = #{categoryId}
+            </if>
+            <if test="categoryId == 0 and petGroupId != 0" >
+                and p.pet_group_id = #{petGroupId}
+            </if>
+           
+            <if test="petGroupId == 3" >
+                and (
+                    p.recommendation = 1
+                    and p.category_id = #{categoryId}
+                )
+            </if>
         limit #{startIndex}, #{limit}
     </select>
     <select id="findProductCount" resultType="java.lang.Integer">
