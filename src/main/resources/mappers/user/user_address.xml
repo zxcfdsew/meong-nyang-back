@@ -6,6 +6,13 @@
 
 <mapper namespace="com.meongnyang.shop.repository.user.UserAddressMapper">
 
+    <update id="save">
+        insert into address_tb
+        values(default, #{userId}, #{zipcode}, #{addressDefault}, #{addressDetail})
+    </update>
+
+
+
     <update id="UpdateAddressByUserId">
         update
             address_tb
@@ -16,4 +23,5 @@
         where
             user_id = #{userId}
     </update>
+
 </mapper>

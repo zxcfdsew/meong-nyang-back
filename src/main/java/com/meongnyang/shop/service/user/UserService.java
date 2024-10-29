@@ -7,9 +7,8 @@ import com.meongnyang.shop.dto.response.user.RespUserInfoDto;
 import com.meongnyang.shop.entity.Address;
 import com.meongnyang.shop.entity.Pet;
 import com.meongnyang.shop.entity.User;
+import com.meongnyang.shop.exception.NotFoundAddressException;
 import com.meongnyang.shop.exception.ValidException;
-import com.meongnyang.shop.repository.AddressMapper;
-import com.meongnyang.shop.repository.UserMapper;
 import com.meongnyang.shop.repository.user.MyPageMapper;
 import com.meongnyang.shop.repository.user.UserAddressMapper;
 import com.meongnyang.shop.repository.user.UserPetMapper;
@@ -60,7 +59,6 @@ public class UserService {
         }
         Address address = user.getAddress();
         Pet pet = user.getPet();
-        System.out.println(user);
 
         Set<String> roles = user.getUserRoles().stream().map(
                 userRole -> userRole.getRole().getRoleName()
@@ -71,30 +69,42 @@ public class UserService {
                 .username(user.getUsername())
                 .name(user.getName())
                 .phone(user.getPhone())
-                .addressId(address.getId())
-                .zipcode(address.getZipcode())
-                .addressDefault(address.getAddressDefault())
-                .addressDetail(address.getAddressDetail())
-                .petId(pet.getId())
-                .petName(pet.getPetName())
-                .petAge(pet.getPetAge())
-                .petType(pet.getPetType())
+                .addressId(address != null ? address.getId() : null)
+                .zipcode(address != null ? address.getZipcode() : null)
+                .addressDefault(address != null ? address.getAddressDefault() : "")
+                .addressDetail(address != null ? address.getAddressDetail() : "")
+                .petId(pet != null ? pet.getId() : null)
+                .petName(pet != null ? pet.getPetName() : "")
+                .petAge(pet != null ? pet.getPetAge() : null)
+                .petType(pet != null ? pet.getPetType() : "")
                 .roles(roles)
                 .build();
     }
 
     public void updateUser(ReqUpdateUserDto dto) {
-        User user = getCurrentUser();
-        Address address = getCurrentUser().getAddress();
+        try {
+            User user = getCurrentUser();
+            Address address = getCurrentUser().getAddress();
 
-        user.setName(dto.getName());
-        user.setPhone(dto.getPhone());
-        address.setZipcode(dto.getZipcode());
-        address.setAddressDefault(dto.getAddressDefault());
-        address.setAddressDetail(dto.getAddressDetail());
+            user.setName(dto.getName());
+            user.setPhone(dto.getPhone());
 
-        myPageMapper.UpdateUserInfoById(user);
-        userAddressMapper.UpdateAddressByUserId(address);
+            myPageMapper.UpdateUserInfoById(user);
+
+
+
+            if(dto.getZipcode() != 0 && !dto.getAddressDefault().isBlank()) {
+                address.setZipcode(dto.getZipcode());
+                address.setAddressDefault(dto.getAddressDefault());
+                address.setAddressDetail(dto.getAddressDetail());
+
+                userAddressMapper.UpdateAddressByUserId(address);
+            }
+        }
+        catch(Exception e) {
+            throw new NotFoundAddressException(e.getMessage());
+        }
+
     }
 
     public void editPassword(ReqUpdatePasswordDto dto) {
