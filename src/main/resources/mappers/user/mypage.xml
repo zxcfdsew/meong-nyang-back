@@ -133,6 +133,44 @@
             username = #{username}
     </select>
 
+    <select id="findUserByUserId" resultMap="userDetailResultMap">
+        select
+            u.id as u_id,
+            u.username,
+            u.password,
+            u.name,
+            u.phone,
+            u.membership_level_id,
+            u.create_date,
+            u.provider,
+            ur.id as ur_id,
+            ur.user_id as ur_user_id,
+            ur.role_id as ur_role_id,
+            r.id as r_id,
+            r.role_name as r_role_name,
+            ml.id as ml_id,
+            ml.membership_level_name,
+            a.id as a_id,
+            a.zipcode,
+            a.user_id as a_user_id,
+            a.address_default,
+            a.address_detail,
+            p.id as p_id,
+            p.user_id as p_user_id,
+            p.pet_name,
+            p.pet_age,
+            p.pet_type
+        from
+            user_tb u
+            left outer join user_role_tb ur on(u.id = ur.user_id)
+            left outer join role_tb r on(r.id = ur.role_id)
+            left outer join membership_level_tb ml on(ml.id = u.membership_level_id)
+            left outer join address_tb a on(u.id = a.user_id)
+            left outer join pet_tb p on(u.id = p.user_id)
+        where
+            u.id = #{id}
+    </select>
+
     <select id="findById" resultMap="userDetailResultMap">
         select
             u.id as u_id,

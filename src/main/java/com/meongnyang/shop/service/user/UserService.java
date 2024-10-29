@@ -88,11 +88,9 @@ public class UserService {
     public void updateUser(ReqUpdateUserDto dto) {
         try {
             User user = getCurrentUser();
-
             user.setName(dto.toEntity().getName());
             user.setPhone(dto.toEntity().getPhone());
             myPageMapper.UpdateUserInfoById(user);
-
             Address address = user.getAddress();
 
             if (userAddressMapper.findAddressByUserId(user.getId()) == null) {
@@ -119,7 +117,7 @@ public class UserService {
         if(!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
             throw new ValidException(Map.of("oldPassword", "비밀번호 인증에 실패하였습니다. 다시 입력하세요"));
         }
-        if(!dto.getNewPassword().equals(dto.getNewPasswordCheck())) {
+        if(!dto.getNewPassword().equals(dto.getNewCheckPassword())) {
             throw new ValidException(Map.of("newPasswordCheck", "새로운 비밀번호가 서로 일치하지 않습니다. 다시 입력하세요"));
         }
         if(passwordEncoder.matches(dto.getNewPassword(), user.getPassword())) {
