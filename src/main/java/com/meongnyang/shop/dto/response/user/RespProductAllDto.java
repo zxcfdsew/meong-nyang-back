@@ -1,6 +1,5 @@
 package com.meongnyang.shop.dto.response.user;
 
-import com.meongnyang.shop.entity.Product;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,6 +8,25 @@ import java.util.List;
 @Data
 @Builder
 public class RespProductAllDto {
-    private List<Product> productList;
+    private List<ProductContent> productList;
     private int productListCount;
+
+    @Data
+    @Builder
+    public static class ProductContent {
+        private Long productId;
+        private String productName;
+        private String petGroupName;
+        private String categoryName;
+        private Long productPrice;
+        private int productPriceDiscount;
+        private String productDetail;
+        private String productBrand;
+        private String productModel;
+
+        private List<String> imgNames;
+
+    }
+
+
 }

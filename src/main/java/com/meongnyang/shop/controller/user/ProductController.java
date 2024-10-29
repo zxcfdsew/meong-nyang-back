@@ -13,9 +13,15 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @GetMapping("/product/categorys")
+    public ResponseEntity<?> getCategorys() {
+        return ResponseEntity.ok().body(productService.getCategorys());
+    }
+
     @GetMapping("/products")
     public ResponseEntity<?> getProductsAll(ReqProductAllDto dto) {
         System.out.println("요청");
+        System.out.println(dto);
         return ResponseEntity.ok().body(productService.getProductsAll(dto));
     }
 

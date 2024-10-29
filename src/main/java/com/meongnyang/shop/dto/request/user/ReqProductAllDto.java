@@ -6,4 +6,6 @@ import lombok.Data;
 public class ReqProductAllDto {
     private Long page;
     private Long limit;
+    private Long petGroupId;
+    private Long categoryId;
 }
