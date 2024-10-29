@@ -68,6 +68,10 @@ public class ValidAspect {
             if (arg instanceof ReqUserSignupDto) {
                 ReqUserSignupDto dto = (ReqUserSignupDto) arg;
                 FieldError fieldError = null;
+
+                boolean isZipcodeBlank = dto.getZipcode() == null || dto.getZipcode().isBlank();
+                boolean isAddressDefaultBlank = dto.getAddressDefault() == null || dto.getAddressDefault().isBlank();
+
                 if (!dto.getPassword().equals(dto.getCheckPassword())) {
                     fieldError = new FieldError("checkPassword", "checkPassword", "비밀번호를 확인해주세요");
                     bindingResult.addError(fieldError);
@@ -76,12 +80,14 @@ public class ValidAspect {
                     fieldError = new FieldError("username", "username", "중복된 아이디입니다.");
                     bindingResult.addError(fieldError);
                 }
-                if((dto.getZipcode() == 0 && !dto.getAddressDefault().isBlank())
-                    || (dto.getZipcode() != 0 && dto.getAddressDefault().isBlank())) {
+                if (isZipcodeBlank && !isAddressDefaultBlank) {
                     fieldError = new FieldError("address", "address", "주소정보를 확인하세요");
                     bindingResult.addError(fieldError);
                 }
-
+                if (isAddressDefaultBlank && !isZipcodeBlank) {
+                    fieldError = new FieldError("address", "address", "주소정보를 확인하세요");
+                    bindingResult.addError(fieldError);
+                }
             }
         }
     }
