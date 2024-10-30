@@ -17,7 +17,7 @@ public interface OrderMapper {
     Order getOrderDetail(Long id);
     int getOrderCountByOption(Map<String, Object> params);
     int getProductCountByOption(Map<String, Object> params);
-    int deleteOrderById(List<Long> idList);
+    int deleteOrderById(Long id);
     int deleteOrderAll();
 }
 

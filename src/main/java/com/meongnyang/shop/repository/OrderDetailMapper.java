@@ -7,4 +7,5 @@ import java.util.Map;
 @Mapper
 public interface OrderDetailMapper {
     int deleteOrderDetailAll();
+    int deleteOrderDetailByOrderId(Long orderId);
 }

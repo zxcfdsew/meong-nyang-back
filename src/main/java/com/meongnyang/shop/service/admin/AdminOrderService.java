@@ -6,11 +6,14 @@ import com.meongnyang.shop.dto.response.admin.RespGetOrdersDto;
 import com.meongnyang.shop.dto.response.admin.RespOrderDetailDto;
 import com.meongnyang.shop.entity.ImgUrl;
 import com.meongnyang.shop.entity.Order;
+import com.meongnyang.shop.exception.DeleteException;
 import com.meongnyang.shop.repository.ImgUrlMapper;
 import com.meongnyang.shop.repository.OrderDetailMapper;
 import com.meongnyang.shop.repository.OrderMapper;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -91,8 +94,14 @@ public class AdminOrderService {
         return dto;
     }
 
-    public void deleteOrder(ReqDeleteOrderDto dto) {
-        orderMapper.deleteOrderById(dto.getOrderIds());
+    @Transactional(rollbackFor = DeleteException.class)
+    public void deleteOrder(Long id) {
+        try {
+            orderMapper.deleteOrderById(id);
+            orderDetailMapper.deleteOrderDetailByOrderId(id);
+        } catch (Exception e) {
+            throw new DeleteException("삭제 실패");
+        }
     }
 
     public void deleteOrderAll() {

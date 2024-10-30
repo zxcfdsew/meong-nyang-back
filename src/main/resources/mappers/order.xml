@@ -110,10 +110,8 @@
         delete
         from
             order_tb
-        where id in
-        <foreach item="id" collection="idList" open="(" separator="," close=")">
-            #{id}
-        </foreach>
+        where
+            id = #{id}
     </delete>
     <delete id="deleteOrderAll">
         delete from order_tb;
