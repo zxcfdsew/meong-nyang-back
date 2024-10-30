@@ -1,6 +1,7 @@
 package com.meongnyang.shop.entity;
 
 import com.meongnyang.shop.dto.response.admin.RespProductDetailDto;
+import com.meongnyang.shop.dto.response.user.RespGetProductDetailDto;
 import com.meongnyang.shop.dto.response.user.RespProductAllDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -73,6 +74,19 @@ public class Product {
                 .productDetail(productDetail)
                 .productBrand(productBrand)
                 .productModel(productModel)
+                .imgNames(imgNames)
+                .build();
+    }
+
+    public RespGetProductDetailDto toUserProductDetailDto(List<String> imgNames) {
+        return RespGetProductDetailDto.builder()
+                .id(id)
+                .productName(productName)
+                .petGroupName(petGroup.getCategoryGroupName())
+                .categoryName(category.getCategoryName())
+                .productDetail(productDetail)
+                .productPrice(productPrice.toString())
+                .productPriceDiscount(String.valueOf(productPriceDiscount))
                 .imgNames(imgNames)
                 .build();
     }

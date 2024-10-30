@@ -12,8 +12,11 @@
         <result property="password" column="password" />
         <result property="name" column="name" />
         <result property="phone" column="phone" />
+        <result property="createDate" column="create_date" />
         <result property="membershipLevelId" column="membership_level_id" />
         <result property="provider" column="provider" />
+        <association property="address" resultMap="addressResultMap" />
+        <association property="pet" resultMap="petResultMap" />
         <association property="membership" resultMap="membershipResultMap" />
         <collection property="userRoles" javaType="java.util.Set" resultMap="userRoleResultMap" />
     </resultMap>
@@ -21,7 +24,6 @@
     <resultMap id="userDetailResultMap" type="com.meongnyang.shop.entity.User">
         <id property="id" column="u_id"/>
         <result property="username" column="username" />
-        <result property="password" column="password" />
         <result property="name" column="name" />
         <result property="phone" column="phone" />
         <result property="createDate" column="create_date" />
@@ -30,7 +32,6 @@
         <association property="address" resultMap="addressResultMap" />
         <association property="membership" resultMap="membershipResultMap" />
         <collection property="userRoles" javaType="java.util.Set" resultMap="userRoleResultMap" />
-        <collection property="orders" javaType="java.util.List" resultMap="orderResultMap" />
     </resultMap>
 
     <resultMap id="addressResultMap" type="com.meongnyang.shop.entity.Address">
@@ -40,6 +41,14 @@
         <result property="addressDefault" column="address_default" />
         <result property="addressDetail" column="address_detail" />
         <result property="request" column="request" />
+    </resultMap>
+
+    <resultMap id="petResultMap" type="com.meongnyang.shop.entity.Pet">
+        <id property="id" column="p_id" />
+        <result property="userId" column="p_user_id" />
+        <result property="petName" column="pet_name" />
+        <result property="petAge" column="pet_age" />
+        <result property="petType" column="pet_type" />
     </resultMap>
 
     <resultMap id="userRoleResultMap" type="com.meongnyang.shop.entity.UserRole">
@@ -154,6 +163,17 @@
             u.membership_level_id,
             u.create_date,
             u.provider,
+            a.id as a_id,
+            a.user_id as a_user_id,
+            a.zipcode,
+            a.address_default,
+            a.address_detail,
+            a.request,
+            p.id as p_id,
+            p.user_id as p_user_id,
+            p.pet_name,
+            p.pet_age,
+            p.pet_type,
             ur.id as ur_id,
             ur.user_id as ur_user_id,
             ur.role_id as ur_role_id,
@@ -164,6 +184,8 @@
         from
             user_tb u
             left outer join user_role_tb ur on(u.id = ur.user_id)
+            left outer join address_tb a on(u.id = a.user_id)
+            left outer join pet_tb p on(u.id = p.user_id)
             left outer join role_tb r on(r.id = ur.role_id)
             left outer join membership_level_tb ml on(ml.id = u.membership_level_id)
     </select>

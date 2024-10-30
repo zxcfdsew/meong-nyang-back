@@ -25,7 +25,6 @@ public class RespProductAllDto {
         private String productModel;
 
         private List<String> imgNames;
-
     }
 
 

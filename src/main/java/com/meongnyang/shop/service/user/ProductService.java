@@ -3,6 +3,7 @@ package com.meongnyang.shop.service.user;
 import com.meongnyang.shop.dto.request.user.ReqProductAllDto;
 import com.meongnyang.shop.dto.request.user.ReqProductCountDto;
 import com.meongnyang.shop.dto.response.admin.RespGetCategorysDto;
+import com.meongnyang.shop.dto.response.user.RespGetProductDetailDto;
 import com.meongnyang.shop.dto.response.user.RespProductAllDto;
 import com.meongnyang.shop.entity.ImgUrl;
 import com.meongnyang.shop.entity.Product;
@@ -26,19 +27,12 @@ public class ProductService {
     @Autowired
     private UserProductMapper userProductMapper;
 
-    private Long findPetGroupId(String groupName) {
-        if (groupName.equals("all")) {
-            return 0l;
-        } else if (groupName.equals("dog")) {
-            return 1l;
-        }
-        else if (groupName.equals("cat")) {
-            return 2l;
-        } else if (groupName.equals("recommend")) {
-            return 3l;
-        }
-        return 0l;
-    };
+    private Map<String, Object> petGroupIdMap = Map.of(
+            "all", 0,
+            "dog", 1,
+            "cat", 2,
+            "recommend", 3
+    );
 
     public RespProductAllDto getProductsAll(ReqProductAllDto dto) {
         Long startIndex = (dto.getPage() - 1) * dto.getLimit();
@@ -46,7 +40,7 @@ public class ProductService {
         Map<String, Object> params = Map.of(
                 "startIndex", startIndex,
                 "limit", dto.getLimit(),
-                "petGroupId", findPetGroupId(dto.getGroupName()),
+                "petGroupId", petGroupIdMap.get(dto.getGroupName()),
                 "categoryId", dto.getCategoryId()
         );
 
@@ -69,7 +63,7 @@ public class ProductService {
 
     public int getProductsCount(ReqProductCountDto dto) {
         Map<String, Object> params = Map.of(
-                "petGroupId", findPetGroupId(dto.getGroupName()),
+                "petGroupId", petGroupIdMap.get(dto.getGroupName()),
                 "categoryId", dto.getCategoryId()
         );
         return userProductMapper.findProductCount(params);
@@ -80,5 +74,13 @@ public class ProductService {
                 .petGroupList(petGroupMapper.findPetGroup())
                 .categoryList(categoryMapper.findCategory())
                 .build();
+    }
+
+    public RespGetProductDetailDto getProductDetail(Long productId) {
+        Product product = userProductMapper.findProductById(productId);
+
+        List<String> imgNames = product.getImgUrls().stream().map(ImgUrl::getImgName).collect(Collectors.toList());
+
+        return product.toUserProductDetailDto(imgNames);
     }
 }

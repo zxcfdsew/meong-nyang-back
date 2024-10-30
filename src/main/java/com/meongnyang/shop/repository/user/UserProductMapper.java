@@ -10,4 +10,5 @@ import java.util.Map;
 public interface UserProductMapper {
     List<Product> findProducts(Map<String, Object> params);
     int findProductCount(Map<String, Object> params);
+    Product findProductById(Long id);
 }
