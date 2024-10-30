@@ -76,7 +76,7 @@ public class AuthService {
             userRoleMapper.save(userRole);
             user.setUserRoles(Set.of(userRole));
             //주소가 들어있다면
-            if(dto.getZipcode().isBlank() && !dto.getAddressDefault().isBlank()) {
+            if(!dto.getZipcode().isBlank() && !dto.getAddressDefault().isBlank()) {
                 addressMapper.save(dto.toEntityByAddress(user.getId()));
             }
             //반려동물 이름이 있다면

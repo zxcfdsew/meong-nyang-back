@@ -49,9 +49,6 @@ public class UserService {
 
     public RespUserInfoDto getUserInfo(Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (!(authentication.getPrincipal() instanceof PrincipalUser)) {
-//            throw new AuthenticationServiceException("유효하지 않은 사용자입니다.");
-//        }
         PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal();
         User user = myPageMapper.findById(id);
         if(principalUser.getId() != id) {

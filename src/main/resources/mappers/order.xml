@@ -5,6 +5,44 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.meongnyang.shop.repository.OrderMapper">
+
+    <sql id="searchOptionIf">
+        <if test='option.equals("all")'>
+            and (
+                o.id like concat('%', trim(ifnull(#{searchWord}, '')), '%')
+                or DATE(o.order_date) between #{startDate} and #{endDate}
+                or od.product_id like concat('%', trim(ifnull(#{searchWord}, '')), '%')
+                or p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), '%')
+                or o.order_status like concat('%', trim(ifnull(#{searchWord}, '')), '%')
+            )
+        </if>
+        <if test='option.equals("number")'>
+            and (
+                o.id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            )
+        </if>
+        <if test='option.equals("date")'>
+            and (
+                DATE(o.order_date) between #{startDate} and #{endDate}
+            )
+        </if>
+        <if test='option.equals("productId")'>
+            and (
+                od.product_id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            )
+        </if>
+        <if test='option.equals("productName")'>
+            and (
+                p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            )
+        </if>
+        <if test='option.equals("status")'>
+            and (
+                o.order_status like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            )
+        </if>
+    </sql>
+
     <resultMap id="orderResultMap" type="com.meongnyang.shop.entity.Order" >
         <id property="id" column="o_id"/>
         <result property="userId" column="user_id" />
@@ -20,6 +58,24 @@
         <collection property="orderDetails" resultMap="orderDetailResultMap" />
     </resultMap>
 
+    <resultMap id="adminOrderDetailResultMap" type="com.meongnyang.shop.entity.Order">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id" />
+        <result property="totalPrice" column="total_price" />
+        <result property="orderItemCount" column="order_item_count" />
+        <result property="orderDate" column="order_date" />
+        <result property="orderStatus" column="order_status" />
+        <result property="orderName" column="order_name" />
+        <result property="zipcode" column="zipcode" />
+        <result property="addressDefault" column="address_default" />
+        <result property="addressDetail" column="address_detail" />
+        <result property="phone" column="phone" />
+        <result property="paymentId" column="payment_id" />
+        <result property="request" column="request" />
+        <association property="payment" resultMap="paymentResultMap"/>
+        <collection property="orderDetails" resultMap="orderDetailResultMap" />
+    </resultMap>
+
     <resultMap id="orderDetailResultMap" type="com.meongnyang.shop.entity.OrderDetail" >
         <id property="id" column="od_id"/>
         <result property="orderId" column="order_id" />
@@ -30,7 +86,7 @@
     </resultMap>
 
     <resultMap id="productResultMap" type="com.meongnyang.shop.entity.Product" >
-        <id property="id" column="o_id"/>
+        <id property="id" column="product_id"/>
         <result property="productName" column="product_name" />
         <result property="productPrice" column="product_price" />
     </resultMap>
@@ -45,14 +101,17 @@
         <result property="provider" column="provider" />
     </resultMap>
 
+    <resultMap id="paymentResultMap" type="com.meongnyang.shop.entity.Payment" >
+        <id property="id" column="payment_id" />
+        <result property="paymentName" column="payment_name" />
+    </resultMap>
+
     <delete id="deleteOrderById">
         delete
         from
             order_tb
-        where id in
-        <foreach item="id" collection="idList" open="(" separator="," close=")">
-            #{id}
-        </foreach>
+        where
+            id = #{id}
     </delete>
     <delete id="deleteOrderAll">
         delete from order_tb;
@@ -111,29 +170,10 @@
             left outer join product_tb p on(od.product_id = p.id)
         where
             1 = 1
-        <if test='option.equals("all")'>
-            and (
-                p.id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-                or p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-<!--                or pg.category_group_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")-->
-<!--                or c.category_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")-->
-            )
-        </if>
-        <if test='option.equals("number")'>
-            and (
-                p.id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-            )
-        </if>
-        <if test='option.equals("name")'>
-            and (
-                p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-            )
-        </if>
-        <if test='option.equals("date")'>
-            and (
-                DATE(o.order_date) between #{startDate} and #{endDate}
-            )
-        </if>
+            <include refid="searchOptionIf" />
+        order by
+            o.id desc,
+            od.id desc
         limit #{startIndex}, #{limit}
 
     </select>
@@ -154,11 +194,62 @@
         group by
             o.product_id
     </select>
-    <select id="getCountAll" resultType="java.lang.Integer">
+    <select id="getOrderCountByOption" resultType="java.lang.Integer">
         select
-            count(*) as totalCount
+            count(*)
+        from (
+            select
+                count(*),
+                o.id
+            from
+                order_tb o
+                left outer join order_detail_tb od on(o.id = od.order_id)
+                left outer join product_tb p on(od.product_id = p.id)
+            where
+                1 = 1
+                <include refid="searchOptionIf" />
+            group by
+                o.id
+        ) as orderList
+    </select>
+    <select id="getProductCountByOption" resultType="java.lang.Integer">
+        select
+            count(*)
         from
             order_tb o
+            left outer join order_detail_tb od on(o.id = od.order_id)
+            left outer join product_tb p on(od.product_id = p.id)
+        where
+            1 = 1
+            <include refid="searchOptionIf" />
+    </select>
+    <select id="getOrderDetail" resultMap="adminOrderDetailResultMap">
+        select
+            o.id,
+            o.user_id,
+            o.total_price,
+            o.order_item_count,
+            o.order_date,
+            o.order_status,
+            o.order_name,
+            o.zipcode,
+            o.address_default,
+            o.address_detail,
+            o.phone,
+            o.payment_id,
+            o.request,
+            od.product_id,
+            od.product_count,
+            od.product_price,
+            p.payment_name,
+            pt.product_name
+        from
+            order_tb o
+            left outer join order_detail_tb od on(o.id = od.order_id)
+            left outer join payment_tb p on(o.payment_id = p.id)
+            left outer join product_tb pt on(od.product_id = pt.id)
+        where
+            o.id = #{id}
     </select>
 
 </mapper>

@@ -86,7 +86,7 @@
             </if>
             <if test='option.equals("상품코드")'>
                 and (
-                    s.product_id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                    s.product_id = #{searchWord}
                 )
             </if>
             <if test='option.equals("상품명")'>
@@ -94,6 +94,7 @@
                     p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
                 )
             </if>
+        limit #{startIndex}, #{limit}
     </select>
     <select id="findStockByProductId" resultType="com.meongnyang.shop.entity.Stock">
         select
@@ -113,6 +114,29 @@
         where
             product_id = #{productId}
     </select>
+    <select id="getAllCount" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            stock_tb s
+            left outer join product_tb p on(s.product_id = p.id)
+        where
+        1 = 1
+            <if test='option.equals("전체")'>
+                and (
+                    s.product_id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                    or p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                )
+            </if>
+            <if test='option.equals("상품코드")'>
+                and (
+                    s.product_id = #{searchWord}
+                )
+            </if>
+            <if test='option.equals("상품명")'>
+                and (
+                    p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                )
+            </if>
+    </select>
 </mapper>
-
-

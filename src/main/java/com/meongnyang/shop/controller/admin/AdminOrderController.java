@@ -24,9 +24,14 @@ public class AdminOrderController {
         return ResponseEntity.ok().body(adminOrderService.getOrdersByOption(dto));
     }
 
-    @DeleteMapping("/orders")
-    public ResponseEntity<?> deleteOrders(@RequestBody ReqDeleteOrderDto dto) {
-        adminOrderService.deleteOrder(dto);
+    @GetMapping("/orders/detail/{id}")
+    public ResponseEntity<?> getOrderDetail(@PathVariable Long id) {
+        return ResponseEntity.ok().body(adminOrderService.getOrderDetail(id));
+    }
+
+    @DeleteMapping("/order/{id}")
+    public ResponseEntity<?> deleteOrders(@PathVariable Long id) {
+        adminOrderService.deleteOrder(id);
         return ResponseEntity.ok().body(true);
     }
 

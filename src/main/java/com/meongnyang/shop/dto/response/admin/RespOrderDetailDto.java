@@ -1,18 +1,14 @@
-package com.meongnyang.shop.entity;
+package com.meongnyang.shop.dto.response.admin;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class Order {
+public class RespOrderDetailDto {
     private Long id;
     private Long userId;
     private Long totalPrice;
@@ -24,9 +20,19 @@ public class Order {
     private String addressDefault;
     private String addressDetail;
     private String phone;
-    private int paymentId;
     private String request;
+    private int paymentId;
+    private String paymentName;
 
-    private Payment payment;
-    private List<OrderDetail> orderDetails;
+    private List<RespOrderProductsDto> products;
+
+    @Data
+    @Builder
+    public static class RespOrderProductsDto{
+        private Long id;
+        private String productName;
+        private Long productPrice;
+        private Long productCount;
+        private String imgName;
+    }
 }
