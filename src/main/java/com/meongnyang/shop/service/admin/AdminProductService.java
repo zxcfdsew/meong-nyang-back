@@ -186,12 +186,6 @@ public class AdminProductService {
         return false;
     }
 
-    public RespGetCategorysDto getCategorys() {
-        return RespGetCategorysDto.builder()
-                .petGroupList(petGroupMapper.findPetGroup())
-                .categoryList(categoryMapper.findCategory())
-                .build();
-    }
 
     public void registerImgUrl(MultipartFile img, Long productId) throws IOException {
             String imgName = img.getOriginalFilename();

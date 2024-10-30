@@ -61,9 +61,4 @@ public class AdminProductController {
         adminProductService.deleteProductsAll();
         return ResponseEntity.ok().body(true);
     }
-
-    @GetMapping("/categorys")
-    public ResponseEntity<?> getCategorys() {
-        return ResponseEntity.ok().body(adminProductService.getCategorys());
-    }
 }

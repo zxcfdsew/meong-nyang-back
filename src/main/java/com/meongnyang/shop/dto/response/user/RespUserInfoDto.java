@@ -13,12 +13,12 @@ public class RespUserInfoDto {
     private String name;
     private String phone;
     private Long addressId;
-    private Long zipcode;
+    private String zipcode;
     private String addressDefault;
     private String addressDetail;
     private Long petId;
     private String petName;
-    private Long petAge;
+    private String petAge;
     private String petType;
     private Set<String> roles;
 }

@@ -77,7 +77,7 @@ public class UserService {
                 .addressDetail(address.getAddressDetail())
                 .petId(pet.getId())
                 .petName(pet.getPetName())
-                .petAge(pet.getPetAge())
+                .petAge(pet.getPetAge().toString())
                 .petType(pet.getPetType())
                 .roles(roles)
                 .build();
