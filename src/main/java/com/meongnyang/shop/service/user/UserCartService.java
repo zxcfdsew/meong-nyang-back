@@ -3,6 +3,7 @@ package com.meongnyang.shop.service.user;
 import com.meongnyang.shop.dto.request.admin.ReqDeleteProductDto;
 import com.meongnyang.shop.dto.request.user.ReqDeleteCartDto;
 import com.meongnyang.shop.dto.request.user.ReqGetCartDto;
+import com.meongnyang.shop.dto.request.user.ReqPostCartDto;
 import com.meongnyang.shop.dto.response.user.RespGetCartDto;
 import com.meongnyang.shop.entity.Cart;
 import com.meongnyang.shop.entity.ImgUrl;
@@ -58,7 +59,8 @@ public class UserCartService {
         }
     }
 
-    public void deleteCart(ReqDeleteCartDto dto) {  //!
+    @Transactional(rollbackFor = DeleteException.class)
+    public void deleteCart(ReqDeleteCartDto dto) {
         try {
             List<Long> deleteCartIds = dto.getCartIds();
             userCartMapper.deleteCartById(deleteCartIds);
@@ -66,5 +68,9 @@ public class UserCartService {
         } catch (Exception e) {
             throw new DeleteException(e.getMessage());
         }
+    }
+
+    public void saveCart(ReqPostCartDto dto) {
+        userCartMapper.saveCart(dto.toEntity());
     }
 }

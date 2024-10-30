@@ -29,6 +29,12 @@
         <result property="productUpdateDate" column="product_update_date" />
         <result property="recommendation" column="recommendation" />
     </resultMap>
+    <insert id="saveCart" parameterType="com.meongnyang.shop.entity.Cart">
+        insert into
+            cart_tb
+        values
+            (0, #{userId}, #{productId}, #{productCount})
+    </insert>
     <select id="getCart" resultMap="cartResultMap">
         select
             c.id,
@@ -62,7 +68,7 @@
         from
             cart_tb
         where id in
-            <foreach item="id" collection="idList" open="(" separator=",">
+            <foreach item="id" collection="idList" open="(" separator="," close=")">
                 #{id}
             </foreach>
     </delete>
