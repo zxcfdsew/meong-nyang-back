@@ -177,22 +177,24 @@
         limit #{startIndex}, #{limit}
 
     </select>
-    <select id="findOrderById" resultType="com.meongnyang.shop.entity.UserOrder">
+    <select id="findOrderDetailProductsById" resultType="com.meongnyang.shop.dto.response.admin.RespGetUserDetailDto$RespUserDetailProductDto">
         select
-            p.id as productId,
-            p.product_name as productName,
-            count(product_id) as buyCount,
-            p.product_price as productPrice,
-            count(product_id) * p.product_price as totalPrice,
-            MAX(o.order_date) as latelyOrderDate
+            odt.product_id as productId,
+            pt.product_name as productName,
+            count(odt.product_id) as productOrderCount,
+            pt.product_price as productPrice,
+            sum(pt.product_price) as totalPrice,
+            max(ot.order_date) as recentlyPurchaseDate
         from
-            order_tb o
-            left outer join order_detail_tb od on(o.id = od.order_id)
-            left outer join product_tb p on(o.id = p.product_id)
+            order_detail_tb odt
+            left outer join order_tb ot on(ot.id = odt.order_id)
+            left outer join product_tb pt on(odt.product_id = pt.id)
         where
-            user_id = #{id}
+            ot.user_id = #{id}
         group by
-            o.product_id
+            odt.product_id,
+            pt.product_name,
+            pt.product_price
     </select>
     <select id="getOrderCountByOption" resultType="java.lang.Integer">
         select

@@ -1,5 +1,6 @@
 package com.meongnyang.shop.repository;
 
+import com.meongnyang.shop.dto.response.admin.RespGetUserDetailDto;
 import com.meongnyang.shop.entity.Order;
 
 import com.meongnyang.shop.entity.UserOrder;
@@ -13,7 +14,7 @@ import java.util.Map;
 @Mapper
 public interface OrderMapper {
     List<Order> findOrderAll();
-    List<UserOrder> findOrderById(Long id);
+    List<RespGetUserDetailDto.RespUserDetailProductDto> findOrderDetailProductsById(Long id);
     List<Order> findOrderByOption(Map<String, Object> params);
     Order getOrderDetail(Long id);
     LocalDate getRecentOrderDate(Long userId);
@@ -22,4 +23,3 @@ public interface OrderMapper {
     int deleteOrderById(Long id);
     int deleteOrderAll();
 }
-

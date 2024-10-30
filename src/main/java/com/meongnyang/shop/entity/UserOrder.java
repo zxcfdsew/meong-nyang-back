@@ -19,4 +19,3 @@ public class UserOrder {
     private int totalPrice;
     private LocalDate latelyOrderDate;
 }
-

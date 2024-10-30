@@ -3,10 +3,10 @@ package com.meongnyang.shop.dto.response.admin;
 import com.meongnyang.shop.entity.Address;
 import com.meongnyang.shop.entity.Membership;
 import com.meongnyang.shop.entity.Pet;
-import com.meongnyang.shop.entity.UserOrder;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -16,16 +16,30 @@ public class RespGetUserDetailDto {
     private String username;
     private String name;
     private String phone;
-    private String createDate;
-    private String initialPurchaseDate;
-    private String recentlyPurchaseDate;
-    private int totalAmount;
-    private String paymentMethod;
-
     private Membership membership;
+    private String createDate;
+    private UserPurchaseData userPurchaseData;
     private Address address;
     private Pet pet;
 
-    //주문내역
-    private List<UserOrder> orders;
+    private List<RespUserDetailProductDto> products;
+
+    @Data
+    @Builder
+    public static class RespUserDetailProductDto {
+        private Long productId;
+        private String productName;
+        private Long count;
+        private Long productPrice;
+        private Long totalPrice;
+        private LocalDate recentlyPurchaseDate;
+    }
+
+    @Data
+    @Builder
+    public static class UserPurchaseData {
+        private LocalDate initialPurchaseDate;
+        private LocalDate recentlyPurchaseDate;
+        private Long totalPrice;
+    }
 }

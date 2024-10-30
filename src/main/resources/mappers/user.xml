@@ -281,6 +281,17 @@
         where
             u.id = #{id}
     </select>
+    <select id="findUserPurchaseDateById" resultType="com.meongnyang.shop.dto.response.admin.RespGetUserDetailDto$UserPurchaseData">
+        select
+            min(o.order_date) as initialPurchaseDate,
+            max(o.order_date) as recentlyPurchaseDate,
+            sum(o.total_price) as totalPrice
+        from
+            user_tb u
+            left outer join order_tb o on(o.user_id = u.id)
+        where
+            u.id = #{id}
+    </select>
 
     <update id="updateUserMembershipById">
         update
