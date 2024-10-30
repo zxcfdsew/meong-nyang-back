@@ -16,27 +16,30 @@ import javax.validation.Valid;
 public class MyPageController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
+    // 회원정보 조회
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getUser(@PathVariable Long userId) {
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return ResponseEntity.ok().body(userService.getUserInfo(userId));
     }
 
+    // 회원정보 수정
     @PutMapping("/user/{userId}")
     public ResponseEntity<?> updateUser(@RequestBody ReqUpdateUserDto dto) {
         userService.updateUser(dto);
         return ResponseEntity.ok().body(true);
     }
 
+    // 비밀번호 수정
     @Valid
     @PutMapping("/edit/password")
     public ResponseEntity<?> editPassword(@Valid @RequestBody ReqUpdatePasswordDto dto, BindingResult bindingResult) {
         userService.editPassword(dto);
-        return ResponseEntity.ok(true);
+        return ResponseEntity.ok().body(true);
     }
 
+    // 반려동물정보 수정
     @PutMapping("/user/pet/{userId}")
     public ResponseEntity<?> modifyPet(@RequestBody ReqUpdatePetDto dto) {
         userService.modifyPet(dto);

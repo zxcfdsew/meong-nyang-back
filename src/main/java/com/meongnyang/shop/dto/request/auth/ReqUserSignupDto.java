@@ -37,7 +37,7 @@ public class ReqUserSignupDto {
     private String request;
 
     private String petName;
-    private Long petAge;
+    private String petAge;
     private String petType;
 
     public User toEntityByUser(BCryptPasswordEncoder passwordEncoder) {
@@ -63,7 +63,7 @@ public class ReqUserSignupDto {
         return Pet.builder()
                 .userId(userId)
                 .petName(petName)
-                .petAge(petAge)
+                .petAge(Long.valueOf(petAge))
                 .petType(petType)
                 .build();
     }

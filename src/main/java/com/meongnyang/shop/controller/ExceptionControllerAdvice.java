@@ -60,4 +60,8 @@ public class ExceptionControllerAdvice {
     public ResponseEntity<?> invalidUserException(InvalidUserException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
+    @ExceptionHandler(UpdateUserException.class)
+    public ResponseEntity<?> updateUserException(UpdateUserException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
 }

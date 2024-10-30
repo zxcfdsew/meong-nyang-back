@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.meongnyang.shop.repository.user.UserCartMapper">
+
+    <resultMap id="cartResultMap" type="com.meongnyang.shop.entity.Cart">
+        <id property="id" column="id" />
+        <result property="userId" column="user_id" />
+        <result property="productId" column="product_id" />
+        <result property="productCount" column="product_count" />
+        <association property="product" resultMap="productResultMap" />
+        <collection property="imgUrls" javaType="java.util.List" resultMap="imgUrlResultMap" />
+    </resultMap>
+
+    <resultMap id="productResultMap" type="com.meongnyang.shop.entity.Product">
+        <id property="id" column="id"/>
+        <result property="productName" column="product_name" />
+        <result property="petGroupId" column="pet_group_id" />
+        <result property="categoryId" column="category_id" />
+        <result property="productPrice" column="product_price" />
+        <result property="productPriceDiscount" column="product_price_discount" />
+        <result property="productDetail" column="product_detail" />
+        <result property="productBrand" column="product_brand" />
+        <result property="productModel" column="product_model" />
+        <result property="productMemo" column="product_memo" />
+        <result property="productCreateDate" column="product_create_date" />
+        <result property="productUpdateDate" column="product_update_date" />
+        <result property="recommendation" column="recommendation" />
+    </resultMap>
+
+    <resultMap id="imgUrlResultMap" type="com.meongnyang.shop.entity.ImgUrl" >
+        <id property="id" column="iu_id" />
+        <result property="productId" column="iu_product_id" />
+        <result property="imgPath" column="img_path" />
+        <result property="imgName" column="img_name" />
+    </resultMap>
+
+    <insert id="saveCart" useGeneratedKeys="true" keyProperty="id">
+        insert into
+            cart_tb
+        values
+            (0, #{userId}, #{productId}, #{productCount})
+    </insert>
+    <select id="getCart" resultMap="cartResultMap">
+        select
+            c.id,
+            c.user_id,
+            c.product_id,
+            c.product_count,
+            c.cart_update_date,
+            p.product_name,
+            p.product_price,
+            iu.id as iu_id,
+            iu.product_id as iu_product_id,
+            iu.img_path,
+            iu.img_name
+
+        from
+            cart_tb c
+            left outer join product_tb p on(p.id = c.product_id)
+            left outer join img_url_tb iu on(c.productId = iu.product_id)
+        where
+            user_id = #{userId}
+        order by
+            c.cart_update_date DESC
+    </select>
+
+    <delete id="deleteCartAll">
+        delete
+        from
+            cart_tb
+        where
+            user_id in (
+                <foreach collection="userIds" item="userId" separator=",">
+                    #{userId}
+                </foreach>
+            )
+    </delete>
+    <delete id="deleteCartById">
+        delete
+        from
+            cart_tb
+        where id in
+            <foreach item="id" collection="idList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+    </delete>
+</mapper>

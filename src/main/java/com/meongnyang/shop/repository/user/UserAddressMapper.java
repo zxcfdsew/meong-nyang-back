@@ -5,5 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserAddressMapper {
+    int saveAddress(Address address);
+    Address findAddressByUserId(Long userId);
     Long UpdateAddressByUserId(Address address);
 }
