@@ -2,6 +2,7 @@ package com.meongnyang.shop.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.meongnyang.shop.dto.response.admin.RespGetUserDetailDto;
+import com.meongnyang.shop.dto.response.admin.RespGetUsersDto;
 import com.meongnyang.shop.security.principal.PrincipalUser;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -42,6 +44,7 @@ public class User {
                 .userRoles(userRoles)
                 .build();
     }
+
     public RespGetUserDetailDto toDto(List<UserOrder> orders, Pet pet) {
         return RespGetUserDetailDto.builder()
                 .id(id)

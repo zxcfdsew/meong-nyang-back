@@ -34,15 +34,26 @@ public class AdminUserService {
     private PetMapper petMapper;
 
     public RespGetUsersDto getUsers() {
-
         List<User> userList = userMapper.findAll().stream()
                 .filter(user -> user.getUserRoles().stream()
                         .anyMatch(role -> role.getRole().getRoleName().equals("ROLE_USER")))
                 .collect(Collectors.toList());
 
+        List<RespGetUsersDto.RespUserDto> respUserDtos = userList.stream().map(user -> {
+            return RespGetUsersDto.RespUserDto.builder()
+                    .id(user.getId())
+                    .createDate(user.getCreateDate())
+                    .username(user.getUsername())
+                    .name(user.getName())
+                    .phone(user.getPhone())
+                    .recentPurchaseDate(orderMapper.getRecentOrderDate(user.getId()))
+                    .membershipName(user.getMembership().getMembershipLevelName())
+                    .build();
+        }).collect(Collectors.toList());
+
         return RespGetUsersDto.builder()
-                .userList(userList)
-                .userListCount(userList.size())
+                .userRespList(respUserDtos)
+                .userListCount(respUserDtos.size())
                 .build();
     }
 

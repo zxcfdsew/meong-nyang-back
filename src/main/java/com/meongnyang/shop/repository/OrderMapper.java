@@ -6,6 +6,7 @@ import com.meongnyang.shop.entity.UserOrder;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ public interface OrderMapper {
     List<UserOrder> findOrderById(Long id);
     List<Order> findOrderByOption(Map<String, Object> params);
     Order getOrderDetail(Long id);
+    LocalDate getRecentOrderDate(Long userId);
     int getOrderCountByOption(Map<String, Object> params);
     int getProductCountByOption(Map<String, Object> params);
     int deleteOrderById(Long id);

@@ -251,6 +251,18 @@
         where
             o.id = #{id}
     </select>
+    <select id="getRecentOrderDate" resultType="java.time.LocalDate">
+        select
+            order_date
+        from
+            order_tb
+        where
+            user_id = 5
+        order by
+            order_date desc
+        limit
+            1;
+    </select>
 
 </mapper>
 
