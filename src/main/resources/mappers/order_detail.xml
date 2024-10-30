@@ -9,6 +9,13 @@
     <delete id="deleteOrderDetailAll">
         truncate table order_detail_tb;
     </delete>
+    <delete id="deleteOrderDetailByOrderId">
+        delete
+        from
+            order_detail_tb
+        where
+            order_id = #{id}
+    </delete>
 </mapper>
 
 

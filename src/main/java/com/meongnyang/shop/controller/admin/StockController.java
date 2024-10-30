@@ -1,6 +1,7 @@
 package com.meongnyang.shop.controller.admin;
 
 import com.meongnyang.shop.dto.request.admin.ReqModifyStockListDto;
+import com.meongnyang.shop.dto.request.admin.ReqStockSearchOptionDto;
 import com.meongnyang.shop.entity.Stock;
 import com.meongnyang.shop.service.admin.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ public class StockController {
     }
 
     @GetMapping("/products/stock/search")
-    public ResponseEntity<?> getProductsStockByOption(@RequestParam String option, @RequestParam String searchWord) {
-        return ResponseEntity.ok().body(stockService.getProductsStockByOption(option, searchWord));
+    public ResponseEntity<?> getProductsStockByOption(ReqStockSearchOptionDto dto) {
+        return ResponseEntity.ok().body(stockService.getProductsStockByOption(dto));
     }
 
     @PutMapping("/products/stock")

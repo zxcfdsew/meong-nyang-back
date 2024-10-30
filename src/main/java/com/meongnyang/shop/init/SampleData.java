@@ -99,7 +99,6 @@ public class SampleData implements CommandLineRunner {
                             .build());
                 }
             }
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -4,8 +4,6 @@ import com.meongnyang.shop.entity.Order;
 
 import com.meongnyang.shop.entity.UserOrder;
 
-import com.meongnyang.shop.entity.OrderDetail;
-
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -14,11 +12,12 @@ import java.util.Map;
 @Mapper
 public interface OrderMapper {
     List<Order> findOrderAll();
-    int getCountAll();
-    List<Order> findOrderByOption(Map<String, Object> params);
-    int deleteOrderById(List<Long> idList);
-    int deleteOrderAll();
     List<UserOrder> findOrderById(Long id);
-
+    List<Order> findOrderByOption(Map<String, Object> params);
+    Order getOrderDetail(Long id);
+    int getOrderCountByOption(Map<String, Object> params);
+    int getProductCountByOption(Map<String, Object> params);
+    int deleteOrderById(Long id);
+    int deleteOrderAll();
 }
 
