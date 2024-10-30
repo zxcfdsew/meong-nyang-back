@@ -129,7 +129,7 @@ public class UserService {
                     .petAge(dto.getPetAge())
                     .petType(dto.getPetType())
                     .build();
-            
+
             if(userPetMapper.findPetByUserId(user.getId()) == null) {
                 userPetMapper.savePet(pet);
             } if(userPetMapper.findPetByUserId(user.getId()) != null) {

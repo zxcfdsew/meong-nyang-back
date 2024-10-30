@@ -1,6 +1,5 @@
 package com.meongnyang.shop.dto.request.user;
 
-import com.meongnyang.shop.entity.Address;
 import com.meongnyang.shop.entity.User;
 import lombok.Data;
 
@@ -17,14 +16,6 @@ public class ReqUpdateUserDto {
         return User.builder()
                 .name(name)
                 .phone(phone)
-                .build();
-    }
-
-    public Address toEntityAddress() {
-        return Address.builder()
-                .zipcode(zipcode)
-                .addressDefault(addressDefault)
-                .addressDetail(addressDetail)
                 .build();
     }
 }
