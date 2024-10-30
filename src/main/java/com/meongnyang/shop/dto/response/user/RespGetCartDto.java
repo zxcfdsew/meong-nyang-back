@@ -4,6 +4,7 @@ import com.meongnyang.shop.entity.ImgUrl;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Builder
@@ -13,7 +14,10 @@ public class RespGetCartDto {
     private Long userId;
     private Long productId;
     private Long productCount;
+    private LocalDate cartUpdateDate;
+
     private String productName;
     private Long productPrice;
-    private List<ImgUrl> productImageUrl;
+
+    private List<ImgUrl> imgUrls;
 }

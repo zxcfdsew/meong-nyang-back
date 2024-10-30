@@ -26,7 +26,7 @@ public class CartController {
         return ResponseEntity.ok().body(userCartService.saveCart(dto));
     }
 
-    // 장바구니 내역 조회
+    // 장바구니 내역 조회(수정중)
     @GetMapping("/user/cart")
     public ResponseEntity<?> getCart(ReqGetCartDto dto) {
         return ResponseEntity.ok().body(userCartService.getCart(dto));

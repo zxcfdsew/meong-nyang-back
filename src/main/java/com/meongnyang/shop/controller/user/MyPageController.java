@@ -16,12 +16,11 @@ import javax.validation.Valid;
 public class MyPageController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     // 회원정보 조회
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getUser(@PathVariable Long userId) {
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return ResponseEntity.ok().body(userService.getUserInfo(userId));
     }
 

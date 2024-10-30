@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -15,18 +18,21 @@ public class Cart {
     private Long userId;
     private Long productId;
     private Long productCount;
+    private LocalDate cartUpdateDate;
 
     private Product product;
+    private List<ImgUrl> imgUrls;
 
     public RespGetCartDto toDto() {
         return RespGetCartDto.builder()
-                .cartId(productId)
+                .cartId(id)
                 .userId(userId)
                 .productId(product.getId())
                 .productCount(productCount)
+                .cartUpdateDate(getCartUpdateDate())
                 .productName(product.getProductName())
                 .productPrice(product.getProductPrice())
-                .productImageUrl(product.getImgUrls())
+                .imgUrls(imgUrls)
                 .build();
     }
 }

@@ -1,17 +1,13 @@
 package com.meongnyang.shop.service.user;
 
-import com.meongnyang.shop.dto.request.admin.ReqDeleteProductDto;
 import com.meongnyang.shop.dto.request.user.ReqDeleteCartDto;
 import com.meongnyang.shop.dto.request.user.ReqGetCartDto;
 import com.meongnyang.shop.dto.request.user.ReqPostCartDto;
 import com.meongnyang.shop.dto.response.user.RespGetCartDto;
 import com.meongnyang.shop.dto.response.user.RespPostCartDto;
 import com.meongnyang.shop.entity.Cart;
-import com.meongnyang.shop.entity.ImgUrl;
 import com.meongnyang.shop.entity.User;
 import com.meongnyang.shop.exception.DeleteException;
-import com.meongnyang.shop.exception.NotFoundUserException;
-import com.meongnyang.shop.exception.UpdateUserException;
 import com.meongnyang.shop.repository.user.MyPageMapper;
 import com.meongnyang.shop.repository.user.UserCartMapper;
 import com.meongnyang.shop.security.principal.PrincipalUser;
