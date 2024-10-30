@@ -15,4 +15,8 @@ public class Pet {
     private String petName;
     private Long petAge;
     private String petType;
+
+    public Pet(Long userId, String petName, Long petAge, String petType) {
+
+    }
 }
