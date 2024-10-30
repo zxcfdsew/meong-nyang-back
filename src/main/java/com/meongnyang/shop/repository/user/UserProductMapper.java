@@ -9,5 +9,5 @@ import java.util.Map;
 @Mapper
 public interface UserProductMapper {
     List<Product> findProducts(Map<String, Object> params);
-    int findProductCount();
+    int findProductCount(Map<String, Object> params);
 }
