@@ -5,6 +5,7 @@ import com.meongnyang.shop.dto.request.user.ReqDeleteCartDto;
 import com.meongnyang.shop.dto.request.user.ReqGetCartDto;
 import com.meongnyang.shop.dto.request.user.ReqPostCartDto;
 import com.meongnyang.shop.dto.response.user.RespGetCartDto;
+import com.meongnyang.shop.dto.response.user.RespPostCartDto;
 import com.meongnyang.shop.entity.Cart;
 import com.meongnyang.shop.entity.ImgUrl;
 import com.meongnyang.shop.entity.User;
@@ -13,6 +14,7 @@ import com.meongnyang.shop.exception.NotFoundUserException;
 import com.meongnyang.shop.exception.UpdateUserException;
 import com.meongnyang.shop.repository.user.MyPageMapper;
 import com.meongnyang.shop.repository.user.UserCartMapper;
+import com.meongnyang.shop.security.principal.PrincipalUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,6 +33,16 @@ public class UserCartService {
 
     @Autowired
     UserCartMapper userCartMapper;
+
+    public RespPostCartDto saveCart(ReqPostCartDto dto) {
+        PrincipalUser principalUser = (PrincipalUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Cart cart = dto.toEntity(principalUser.getId());
+        userCartMapper.saveCart(cart);
+
+        return RespPostCartDto.builder()
+                .userId(cart.getUserId())
+                .build();
+    }
 
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -68,9 +80,5 @@ public class UserCartService {
         } catch (Exception e) {
             throw new DeleteException(e.getMessage());
         }
-    }
-
-    public void saveCart(ReqPostCartDto dto) {
-        userCartMapper.saveCart(dto.toEntity());
     }
 }

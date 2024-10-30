@@ -1,5 +1,6 @@
 package com.meongnyang.shop.controller.user;
 
+import com.meongnyang.shop.aspect.annotation.ValidAop;
 import com.meongnyang.shop.dto.request.admin.ReqDeleteProductDto;
 import com.meongnyang.shop.dto.request.user.ReqDeleteCartDto;
 import com.meongnyang.shop.dto.request.user.ReqGetCartDto;
@@ -7,6 +8,7 @@ import com.meongnyang.shop.dto.request.user.ReqPostCartDto;
 import com.meongnyang.shop.service.user.UserCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,10 +20,10 @@ public class CartController {
     UserCartService userCartService;
 
     // 장바구니 물품 추가
+    @ValidAop
     @PostMapping("/user/cart")
-    public ResponseEntity<?> saveProductCart(@RequestBody ReqPostCartDto dto) {
-        userCartService.saveCart(dto);
-        return ResponseEntity.ok().body(true);
+    public ResponseEntity<?> saveProductCart(@RequestBody ReqPostCartDto dto, BindingResult bindingResult) {
+        return ResponseEntity.ok().body(userCartService.saveCart(dto));
     }
 
     // 장바구니 내역 조회

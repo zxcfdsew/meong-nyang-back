@@ -5,13 +5,12 @@ import lombok.Data;
 
 @Data
 public class ReqPostCartDto {
-    private Long userId;
     private Long productId;
     private Long productCount;
 
-    public Cart toEntity() {
+    public Cart toEntity(Long id) {
         return Cart.builder()
-                .userId(userId)
+                .userId(id)
                 .productId(productId)
                 .productCount(productCount)
                 .build();

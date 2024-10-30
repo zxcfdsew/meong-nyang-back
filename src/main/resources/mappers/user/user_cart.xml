@@ -29,7 +29,7 @@
         <result property="productUpdateDate" column="product_update_date" />
         <result property="recommendation" column="recommendation" />
     </resultMap>
-    <insert id="saveCart" parameterType="com.meongnyang.shop.entity.Cart">
+    <insert id="saveCart" useGeneratedKeys="true" keyProperty="id">
         insert into
             cart_tb
         values
