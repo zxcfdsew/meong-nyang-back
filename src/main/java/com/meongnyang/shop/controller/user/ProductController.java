@@ -22,7 +22,6 @@ public class ProductController {
 
     @GetMapping("/products")
     public ResponseEntity<?> getProductsAll(ReqProductAllDto dto) {
-        System.out.println("요청");
         System.out.println(dto);
         return ResponseEntity.ok().body(productService.getProductsAll(dto));
     }

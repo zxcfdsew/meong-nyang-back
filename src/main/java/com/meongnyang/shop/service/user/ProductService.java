@@ -36,7 +36,7 @@ public class ProductService {
 
     public RespProductAllDto getProductsAll(ReqProductAllDto dto) {
         Long startIndex = (dto.getPage() - 1) * dto.getLimit();
-
+        System.out.println(startIndex);
         Map<String, Object> params = Map.of(
                 "startIndex", startIndex,
                 "limit", dto.getLimit(),
@@ -45,6 +45,7 @@ public class ProductService {
         );
 
         List<Product> productList = userProductMapper.findProducts(params);
+        System.out.println(productList);
 
         List<RespProductAllDto.ProductContent> productContentList = productList.stream()
                 .map(product -> {

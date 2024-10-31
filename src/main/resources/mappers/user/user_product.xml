@@ -97,7 +97,10 @@
                     and p.category_id = #{categoryId}
                 </when>
             </choose>
-
+        group by
+            p.id
+        order by
+            p.id
         limit #{startIndex}, #{limit}
     </select>
     <select id="findProductCount" resultType="java.lang.Integer">
