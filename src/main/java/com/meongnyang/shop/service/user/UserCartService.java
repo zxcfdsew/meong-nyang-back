@@ -47,6 +47,8 @@ public class UserCartService {
 
         return RespPostCartDto.builder()
                 .userId(cart.getUserId())
+                .productId(cart.getProductId())
+                .productCount(cart.getProductCount())
                 .build();
     }
 

@@ -50,8 +50,8 @@
         from
             cart_tb
         where
-            product_id = #{productId}
-        AND user_id = #{userId}
+            product_id = #{productId} AND user_id = #{userId}
+        LIMIT 1
     </select>
     <update id="updateCart">
         update
