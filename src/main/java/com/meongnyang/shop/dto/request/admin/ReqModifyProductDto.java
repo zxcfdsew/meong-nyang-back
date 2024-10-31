@@ -24,7 +24,7 @@ public class ReqModifyProductDto {
     private Long categoryId;
     @NotNull
     private Long productPrice;
-    private int productPriceDiscount;
+    private Long productPriceDiscount;
     private String productDetail;
     private String productBrand;
     private String productModel;
