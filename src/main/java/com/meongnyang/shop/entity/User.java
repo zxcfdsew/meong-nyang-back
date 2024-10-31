@@ -42,7 +42,10 @@ public class User {
                 .userRoles(userRoles)
                 .build();
     }
-    public RespGetUserDetailDto toDto(List<UserOrder> orders, Pet pet) {
+
+    public RespGetUserDetailDto toDto(Pet pet,
+                                      List<RespGetUserDetailDto.RespUserDetailProductDto> productDtos,
+                                      RespGetUserDetailDto.UserPurchaseData userPurchaseData) {
         return RespGetUserDetailDto.builder()
                 .id(id)
                 .username(username)
@@ -51,8 +54,9 @@ public class User {
                 .createDate(createDate.toString())
                 .membership(membership)
                 .address(address)
-                .orders(orders)
+                .userPurchaseData(userPurchaseData)
                 .pet(pet)
+                .products(productDtos)
                 .build();
 
     }

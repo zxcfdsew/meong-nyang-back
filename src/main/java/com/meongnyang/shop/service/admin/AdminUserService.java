@@ -7,7 +7,6 @@ import com.meongnyang.shop.dto.response.admin.RespGetUserDetailDto;
 import com.meongnyang.shop.dto.response.admin.RespGetUsersDto;
 import com.meongnyang.shop.entity.Pet;
 import com.meongnyang.shop.entity.User;
-import com.meongnyang.shop.entity.UserOrder;
 import com.meongnyang.shop.exception.NotFoundMembershipException;
 import com.meongnyang.shop.exception.NotFoundUserException;
 import com.meongnyang.shop.repository.MembershipMapper;
@@ -34,15 +33,26 @@ public class AdminUserService {
     private PetMapper petMapper;
 
     public RespGetUsersDto getUsers() {
-
         List<User> userList = userMapper.findAll().stream()
                 .filter(user -> user.getUserRoles().stream()
                         .anyMatch(role -> role.getRole().getRoleName().equals("ROLE_USER")))
                 .collect(Collectors.toList());
 
+        List<RespGetUsersDto.RespUserDto> respUserDtos = userList.stream().map(user -> {
+            return RespGetUsersDto.RespUserDto.builder()
+                    .id(user.getId())
+                    .createDate(user.getCreateDate())
+                    .username(user.getUsername())
+                    .name(user.getName())
+                    .phone(user.getPhone())
+                    .recentPurchaseDate(orderMapper.getRecentOrderDate(user.getId()))
+                    .membershipName(user.getMembership().getMembershipLevelName())
+                    .build();
+        }).collect(Collectors.toList());
+
         return RespGetUsersDto.builder()
-                .userList(userList)
-                .userListCount(userList.size())
+                .userRespList(respUserDtos)
+                .userListCount(respUserDtos.size())
                 .build();
     }
 
@@ -68,19 +78,18 @@ public class AdminUserService {
     }
 
     public RespGetUserDetailDto getUserDetail(Long userId) {
-        System.out.println("tlfgod");
         User user = userMapper.findUserDetailById(userId);
-        System.out.println(user);
-        List<UserOrder> userOrderList = orderMapper.findOrderById(userId);
+        List<RespGetUserDetailDto.RespUserDetailProductDto> userOrderList = orderMapper.findOrderDetailProductsById(userId);
+        RespGetUserDetailDto.UserPurchaseData userPurchaseData = userMapper.findUserPurchaseDateById(userId);
         Pet pet = petMapper.findPetByUserId(userId);
 
-        System.out.println(user.getUserRoles().stream()
-                .map(userRole -> userRole.getRole().getRoleName()).equals("ROLE_ADMIN"));
+//        System.out.println(user.getUserRoles().stream()
+//                .map(userRole -> userRole.getRole().getRoleName()).equals("ROLE_ADMIN"));
         if (user == null) {
             throw new NotFoundUserException("사용자를 찾을 수 없습니다.");
         }
 
-        return user.toDto(userOrderList, pet);
+        return user.toDto(pet, userOrderList, userPurchaseData);
     }
 
     public void modifyUserMembership(ReqModifyMembershipLevelDto dto) {

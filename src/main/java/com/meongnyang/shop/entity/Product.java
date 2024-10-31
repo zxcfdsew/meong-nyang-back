@@ -20,7 +20,7 @@ public class Product {
     private Long petGroupId;
     private Long categoryId;
     private Long productPrice;
-    private int productPriceDiscount;
+    private Long productPriceDiscount;
     private String productDetail;
     private String productBrand;
     private String productModel;
