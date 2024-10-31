@@ -91,7 +91,7 @@ public class UserService {
                     .userId(user.getId())
                     .zipcode(dto.getZipcode())
                     .addressDefault(dto.getAddressDefault())
-                    .addressDetail(dto.getAddressDefault())
+                    .addressDetail(dto.getAddressDetail())
                     .build();
 
             if (userAddressMapper.findAddressByUserId(user.getId()) == null) {

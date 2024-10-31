@@ -27,7 +27,7 @@ public class Cart {
         return RespGetCartDto.builder()
                 .cartId(id)
                 .userId(userId)
-                .productId(product.getId())
+                .productId(productId)
                 .productCount(productCount)
                 .cartUpdateDate(getCartUpdateDate())
                 .productName(product.getProductName())

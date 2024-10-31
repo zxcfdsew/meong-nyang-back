@@ -1,8 +1,6 @@
 package com.meongnyang.shop.service.user;
 
-import com.meongnyang.shop.dto.request.user.ReqDeleteCartDto;
-import com.meongnyang.shop.dto.request.user.ReqGetCartDto;
-import com.meongnyang.shop.dto.request.user.ReqPostCartDto;
+import com.meongnyang.shop.dto.request.user.*;
 import com.meongnyang.shop.dto.response.user.RespGetCartDto;
 import com.meongnyang.shop.dto.response.user.RespPostCartDto;
 import com.meongnyang.shop.entity.Cart;
@@ -12,6 +10,7 @@ import com.meongnyang.shop.repository.user.MyPageMapper;
 import com.meongnyang.shop.repository.user.UserCartMapper;
 import com.meongnyang.shop.security.principal.PrincipalUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -19,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,7 +32,17 @@ public class UserCartService {
 
     public RespPostCartDto saveCart(ReqPostCartDto dto) {
         PrincipalUser principalUser = (PrincipalUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Cart cart = dto.toEntity(principalUser.getId());
+        Long userId = principalUser.getId();
+        Cart cart = dto.toEntity(userId);
+
+        Cart existingCart = userCartMapper.findCartByProductId(cart.getProductId(), cart.getUserId());
+        System.out.println(cart);
+//        if (existingCart != null && existingCart.getUserId().equals(userId)) {
+//            System.out.println("실행2");
+//            existingCart.setProductCount(existingCart.getProductCount() + 1);
+//            userCartMapper.updateCart(existingCart);
+//        }
+        System.out.println("실행3");
         userCartMapper.saveCart(cart);
 
         return RespPostCartDto.builder()
@@ -45,14 +55,22 @@ public class UserCartService {
         return myPageMapper.findUserByUsername(authentication.getName());
     }
 
-    public List<RespGetCartDto> getCart(ReqGetCartDto dto) {
+    public List<RespGetCartDto> getCartAll(ReqGetCartAllDto dto) {
         User user = getCurrentUser();
         if (user.getId().equals(dto.getUserId())) {
-            List<Cart> cart = userCartMapper.getCart(user.getId());
-            return cart.stream().map(Cart::toDto).collect(Collectors.toList());
-        } else {
-            return Collections.emptyList();
+            List<Cart> cartList = userCartMapper.getCart(user.getId());
+            return cartList.stream().map(Cart::toDto).collect(Collectors.toList());
         }
+        return Collections.emptyList();
+    }
+
+    public int getCartAllCount(ReqGetCartAllCountDto dto) {
+        User user = getCurrentUser();
+        Long userId = user.getId();
+        if (userId.equals(dto.getUserId())) {
+            return userCartMapper.findCartCount(userId);
+        }
+        throw new AuthenticationServiceException("");
     }
 
     @Transactional(rollbackFor = DeleteException.class)
