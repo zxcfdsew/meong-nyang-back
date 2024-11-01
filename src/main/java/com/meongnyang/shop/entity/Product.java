@@ -63,7 +63,7 @@ public class Product {
                 .build();
     }
 
-    public RespProductAllDto.ProductContent toDto(List<String> imgNames) {
+    public RespProductAllDto.ProductContent toDto(String imgName) {
         return RespProductAllDto.ProductContent.builder()
                 .productId(id)
                 .productName(productName)
@@ -74,7 +74,7 @@ public class Product {
                 .productDetail(productDetail)
                 .productBrand(productBrand)
                 .productModel(productModel)
-                .imgNames(imgNames)
+                .imgName(imgName)
                 .build();
     }
 

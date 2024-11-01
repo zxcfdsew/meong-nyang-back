@@ -8,6 +8,7 @@ import com.meongnyang.shop.dto.response.user.RespProductAllDto;
 import com.meongnyang.shop.entity.ImgUrl;
 import com.meongnyang.shop.entity.Product;
 import com.meongnyang.shop.repository.CategoryMapper;
+import com.meongnyang.shop.repository.ImgUrlMapper;
 import com.meongnyang.shop.repository.PetGroupMapper;
 import com.meongnyang.shop.repository.user.UserProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ public class ProductService {
     private CategoryMapper categoryMapper;
     @Autowired
     private UserProductMapper userProductMapper;
+    @Autowired
+    private ImgUrlMapper imgUrlMapper;
 
     private Map<String, Object> petGroupIdMap = Map.of(
             "all", 0,
@@ -45,14 +48,11 @@ public class ProductService {
         );
 
         List<Product> productList = userProductMapper.findProducts(params);
-        System.out.println(productList);
 
         List<RespProductAllDto.ProductContent> productContentList = productList.stream()
                 .map(product -> {
-                    List<String> imgNames = product.getImgUrls().stream()
-                            .map(ImgUrl::getImgName) // Img 객체에서 imgName 추출
-                            .collect(Collectors.toList());
-                    return product.toDto(imgNames);
+                    ImgUrl imgUrl = imgUrlMapper.findImgNameByProductId(product.getId());
+                    return product.toDto(imgUrl != null ?imgUrl.getImgName() : "");
                 })
                 .collect(Collectors.toList());
 
@@ -79,7 +79,7 @@ public class ProductService {
 
     public RespGetProductDetailDto getProductDetail(Long productId) {
         Product product = userProductMapper.findProductById(productId);
-
+        System.out.println(product);
         List<String> imgNames = product.getImgUrls().stream().map(ImgUrl::getImgName).collect(Collectors.toList());
 
         return product.toUserProductDetailDto(imgNames);

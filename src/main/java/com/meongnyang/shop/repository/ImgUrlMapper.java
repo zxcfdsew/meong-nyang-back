@@ -11,4 +11,5 @@ public interface ImgUrlMapper {
     List<ImgUrl> findImgUrlByProductId(Long productId);
     int deleteImgUrlById(List<Long> idList);
     int deleteImgUrlAll();
+    ImgUrl findImgNameByProductId(Long productId);
 }

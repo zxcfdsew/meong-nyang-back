@@ -36,4 +36,16 @@
         where
             product_id = #{productId}
     </select>
+    <select id="findImgNameByProductId" resultType="com.meongnyang.shop.entity.ImgUrl">
+        select
+            id,
+            img_name as imgName
+        from
+            img_url_tb
+        where
+            product_id = #{productId}
+        order by
+            id
+        limit 0, 1;
+    </select>
 </mapper>
