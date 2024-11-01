@@ -23,9 +23,7 @@ public class RespProductAllDto {
         private String productDetail;
         private String productBrand;
         private String productModel;
-
-        private List<String> imgNames;
-
+        private String imgName;
     }
 
 

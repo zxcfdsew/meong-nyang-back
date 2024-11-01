@@ -59,6 +59,97 @@
             pg.id as pg_id,
             pg.category_group_name,
             c.id as c_id,
+            c.category_name
+        from
+            product_tb p
+            left outer join pet_group_tb pg on(p.pet_group_id = pg.id)
+            left outer join category_tb c on(p.category_id = c.id)
+        where
+            1 = 1
+            <choose>
+                <when test='petGroupId == 1 and categoryId == 0'>
+                    and p.pet_group_id = 1
+                </when>
+                <when test='petGroupId == 1 and categoryId != 0'>
+                    and p.pet_group_id = 1
+                    and p.category_id = #{categoryId}
+                </when>
+                <when test='petGroupId == 2 and categoryId == 0'>
+                    and p.pet_group_id = 2
+                </when>
+                <when test='petGroupId == 2 and categoryId != 0'>
+                    and p.pet_group_id = 2
+                    and p.category_id = #{categoryId}
+                </when>
+                <when test='petGroupId == 3 and categoryId == 0'>
+                    and p.recommendation = 1
+                </when>
+                <when test='petGroupId == 3 and categoryId != 0'>
+                    and p.recommendation = 1
+                    and p.category_id = #{categoryId}
+                </when>
+                <when test='petGroupId == 0 and categoryId != 0'>
+                    and p.category_id = #{categoryId}
+                </when>
+            </choose>
+        group by
+            p.id
+        order by
+            p.id
+        limit #{startIndex}, #{limit}
+    </select>
+    <select id="findProductCount" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            product_tb
+        where
+            1 = 1
+        <choose>
+            <when test='petGroupId == 1 and categoryId == 0'>
+                and pet_group_id = 1
+            </when>
+            <when test='petGroupId == 1 and categoryId != 0'>
+                and pet_group_id = 1
+                and category_id = #{categoryId}
+            </when>
+            <when test='petGroupId == 2 and categoryId == 0'>
+                and pet_group_id = 2
+            </when>
+            <when test='petGroupId == 2 and categoryId != 0'>
+                and pet_group_id = 2
+                and category_id = #{categoryId}
+            </when>
+            <when test='petGroupId == 3 and categoryId == 0'>
+                and recommendation = 1
+            </when>
+            <when test='petGroupId == 3 and categoryId != 0'>
+                and recommendation = 1
+                and category_id = #{categoryId}
+            </when>
+            <when test='petGroupId == 0 and categoryId != 0'>
+                and category_id = #{categoryId}
+            </when>
+        </choose>
+    </select>
+    <select id="findProductById" resultMap="productResultMap">
+        select
+            p.id,
+            p.product_name,
+            p.pet_group_id,
+            p.category_id,
+            p.product_price,
+            p.product_price_discount,
+            p.product_detail,
+            p.product_brand,
+            p.product_model,
+            p.product_memo,
+            p.product_create_date,
+            p.product_update_date,
+            p.recommendation,
+            pg.id as pg_id,
+            pg.category_group_name,
+            c.id as c_id,
             c.category_name,
             iu.id as iu_id,
             iu.product_id as iu_product_id,
@@ -70,42 +161,6 @@
             left outer join pet_group_tb pg on(p.pet_group_id = pg.id)
             left outer join category_tb c on(p.category_id = c.id)
         where
-            1 = 1
-            <if test="petGroupId == 0 and categoryId != 0" >
-                and p.category_id = #{categoryId}
-            </if>
-            <if test="categoryId == 0 and petGroupId != 0" >
-                and p.pet_group_id = #{petGroupId}
-            </if>
-
-            <if test="petGroupId == 3" >
-                and (
-                    p.recommendation = 1
-                    and p.category_id = #{categoryId}
-                )
-            </if>
-        limit #{startIndex}, #{limit}
-    </select>
-    <select id="findProductCount" resultType="java.lang.Integer">
-        select
-            count(*)
-        from
-            product_tb
-        where
-            1 = 1
-            <if test="petGroupId == 0 and categoryId != 0" >
-                and category_id = #{categoryId}
-            </if>
-            <if test="categoryId == 0 and petGroupId != 0" >
-                and pet_group_id = #{petGroupId}
-            </if>
-
-            <if test="petGroupId == 3" >
-                and (
-                recommendation = 1
-                and category_id = #{categoryId}
-                )
-            </if>
-
+            p.id = #{id}
     </select>
 </mapper>
