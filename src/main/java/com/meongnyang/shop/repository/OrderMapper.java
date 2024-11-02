@@ -1,9 +1,8 @@
 package com.meongnyang.shop.repository;
 
 import com.meongnyang.shop.dto.response.admin.RespGetUserDetailDto;
+import com.meongnyang.shop.dto.response.admin.RespStatisticsDto;
 import com.meongnyang.shop.entity.Order;
-
-import com.meongnyang.shop.entity.UserOrder;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -22,4 +21,8 @@ public interface OrderMapper {
     int getProductCountByOption(Map<String, Object> params);
     int deleteOrderById(Long id);
     int deleteOrderAll();
+    RespStatisticsDto getStatisticsByDate(Map<String, LocalDate> params);
+    RespStatisticsDto getStatisticsDailyByDate(Map<String, LocalDate> params);
+    List<RespStatisticsDto.BestProductCount> getBestProductCountByDate(Map<String, LocalDate> params);
+    List<RespStatisticsDto.BestProductAmount> getBestProductAmountByDate(Map<String, LocalDate> params);
 }

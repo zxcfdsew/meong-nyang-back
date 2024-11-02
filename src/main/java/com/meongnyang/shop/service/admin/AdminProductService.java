@@ -21,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -51,7 +53,7 @@ public class AdminProductService {
             List<MultipartFile> imgs = dto.getProductImage();
             if(imgs != null && !imgs.get(0).isEmpty()) {
                 for(MultipartFile img : imgs) {
-                    registerImgUrl(img,product.getId());
+                    registerImgUrl(img, product.getId());
                 }
             }
 
@@ -117,6 +119,7 @@ public class AdminProductService {
             if (!imgUrls.isEmpty()) {
                 deleteImgUrl(imgUrls);
             }
+
             //이미지 추가
             List<MultipartFile> imgs = dto.getProductImage();
             if(imgs != null) {
@@ -189,7 +192,12 @@ public class AdminProductService {
 
     public void registerImgUrl(MultipartFile img, Long productId) throws IOException {
             String imgName = img.getOriginalFilename();
-            img.transferTo(new File(filePath + imgName));
+            File directory = new File(filePath);
+            if(!directory.exists()) {
+                directory.mkdirs();
+            }
+            File file = new File(filePath + imgName);
+            img.transferTo(file);
 
             ImgUrl imgUrl = ImgUrl.builder()
                     .productId(productId)
@@ -204,6 +212,8 @@ public class AdminProductService {
     public void deleteImgUrl(List<ImgUrl> imgUrls) {
         List<Long> deleteImgUrlIds = new ArrayList<>();
         for(ImgUrl imgUrl : imgUrls) {
+            File file = new File(filePath + imgUrl.getImgName());
+            file.delete();
             deleteImgUrlIds.add(imgUrl.getId());
         }
         imgUrlMapper.deleteImgUrlById(deleteImgUrlIds);

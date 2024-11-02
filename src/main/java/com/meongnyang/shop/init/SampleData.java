@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-@Component
+//@Component
 public class SampleData implements CommandLineRunner {
 
     @Autowired
@@ -32,7 +32,6 @@ public class SampleData implements CommandLineRunner {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
     @Override
     public void run(String... args) throws Exception {
         registerAdmin();
@@ -48,6 +47,8 @@ public class SampleData implements CommandLineRunner {
                 user = User.builder()
                         .username("admin")
                         .password(passwordEncoder.encode("1234"))
+                        .name("관리자")
+                        .phone("010-1234-5678")
                         .build();
                 userMapper.save(user);
 

@@ -179,12 +179,12 @@
     </select>
     <select id="findOrderDetailProductsById" resultType="com.meongnyang.shop.dto.response.admin.RespGetUserDetailDto$RespUserDetailProductDto">
         select
-            odt.product_id as productId,
-            pt.product_name as productName,
-            count(odt.product_id) as productOrderCount,
-            pt.product_price as productPrice,
-            sum(pt.product_price) as totalPrice,
-            max(ot.order_date) as recentlyPurchaseDate
+            odt.product_id,
+            pt.product_name,
+            sum(odt.product_count) as product_order_count,
+            pt.product_price,
+            sum(pt.product_price * odt.product_count) as total_order_price,
+            max(ot.order_date) as last_order_date
         from
             order_detail_tb odt
             left outer join order_tb ot on(ot.id = odt.order_id)
@@ -264,6 +264,71 @@
             order_date desc
         limit
             1;
+    </select>
+    <select id="getStatisticsByDate" resultType="com.meongnyang.shop.dto.response.admin.RespStatisticsDto">
+        select
+            sum(case when order_status = '결제완료' then total_price else 0 end) as totalAmount,
+            count(case when order_status = '결제완료' then 1 else null end) as orderCount,
+            sum(case when order_status = '환불완료' then total_price else 0 end) as refundAmount,
+            count(case when order_status = '환불완료' then 1 else null end) as refundCount
+        from
+            order_tb
+        where
+            order_date between #{startDate} and #{endDate};
+    </select>
+    <select id="getStatisticsDailyByDate" resultType="com.meongnyang.shop.dto.response.admin.RespStatisticsDto">
+        select
+            min(dailyAmount) as minDailyAmount,
+            avg(dailyAmount) as avgDailyAmount,
+            max(dailyAmount) as maxDailyAmount
+        from
+            (select
+                order_date,
+                sum(total_price) as dailyAmount
+            from
+                order_tb
+            where
+                order_date between #{startDate} and #{endDate} and order_status = "결제완료"
+            group by
+                order_date) as amout_tb
+    </select>
+    <select id="getBestProductCountByDate"
+            resultType="com.meongnyang.shop.dto.response.admin.RespStatisticsDto$BestProductCount">
+        select
+            odt.product_id productId,
+            pt.product_name productName,
+            sum(odt.product_price * product_count) productPrice,
+            sum(odt.product_count) productCount
+        from
+            order_tb ot
+            left outer join order_detail_tb odt on(ot.id = odt.order_id)
+            left outer join product_tb pt on(odt.product_id = pt.id)
+        where
+            order_date between #{startDate} and #{endDate}
+        group by
+            odt.product_id
+        order by
+            productCount desc
+        limit 0, 5
+    </select>
+    <select id="getBestProductAmountByDate"
+            resultType="com.meongnyang.shop.dto.response.admin.RespStatisticsDto$BestProductAmount">
+        select
+            odt.product_id productId,
+            pt.product_name productName,
+            sum(odt.product_price * product_count) productPrice,
+            sum(odt.product_count) productCount
+        from
+            order_tb ot
+            left outer join order_detail_tb odt on(ot.id = odt.order_id)
+            left outer join product_tb pt on(odt.product_id = pt.id)
+        where
+            order_date between #{startDate} and #{endDate}
+        group by
+            odt.product_id
+        order by
+            productPrice desc
+        limit 0, 5
     </select>
 
 </mapper>

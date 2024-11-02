@@ -7,6 +7,7 @@ import com.meongnyang.shop.dto.request.admin.ReqRegisterProductDto;
 import com.meongnyang.shop.dto.request.admin.ReqSearchDto;
 import com.meongnyang.shop.service.admin.AdminProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -46,6 +47,7 @@ public class AdminProductController {
     @ValidAop
     @PutMapping("/product/{productId}")
     public ResponseEntity<?> modifyProduct(@Valid @ModelAttribute ReqModifyProductDto dto, BindingResult bindingResult) {
+        System.out.println(dto);
         adminProductService.modifyProduct(dto);
         return ResponseEntity.ok().body(true);
     }
