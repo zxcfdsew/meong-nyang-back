@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -13,16 +14,17 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RespStatisticsDto {
-    private Long totalAmount;
-    private Long orderCount;
-    private Long refundAmount;
-    private Long refundCount;
-    private Long minDailyAmount;
-    private Long avgDailyAmount;
-    private Long maxDailyAmount;
-
+    List<SummaryStatistics> summaryStatistics;
     List<BestProductCount> bestProductsCounts;
     List<BestProductAmount> bestProductsAmounts;
+
+    @Data
+    public static class SummaryStatistics {
+        private LocalDate orderDate;
+        private String orderStatus;
+        private Long totalPrice;
+        private Long totalCount;
+    }
 
     @Data
     public static class BestProductCount {

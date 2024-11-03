@@ -265,17 +265,34 @@
         limit
             1;
     </select>
-    <select id="getStatisticsByDate" resultType="com.meongnyang.shop.dto.response.admin.RespStatisticsDto">
+    <select id="getSummaryStatisticsByDate" resultType="com.meongnyang.shop.dto.response.admin.RespStatisticsDto$SummaryStatistics">
         select
-            sum(case when order_status = '결제완료' then total_price else 0 end) as totalAmount,
-            count(case when order_status = '결제완료' then 1 else null end) as orderCount,
-            sum(case when order_status = '환불완료' then total_price else 0 end) as refundAmount,
-            count(case when order_status = '환불완료' then 1 else null end) as refundCount
+            order_date as orderDate,
+            order_status as orderStatus,
+            sum(total_price) as totalPrice,
+            sum(order_item_count) as totalCount
         from
-            order_tb
+            order_tb ot
         where
-            order_date between #{startDate} and #{endDate};
+            order_status = '결제완료'
+            and order_date between #{startDate} and #{endDate}
+        group by
+            date(order_date)
+        union all
+        select
+            order_date as orderDate,
+            order_status as orderStatus,
+            sum(total_price) as totalPrice,
+            sum(order_item_count) as totalCount
+        from
+            order_tb ot
+        where
+            order_status = '환불완료'
+            and order_date between #{startDate} and #{endDate}
+        group by
+            date(order_date);
     </select>
+
     <select id="getStatisticsDailyByDate" resultType="com.meongnyang.shop.dto.response.admin.RespStatisticsDto">
         select
             min(dailyAmount) as minDailyAmount,

@@ -21,8 +21,9 @@ public interface OrderMapper {
     int getProductCountByOption(Map<String, Object> params);
     int deleteOrderById(Long id);
     int deleteOrderAll();
-    RespStatisticsDto getStatisticsByDate(Map<String, LocalDate> params);
-    RespStatisticsDto getStatisticsDailyByDate(Map<String, LocalDate> params);
+    List<RespStatisticsDto.SummaryStatistics> getSummaryStatisticsByDate(Map<String, LocalDate> params);
+//    RespStatisticsDto getStatisticsByDate(Map<String, LocalDate> params);
+//    RespStatisticsDto getStatisticsDailyByDate(Map<String, LocalDate> params);
     List<RespStatisticsDto.BestProductCount> getBestProductCountByDate(Map<String, LocalDate> params);
     List<RespStatisticsDto.BestProductAmount> getBestProductAmountByDate(Map<String, LocalDate> params);
 }
