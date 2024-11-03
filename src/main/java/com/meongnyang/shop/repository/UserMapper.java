@@ -1,5 +1,6 @@
 package com.meongnyang.shop.repository;
 
+import com.meongnyang.shop.dto.response.admin.RespDashboardDto;
 import com.meongnyang.shop.dto.response.admin.RespGetUserDetailDto;
 import com.meongnyang.shop.entity.User;
 import org.apache.ibatis.annotations.Mapper;
@@ -15,6 +16,7 @@ public interface UserMapper {
     User findUserById(Long id);
     User findUserDetailById(Long id);
     RespGetUserDetailDto.UserPurchaseData findUserPurchaseDateById(Long id);
+    RespDashboardDto getDashboardCustomer();
     List<User> findAll();
     List<User> findUserByOption(Map<String, Object> params);
     int updateUserMembershipById(@Param("id")Long id, @Param("membershipId")Long membershipId);

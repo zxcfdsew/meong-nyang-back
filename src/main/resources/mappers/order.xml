@@ -347,6 +347,47 @@
             productPrice desc
         limit 0, 5
     </select>
+    <select id="getDashboardData" resultType="com.meongnyang.shop.dto.response.admin.RespDashboardDto">
+        select
+            sum(case when order_status = '결제완료' then total_price else 0 end) totalPrice,
+            sum(case when order_status = '결제완료' then order_item_count else 0 end) totalCount,
+            sum(case when order_status = '환불완료' then total_price else 0 end) refundPrice,
+            sum(case when order_status = '환불완료' then order_item_count else 0 end) refundCount,
+            sum(case when order_status = '결제완료' and date(order_date) = date(now()) then total_price else 0 end) todayTotalPrice,
+            sum(case when order_status = '결제완료' and date(order_date) = date(now()) then order_item_count else 0 end) todayTotalCount,
+            sum(case when order_status = '환불완료' and date(order_date) = date(now()) then total_price else 0 end) todayRefundPrice,
+            sum(case when order_status = '환불완료' and date(order_date) = date(now()) then order_item_count else 0 end) todayRefundCount
+        from
+            order_tb;
+    </select>
+    <select id="getDashboardOrderStatus"
+            resultType="com.meongnyang.shop.dto.response.admin.RespDashboardDto$OrderStatus">
+        select
+            order_name orderName,
+            order_date orderDate,
+            order_status orderStatus
+        from
+            order_tb
+        order by
+            id desc
+        limit 0, 7;
+    </select>
+    <select id="getDashboardStatisticsStatus"
+            resultType="com.meongnyang.shop.dto.response.admin.RespDashboardDto$StatisticsStatus">
+        select
+            date(order_date) as `date`,
+            count(date(order_date)) as orderCount,
+            sum(total_price) as orderAmount
+        from
+            order_tb
+        where
+            date(order_date) > date(now() - interval 7 day)
+        group by
+            date(order_date)
+        order by
+            date(order_date) desc
+        limit 0, 7;
+    </select>
 
 </mapper>
 

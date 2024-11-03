@@ -290,6 +290,13 @@
         where
             u.id = #{id}
     </select>
+    <select id="getDashboardCustomer" resultType="com.meongnyang.shop.dto.response.admin.RespDashboardDto">
+        select
+            count(id) totalCustomerCount,
+            sum(case when date(create_date) = date(now()) then 1 else 0 end) todayJoinCustomerCount
+        from
+            user_tb;
+    </select>
 
     <update id="updateUserMembershipById">
         update
