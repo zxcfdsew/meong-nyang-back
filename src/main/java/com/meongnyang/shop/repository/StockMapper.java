@@ -1,5 +1,6 @@
 package com.meongnyang.shop.repository;
 
+import com.meongnyang.shop.dto.response.admin.RespDashboardDto;
 import com.meongnyang.shop.entity.Stock;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -26,4 +27,6 @@ public interface StockMapper {
             @Param("searchWord") String search,
             @Param("startIndex") int startIndex,
             @Param("limit") int limit);
+
+    List<RespDashboardDto.StockStatus> getDashboardStockStatus();
 }

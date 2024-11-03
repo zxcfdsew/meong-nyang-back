@@ -139,4 +139,18 @@
                 )
             </if>
     </select>
+    <select id="getDashboardStockStatus"
+            resultType="com.meongnyang.shop.dto.response.admin.RespDashboardDto$StockStatus">
+        select
+            st.product_id productId,
+            pt.product_name productName,
+            st.current_stock currentStock,
+            st.expected_stock expectedStock
+        from
+            stock_tb st
+            left outer join product_tb pt on(pt.id = st.product_id)
+        where
+            st.expected_stock <![CDATA[<=]]> min_alert_quantity
+        limit 0, 7
+    </select>
 </mapper>
