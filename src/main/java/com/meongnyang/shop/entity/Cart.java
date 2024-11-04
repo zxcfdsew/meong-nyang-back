@@ -23,16 +23,15 @@ public class Cart {
     private Product product;
     private List<ImgUrl> imgUrls;
 
-    public RespGetCartDto toDto() {
-        return RespGetCartDto.builder()
+    public RespGetCartDto.CartContent toDto(String imgName) {
+        return RespGetCartDto.CartContent.builder()
                 .cartId(id)
                 .userId(userId)
-                .productId(product.getId())
+                .productId(productId)
                 .productCount(productCount)
-                .cartUpdateDate(getCartUpdateDate())
                 .productName(product.getProductName())
                 .productPrice(product.getProductPrice())
-                .imgUrls(imgUrls)
+                .imgName(imgName)
                 .build();
     }
 }

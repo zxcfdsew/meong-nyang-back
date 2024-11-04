@@ -6,10 +6,9 @@ import com.meongnyang.shop.dto.request.user.ReqUpdateUserDto;
 import com.meongnyang.shop.dto.response.user.RespUserInfoDto;
 import com.meongnyang.shop.entity.Address;
 import com.meongnyang.shop.entity.Pet;
-import com.meongnyang.shop.entity.Product;
 import com.meongnyang.shop.entity.User;
-import com.meongnyang.shop.exception.SignupException;
 import com.meongnyang.shop.exception.UpdateUserException;
+import com.meongnyang.shop.exception.UserNotAuthenticatedException;
 import com.meongnyang.shop.exception.ValidException;
 import com.meongnyang.shop.repository.user.MyPageMapper;
 import com.meongnyang.shop.repository.user.UserAddressMapper;
@@ -44,6 +43,9 @@ public class UserService {
 
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new UserNotAuthenticatedException("로그인을 다시해주세요");
+        }
         return myPageMapper.findUserByUsername(authentication.getName());
     }
 
@@ -88,19 +90,17 @@ public class UserService {
             user.setName(dto.toEntity().getName());
             user.setPhone(dto.toEntity().getPhone());
             myPageMapper.UpdateUserInfoById(user);
-            Address address = user.getAddress();
+
+            Address address = Address.builder()
+                    .userId(user.getId())
+                    .zipcode(dto.getZipcode())
+                    .addressDefault(dto.getAddressDefault())
+                    .addressDetail(dto.getAddressDetail())
+                    .build();
 
             if (userAddressMapper.findAddressByUserId(user.getId()) == null) {
-                address = new Address();
-                address.setUserId(user.getId());
-                address.setZipcode(dto.toEntityAddress().getZipcode());
-                address.setAddressDefault(dto.toEntityAddress().getAddressDefault());
-                address.setAddressDetail(dto.toEntityAddress().getAddressDetail());
                 userAddressMapper.saveAddress(address);
-            } else {
-                address.setZipcode(dto.toEntityAddress().getZipcode());
-                address.setAddressDefault(dto.toEntityAddress().getAddressDefault());
-                address.setAddressDetail(dto.toEntityAddress().getAddressDetail());
+            } if (userAddressMapper.findAddressByUserId(user.getId()) != null) {
                 userAddressMapper.UpdateAddressByUserId(address);
             }
         } catch (Exception e) {
@@ -115,10 +115,10 @@ public class UserService {
             throw new ValidException(Map.of("oldPassword", "비밀번호 인증에 실패하였습니다. 다시 입력하세요"));
         }
         if(!dto.getNewPassword().equals(dto.getNewCheckPassword())) {
-            throw new ValidException(Map.of("newPasswordCheck", "새로운 비밀번호가 서로 일치하지 않습니다. 다시 입력하세요"));
+            throw new ValidException(Map.of("newPasswordCheck", "비밀번호 인증에 실패하였습니다. 다시 입력하세요"));
         }
         if(passwordEncoder.matches(dto.getNewPassword(), user.getPassword())) {
-            throw new ValidException(Map.of("newPasswordCheck", "이전 비밀번호와 동일한 비밀번호는 사용하실 수 없습니다. 다시 입력하세요"));
+            throw new ValidException(Map.of("newPasswordCheck", "비밀번호 인증에 실패하였습니다. 다시 입력하세요"));
         }
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         myPageMapper.editPassword(user);
@@ -127,19 +127,16 @@ public class UserService {
     public void modifyPet(ReqUpdatePetDto dto) {
         try {
             User user = getCurrentUser();
-            Pet pet = getCurrentUser().getPet();
+            Pet pet = Pet.builder()
+                    .userId(user.getId())
+                    .petName(dto.getPetName())
+                    .petAge(dto.getPetAge())
+                    .petType(dto.getPetType())
+                    .build();
 
             if(userPetMapper.findPetByUserId(user.getId()) == null) {
-                pet = new Pet();
-                pet.setUserId(dto.toEntity().getUserId());
-                pet.setPetName(dto.toEntity().getPetName());
-                pet.setPetAge(dto.toEntity().getPetAge());
-                pet.setPetType(dto.toEntity().getPetType());
                 userPetMapper.savePet(pet);
-            } else {
-                pet.setPetName(dto.toEntity().getPetName());
-                pet.setPetAge(dto.toEntity().getPetAge());
-                pet.setPetType(dto.toEntity().getPetType());
+            } if(userPetMapper.findPetByUserId(user.getId()) != null) {
                 userPetMapper.UpdatePetByUserId(pet);
             }
         } catch (Exception e) {

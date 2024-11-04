@@ -11,12 +11,13 @@
         <result property="userId" column="user_id" />
         <result property="productId" column="product_id" />
         <result property="productCount" column="product_count" />
+        <result property="cartUpdateDate" column="cart_update_date" />
         <association property="product" resultMap="productResultMap" />
         <collection property="imgUrls" javaType="java.util.List" resultMap="imgUrlResultMap" />
     </resultMap>
 
     <resultMap id="productResultMap" type="com.meongnyang.shop.entity.Product">
-        <id property="id" column="id"/>
+        <id property="id" column="p_id"/>
         <result property="productName" column="product_name" />
         <result property="petGroupId" column="pet_group_id" />
         <result property="categoryId" column="category_id" />
@@ -42,8 +43,39 @@
         insert into
             cart_tb
         values
-            (0, #{userId}, #{productId}, #{productCount})
+            (default, #{userId}, #{productId}, #{productCount}, now())
     </insert>
+    <select id="findCartByUserProductId" resultMap="cartResultMap">
+        select
+            c.id,
+            c.user_id,
+            c.product_id,
+            c.product_count,
+            c.cart_update_date,
+            p.product_name,
+            p.product_price,
+            iu.id as iu_id,
+            iu.product_id as iu_product_id,
+            iu.img_path,
+            iu.img_name
+        from
+            cart_tb c
+            left outer join product_tb p on(p.id = c.product_id)
+            left outer join img_url_tb iu on(c.product_id = iu.product_id)
+        where
+            c.user_id = #{userId} AND
+            c.product_id = #{productId}
+    </select>
+    <update id="updateCart">
+        update
+            cart_tb
+        set
+            product_count = #{productCount},
+            cart_update_date = now()
+        where
+            user_id = #{userId} AND
+            product_id = #{productId}
+    </update>
     <select id="getCart" resultMap="cartResultMap">
         select
             c.id,
@@ -57,17 +89,24 @@
             iu.product_id as iu_product_id,
             iu.img_path,
             iu.img_name
-
         from
             cart_tb c
             left outer join product_tb p on(p.id = c.product_id)
-            left outer join img_url_tb iu on(c.productId = iu.product_id)
+            left outer join img_url_tb iu on(c.product_id = iu.product_id)
         where
-            user_id = #{userId}
+            c.user_id = #{userId}
         order by
             c.cart_update_date DESC
+        limit #{startIndex}, #{limit}
     </select>
-
+    <select id="findCartCount" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            cart_tb
+        where
+            user_id = #{userId}
+    </select>
     <delete id="deleteCartAll">
         delete
         from
@@ -79,13 +118,25 @@
                 </foreach>
             )
     </delete>
+    <select id="findCartIdsByUserId" resultType="java.lang.Long">
+        select
+            id
+        from
+            cart_tb
+        WHERE
+            user_id = #{userId}
+            AND id in
+            <foreach item="id" collection="cartIds" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+    </select>
     <delete id="deleteCartById">
         delete
         from
-            cart_tb
+        cart_tb
         where id in
-            <foreach item="id" collection="idList" open="(" separator="," close=")">
-                #{id}
-            </foreach>
+        <foreach item="id" collection="idList" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </delete>
 </mapper>

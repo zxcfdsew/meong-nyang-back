@@ -3,6 +3,7 @@ package com.meongnyang.shop.controller;
 import com.meongnyang.shop.exception.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -62,6 +63,10 @@ public class ExceptionControllerAdvice {
     }
     @ExceptionHandler(UpdateUserException.class)
     public ResponseEntity<?> updateUserException(UpdateUserException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<?> usernameNotFoundException(UsernameNotFoundException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

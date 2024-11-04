@@ -1,9 +1,8 @@
 package com.meongnyang.shop.controller.user;
 
-import com.meongnyang.shop.aspect.annotation.ValidAop;
-import com.meongnyang.shop.dto.request.admin.ReqDeleteProductDto;
 import com.meongnyang.shop.dto.request.user.ReqDeleteCartDto;
-import com.meongnyang.shop.dto.request.user.ReqGetCartDto;
+import com.meongnyang.shop.dto.request.user.ReqGetCartAllCountDto;
+import com.meongnyang.shop.dto.request.user.ReqGetCartAllDto;
 import com.meongnyang.shop.dto.request.user.ReqPostCartDto;
 import com.meongnyang.shop.service.user.UserCartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +18,22 @@ public class CartController {
     @Autowired
     UserCartService userCartService;
 
-    // 장바구니 물품 추가
-    @ValidAop
+    // 장바구니 물품 추가(수정중!!)
     @PostMapping("/user/cart")
     public ResponseEntity<?> saveProductCart(@RequestBody ReqPostCartDto dto, BindingResult bindingResult) {
         return ResponseEntity.ok().body(userCartService.saveCart(dto));
     }
 
-    // 장바구니 내역 조회(수정중)
+    // 장바구니 내역 조회
     @GetMapping("/user/cart")
-    public ResponseEntity<?> getCart(ReqGetCartDto dto) {
-        return ResponseEntity.ok().body(userCartService.getCart(dto));
+    public ResponseEntity<?> getCartAll(ReqGetCartAllDto dto) {
+        return ResponseEntity.ok().body(userCartService.getCartAll(dto));
+    }
+
+    // 장바구니 내역 갯수 조회
+    @GetMapping("/user/cart/count")
+    public ResponseEntity<?> getCartAllCount(ReqGetCartAllCountDto dto) {
+        return ResponseEntity.ok().body(userCartService.getCartAllCount(dto));
     }
 
     // 장바구니 내역 전체 삭제
