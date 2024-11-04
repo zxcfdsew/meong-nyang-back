@@ -30,7 +30,7 @@ public class AdminProductController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<?> getProductsAll() throws IOException {
+    public ResponseEntity<?> getProductsAll() {
         return ResponseEntity.ok().body(adminProductService.getProductsAll());
     }
 

@@ -2,7 +2,6 @@ package com.meongnyang.shop.controller.admin;
 
 import com.meongnyang.shop.dto.request.admin.ReqModifyStockListDto;
 import com.meongnyang.shop.dto.request.admin.ReqStockSearchOptionDto;
-import com.meongnyang.shop.entity.Stock;
 import com.meongnyang.shop.service.admin.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin")
-public class StockController {
+public class AdminStockController {
 
     @Autowired
     private StockService stockService;

@@ -52,7 +52,9 @@ public class AdminSiteSettingService {
             if (result == 0) {
                 throw new RuntimeException();
             }
-            registerImgs(dto.getLogo());
+            if(dto.getLogo() != null) {
+                registerImgs(dto.getLogo());
+            }
             return true;
         } catch (Exception e) {
             throw new RuntimeException("수정 실패");
