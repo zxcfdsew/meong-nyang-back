@@ -12,16 +12,38 @@
             site_name = #{siteName},
             site_address = #{siteAddress},
             site_phone = #{sitePhone},
-            default_deliver_cost = #{defaultDeliverCost}
+            default_deliver_cost = #{defaultDeliverCost},
+            img_path = if(#{imgPath} is not null, #{imgPath}, img_path),
+            img_name = if(#{imgName} is not null, #{imgName}, img_name)
         where
             id = 1;
     </update>
+    <insert id="setSiteSetting">
+        insert
+        into
+            site_set_tb
+        values(1, #{siteName}, #{siteAddress}, #{sitePhone}, #{defaultDeliverCost}, #{imgPath}, #{imgName})
+    </insert>
+
     <select id="getSiteSetting" resultType="com.meongnyang.shop.entity.SiteSetting">
         select
             site_name siteName,
             site_address siteAddress,
             site_phone sitePhone,
-            default_deliver_cost defaultDeliverCost
+            default_deliver_cost defaultDeliverCost,
+            img_name imgName
+        from
+            site_set_tb;
+    </select>
+    <select id="getLogoName" resultType="com.meongnyang.shop.entity.SiteSetting">
+        select
+            img_name imgName
+        from
+            site_set_tb;
+    </select>
+    <select id="getSiteSettingCount" resultType="java.lang.Integer">
+        select
+            count(id)
         from
             site_set_tb;
     </select>

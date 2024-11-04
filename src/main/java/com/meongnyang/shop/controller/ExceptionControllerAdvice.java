@@ -6,8 +6,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.format.DateTimeParseException;
-
 @RestControllerAdvice
 public class ExceptionControllerAdvice {
 
@@ -65,8 +63,8 @@ public class ExceptionControllerAdvice {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
-    @ExceptionHandler(ModifyFailedException.class)
-    public ResponseEntity<?> modifyfailedException(ModifyFailedException e) {
+    @ExceptionHandler(DataNotFoundException.class)
+    public ResponseEntity<?> modifyfailedException(DataNotFoundException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

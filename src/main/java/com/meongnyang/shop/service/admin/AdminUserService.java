@@ -38,6 +38,8 @@ public class AdminUserService {
                         .anyMatch(role -> role.getRole().getRoleName().equals("ROLE_USER")))
                 .collect(Collectors.toList());
 
+        System.out.println(userList.get(0));
+
         List<RespGetUsersDto.RespUserDto> respUserDtos = userList.stream().map(user -> {
             return RespGetUsersDto.RespUserDto.builder()
                     .id(user.getId())

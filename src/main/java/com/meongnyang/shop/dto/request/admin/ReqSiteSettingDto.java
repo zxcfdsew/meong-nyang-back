@@ -2,6 +2,7 @@ package com.meongnyang.shop.dto.request.admin;
 
 import com.meongnyang.shop.entity.SiteSetting;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class ReqSiteSettingDto {
@@ -9,6 +10,7 @@ public class ReqSiteSettingDto {
     private String siteAddress;
     private String sitePhone;
     private int defaultDeliverCost;
+    private MultipartFile logo;
 
     public SiteSetting toEntity() {
         return SiteSetting.builder()

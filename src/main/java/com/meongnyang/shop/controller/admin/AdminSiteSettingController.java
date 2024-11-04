@@ -8,24 +8,23 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/admin")
 public class AdminSiteSettingController {
 
     @Autowired
     private AdminSiteSettingService adminSiteSettingService;
 
-    @GetMapping("/setting")
+    @GetMapping("/admin/setting")
     public ResponseEntity<?> getSiteSetting() {
         return ResponseEntity.ok().body(adminSiteSettingService.getSiteSetting());
     }
 
-    @PostMapping("/setting/logo")
-    public ResponseEntity<?> changeLogo(@RequestParam("logo") MultipartFile logo) {
-        return ResponseEntity.ok().body(null);
+    @GetMapping("/logo")
+    public ResponseEntity<?> getLogo() {
+        return ResponseEntity.ok().body(adminSiteSettingService.getLogoName());
     }
 
-    @PutMapping("/setting")
-    public ResponseEntity<?> modifySiteSetting(@RequestBody ReqSiteSettingDto dto) {
+    @PutMapping("/admin/setting")
+    public ResponseEntity<?> modifySiteSetting(@ModelAttribute ReqSiteSettingDto dto) {
         return ResponseEntity.ok().body(adminSiteSettingService.modifySiteSetting(dto));
     }
 }

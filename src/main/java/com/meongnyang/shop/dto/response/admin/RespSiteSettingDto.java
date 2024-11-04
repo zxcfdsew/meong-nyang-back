@@ -14,4 +14,5 @@ public class RespSiteSettingDto {
     private String siteAddress;
     private String sitePhone;
     private int defaultDeliverCost;
+    private String imgName;
 }

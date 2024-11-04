@@ -16,6 +16,8 @@ public class SiteSetting {
     private String siteAddress;
     private String sitePhone;
     private int defaultDeliverCost;
+    private String imgPath;
+    private String imgName;
 
     public RespSiteSettingDto toDto() {
         return RespSiteSettingDto.builder()
@@ -23,6 +25,7 @@ public class SiteSetting {
                 .siteAddress(siteAddress)
                 .sitePhone(sitePhone)
                 .defaultDeliverCost(defaultDeliverCost)
+                .imgName(imgName)
                 .build();
     }
 }
