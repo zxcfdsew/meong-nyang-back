@@ -75,7 +75,6 @@
         where
             user_id = #{userId} AND
             product_id = #{productId}
-
     </update>
     <select id="getCart" resultMap="cartResultMap">
         select
@@ -119,13 +118,25 @@
                 </foreach>
             )
     </delete>
+    <select id="findCartIdsByUserId" resultType="java.lang.Long">
+        select
+            id
+        from
+            cart_tb
+        WHERE
+            user_id = #{userId}
+            AND id in
+            <foreach item="id" collection="cartIds" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+    </select>
     <delete id="deleteCartById">
         delete
         from
-            cart_tb
+        cart_tb
         where id in
-            <foreach item="id" collection="idList" open="(" separator="," close=")">
-                #{id}
-            </foreach>
+        <foreach item="id" collection="idList" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </delete>
 </mapper>

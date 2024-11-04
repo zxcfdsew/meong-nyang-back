@@ -2,8 +2,8 @@ package com.meongnyang.shop.repository.user;
 
 import com.meongnyang.shop.entity.Cart;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,4 +16,5 @@ public interface UserCartMapper {
     int deleteCartById(List<Long> idList);
     Cart findCartByUserProductId(Long userId,Long productId);
     int updateCart(Cart cart);
+    List<Long> findCartIdsByUserId(@Param("userId") Long userId, @Param("cartIds") List<Long> cartIds);
 }

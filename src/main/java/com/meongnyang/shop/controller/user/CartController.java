@@ -1,6 +1,5 @@
 package com.meongnyang.shop.controller.user;
 
-import com.meongnyang.shop.aspect.annotation.ValidAop;
 import com.meongnyang.shop.dto.request.user.ReqDeleteCartDto;
 import com.meongnyang.shop.dto.request.user.ReqGetCartAllCountDto;
 import com.meongnyang.shop.dto.request.user.ReqGetCartAllDto;

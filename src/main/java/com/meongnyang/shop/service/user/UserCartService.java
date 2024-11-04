@@ -52,7 +52,6 @@ public class UserCartService {
         if (existingCart != null) {
             existingCart.setProductCount(existingCart.getProductCount() + dto.getProductCount());
             userCartMapper.updateCart(existingCart);
-            System.out.println("update실행");
 
             return RespPostCartDto.builder()
                     .userId(existingCart.getUserId())
@@ -68,7 +67,6 @@ public class UserCartService {
                 .build();
 
         userCartMapper.saveCart(cart);
-        System.out.println("save실행");
 
         return RespPostCartDto.builder()
                 .userId(cart.getUserId())
@@ -112,10 +110,10 @@ public class UserCartService {
         User user = getCurrentUser();
         Long currentUserId = user.getId();
 
-        if (currentUserId.equals(dto.getUserId())) {
-            return userCartMapper.findCartCount(currentUserId);
+        if (!currentUserId.equals(dto.getUserId())) {
+            throw new SecurityException("사용자 ID가 일치하지 않습니다");
         }
-        throw new SecurityException("사용자 ID가 일치하지 않습니다");
+        return userCartMapper.findCartCount(currentUserId);
     }
 
     @Transactional(rollbackFor = DeleteException.class)
@@ -140,6 +138,12 @@ public class UserCartService {
         try {
             if (dto.getUserId() != null && dto.getUserId().equals(currentUserId)) {
                 List<Long> deleteCartIds = dto.getCartIds();
+                List<Long> validCartIds = userCartMapper.findCartIdsByUserId(currentUserId, deleteCartIds);
+                if (!validCartIds.isEmpty()) {
+                    userCartMapper.deleteCartById(validCartIds);
+                } else {
+                    throw new SecurityException("사용자 ID와 일치하는 카트가 없습니다.");
+                }
                 userCartMapper.deleteCartById(deleteCartIds);
             } else {
                 throw new SecurityException("사용자 ID가 일치하지 않습니다");
