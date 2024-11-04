@@ -8,12 +8,14 @@
 
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
         insert into payment_tb
-        values(default, #{paymentName})
+        values(default, #{paymentName}, #{paymentMethod}, #{paymentChannelKey})
     </insert>
     <select id="findPaymentByName" resultType="com.meongnyang.shop.entity.Payment">
         select
             id,
-            payment_name as paymentName
+            payment_name as paymentName,
+            payment_method as paymentMethod,
+            payment_channel_key as paymentChannelKey
         from
             payment_tb
         where
@@ -22,7 +24,9 @@
     <select id="findAll" resultType="com.meongnyang.shop.entity.Payment">
         select
             id,
-            payment_name as paymentName
+            payment_name as paymentName,
+            payment_method as paymentMethod,
+            payment_channel_key as paymentChannelKey
         from
             payment_tb
         order by

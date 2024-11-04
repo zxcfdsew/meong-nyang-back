@@ -121,15 +121,20 @@ public class SampleData implements CommandLineRunner {
     }
 
     public void registerPayment() {
-        List<String> paymentList = new ArrayList<>(Arrays.asList("카드결제", "실시간 계좌이체", "휴대폰 결제", "무통장입금", "카카오페이(간편결제)"));
+        List<String> paymentList = new ArrayList<>(Arrays.asList("카드결제", "실시간 계좌이체", "휴대폰 결제"));
+        List<String> paymentMethodList = new ArrayList<>(Arrays.asList("CARD", "TRANSFER", "MOBILE"));
+//        List<String> paymentChannelKeyList = new ArrayList<>(Arrays.asList("CARD", "TRANSFER", "MOBILE", "VIRTUAL_ACCOUNT", "channel-key-74d2082b-6af1-4866-864d-1cc83fbf0917"));
         Payment payment = null;
-        for(String paymentName : paymentList) {
-            payment = paymentMapper.findPaymentByName(paymentName);
+        for(int i = 0; i < paymentList.size(); i++) {
+            payment = paymentMapper.findPaymentByName(paymentList.get(i));
             if(payment == null) {
                 paymentMapper.save(Payment.builder()
-                        .paymentName(paymentName)
+                        .paymentName(paymentList.get(i))
+                        .paymentMethod(paymentMethodList.get(i))
+                        .paymentChannelKey("channel-key-357b798b-239e-4b6e-ba4c-0f58b5faa3e4")
                         .build());
             }
+
         }
     }
 
