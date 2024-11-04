@@ -23,7 +23,7 @@ public class Cart {
     private Product product;
     private List<ImgUrl> imgUrls;
 
-    public RespGetCartDto.CartContent toDto(String imgNames) {
+    public RespGetCartDto.CartContent toDto(String imgName) {
         return RespGetCartDto.CartContent.builder()
                 .cartId(id)
                 .userId(userId)
@@ -31,7 +31,7 @@ public class Cart {
                 .productCount(productCount)
                 .productName(product.getProductName())
                 .productPrice(product.getProductPrice())
-                .imgNames(imgNames)
+                .imgName(imgName)
                 .build();
     }
 }

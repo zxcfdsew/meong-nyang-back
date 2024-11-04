@@ -17,7 +17,7 @@ public class ReqUserSignupDto {
     private String username;
 
     @NotBlank
-    @Size(min = 6, message = "비밀번호는 6자 이상이어야 합니다.")
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,20}$", message = "하나의 영문자, 숫자, 특수문자를 포함한 8 ~ 20자리 형식이어야 합니다")
     private String password;
 
     @NotBlank

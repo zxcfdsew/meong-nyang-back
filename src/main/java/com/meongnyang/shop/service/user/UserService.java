@@ -8,6 +8,7 @@ import com.meongnyang.shop.entity.Address;
 import com.meongnyang.shop.entity.Pet;
 import com.meongnyang.shop.entity.User;
 import com.meongnyang.shop.exception.UpdateUserException;
+import com.meongnyang.shop.exception.UserNotAuthenticatedException;
 import com.meongnyang.shop.exception.ValidException;
 import com.meongnyang.shop.repository.user.MyPageMapper;
 import com.meongnyang.shop.repository.user.UserAddressMapper;
@@ -42,6 +43,9 @@ public class UserService {
 
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new UserNotAuthenticatedException("로그인을 다시해주세요");
+        }
         return myPageMapper.findUserByUsername(authentication.getName());
     }
 

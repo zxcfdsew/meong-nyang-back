@@ -9,6 +9,7 @@ import com.meongnyang.shop.entity.ImgUrl;
 import com.meongnyang.shop.entity.Product;
 import com.meongnyang.shop.entity.User;
 import com.meongnyang.shop.exception.DeleteException;
+import com.meongnyang.shop.exception.UserNotAuthenticatedException;
 import com.meongnyang.shop.repository.ImgUrlMapper;
 import com.meongnyang.shop.repository.user.MyPageMapper;
 import com.meongnyang.shop.repository.user.UserCartMapper;
@@ -39,21 +40,25 @@ public class UserCartService {
 
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new UserNotAuthenticatedException("로그인을 다시해주세요");
+        }
         return myPageMapper.findUserByUsername(authentication.getName());
     }
 
     public RespPostCartDto saveCart(ReqPostCartDto dto) {
-        PrincipalUser principalUser = (PrincipalUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = principalUser.getId();
-        Cart cart = dto.toEntity(userId);
+        User currentUser = getCurrentUser();
+        Long currentUserId = currentUser.getId();
+
+        Cart cart = dto.toEntity(currentUserId);
 
         Cart existingCart = userCartMapper.findCartByProductId(cart.getProductId(), cart.getUserId());
         System.out.println(cart);
-//        if (existingCart != null && existingCart.getUserId().equals(userId)) {
-//            System.out.println("실행2");
-//            existingCart.setProductCount(existingCart.getProductCount() + 1);
-//            userCartMapper.updateCart(existingCart);
-//        }
+        if (existingCart != null && existingCart.getUserId().equals(currentUserId)) {
+            System.out.println("실행2");
+            existingCart.setProductCount(existingCart.getProductCount() + 1);
+            userCartMapper.updateCart(existingCart);
+        }
         System.out.println("실행3");
         userCartMapper.saveCart(cart);
 
@@ -65,7 +70,6 @@ public class UserCartService {
     }
 
     public RespGetCartDto getCartAll(ReqGetCartAllDto dto) {
-
         User currentUser = getCurrentUser();
         Long currentUserId = currentUser.getId();
 
@@ -96,8 +100,10 @@ public class UserCartService {
     }
 
     public int getCartAllCount(ReqGetCartAllCountDto dto) {
+
         User user = getCurrentUser();
         Long userId = user.getId();
+
         if (userId.equals(dto.getUserId())) {
             return userCartMapper.findCartCount(userId);
         }

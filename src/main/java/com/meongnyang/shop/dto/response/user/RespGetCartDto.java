@@ -23,6 +23,6 @@ public class RespGetCartDto {
         private String productName;
         private Long productPrice;
 
-        private String imgNames;
+        private String imgName;
     }
 }

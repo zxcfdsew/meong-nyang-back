@@ -20,7 +20,6 @@ public class CartController {
     UserCartService userCartService;
 
     // 장바구니 물품 추가(수정중!!)
-    @ValidAop
     @PostMapping("/user/cart")
     public ResponseEntity<?> saveProductCart(@RequestBody ReqPostCartDto dto, BindingResult bindingResult) {
         return ResponseEntity.ok().body(userCartService.saveCart(dto));
