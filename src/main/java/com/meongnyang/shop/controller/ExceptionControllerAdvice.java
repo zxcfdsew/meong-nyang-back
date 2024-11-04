@@ -64,4 +64,9 @@ public class ExceptionControllerAdvice {
     public ResponseEntity<?> updateUserException(UpdateUserException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
+
+    @ExceptionHandler(ModifyFailedException.class)
+    public ResponseEntity<?> modifyfailedException(ModifyFailedException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
 }

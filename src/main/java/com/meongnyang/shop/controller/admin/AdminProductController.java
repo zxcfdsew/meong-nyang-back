@@ -47,7 +47,6 @@ public class AdminProductController {
     @ValidAop
     @PutMapping("/product/{productId}")
     public ResponseEntity<?> modifyProduct(@Valid @ModelAttribute ReqModifyProductDto dto, BindingResult bindingResult) {
-        System.out.println(dto);
         adminProductService.modifyProduct(dto);
         return ResponseEntity.ok().body(true);
     }

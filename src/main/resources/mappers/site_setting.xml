@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.meongnyang.shop.repository.SiteSettingMapper">
+    <update id="modifySiteSetting">
+        update
+            site_set_tb
+        set
+            site_name = #{siteName},
+            site_address = #{siteAddress},
+            site_phone = #{sitePhone},
+            default_deliver_cost = #{defaultDeliverCost}
+        where
+            id = 1;
+    </update>
+    <select id="getSiteSetting" resultType="com.meongnyang.shop.entity.SiteSetting">
+        select
+            site_name siteName,
+            site_address siteAddress,
+            site_phone sitePhone,
+            default_deliver_cost defaultDeliverCost
+        from
+            site_set_tb;
+    </select>
+</mapper>
