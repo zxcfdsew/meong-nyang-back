@@ -1,5 +1,6 @@
 package com.meongnyang.shop.controller.user;
 
+import com.meongnyang.shop.dto.request.user.ReqGetCheckProductsDto;
 import com.meongnyang.shop.dto.request.user.ReqProductAllDto;
 import com.meongnyang.shop.dto.request.user.ReqProductCountDto;
 import com.meongnyang.shop.service.user.ProductService;
@@ -18,6 +19,12 @@ public class ProductController {
     @GetMapping("/product/categorys")
     public ResponseEntity<?> getCategorys() {
         return ResponseEntity.ok().body(productService.getCategorys());
+    }
+
+    @GetMapping("/user/check/product")
+    public ResponseEntity<?> getCheckProduct(ReqGetCheckProductsDto dto) {
+        System.out.println("상품요청" + dto);
+        return ResponseEntity.ok().body( productService.getCheckProduct(dto));
     }
 
     @GetMapping("/products")
