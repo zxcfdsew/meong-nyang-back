@@ -32,7 +32,7 @@ public class CartController {
         return ResponseEntity.ok().body(userCartService.getCartAll(dto));
     }
 
-    // 장바구니 내역 갯수 조회(수정중!!)
+    // 장바구니 내역 갯수 조회
     @GetMapping("/user/cart/count")
     public ResponseEntity<?> getCartAllCount(ReqGetCartAllCountDto dto) {
         return ResponseEntity.ok().body(userCartService.getCartAllCount(dto));

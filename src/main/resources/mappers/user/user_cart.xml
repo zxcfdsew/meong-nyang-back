@@ -80,6 +80,7 @@
             c.user_id = #{userId}
         order by
             c.cart_update_date DESC
+        limit #{startIndex}, #{limit}
     </select>
     <select id="findCartCount" resultType="java.lang.Integer">
         select

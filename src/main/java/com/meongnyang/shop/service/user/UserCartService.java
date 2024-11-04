@@ -3,9 +3,13 @@ package com.meongnyang.shop.service.user;
 import com.meongnyang.shop.dto.request.user.*;
 import com.meongnyang.shop.dto.response.user.RespGetCartDto;
 import com.meongnyang.shop.dto.response.user.RespPostCartDto;
+import com.meongnyang.shop.dto.response.user.RespProductAllDto;
 import com.meongnyang.shop.entity.Cart;
+import com.meongnyang.shop.entity.ImgUrl;
+import com.meongnyang.shop.entity.Product;
 import com.meongnyang.shop.entity.User;
 import com.meongnyang.shop.exception.DeleteException;
+import com.meongnyang.shop.repository.ImgUrlMapper;
 import com.meongnyang.shop.repository.user.MyPageMapper;
 import com.meongnyang.shop.repository.user.UserCartMapper;
 import com.meongnyang.shop.security.principal.PrincipalUser;
@@ -28,7 +32,15 @@ public class UserCartService {
     MyPageMapper myPageMapper;
 
     @Autowired
+    ImgUrlMapper imgUrlMapper;
+
+    @Autowired
     UserCartMapper userCartMapper;
+
+    private User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return myPageMapper.findUserByUsername(authentication.getName());
+    }
 
     public RespPostCartDto saveCart(ReqPostCartDto dto) {
         PrincipalUser principalUser = (PrincipalUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -52,18 +64,35 @@ public class UserCartService {
                 .build();
     }
 
-    private User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return myPageMapper.findUserByUsername(authentication.getName());
-    }
+    public RespGetCartDto getCartAll(ReqGetCartAllDto dto) {
 
-    public List<RespGetCartDto> getCartAll(ReqGetCartAllDto dto) {
-        User user = getCurrentUser();
-        if (user.getId().equals(dto.getUserId())) {
-            List<Cart> cartList = userCartMapper.getCart(user.getId());
-            return cartList.stream().map(Cart::toDto).collect(Collectors.toList());
+        User currentUser = getCurrentUser();
+        Long currentUserId = currentUser.getId();
+
+        if (!currentUserId.equals(dto.getUserId())) {
+            throw new SecurityException("Access denied: User ID does not match");
         }
-        return Collections.emptyList();
+
+        Long startIndex = (dto.getPage() - 1) * dto.getLimit();
+        Map<String, Object> params = Map.of(
+                "startIndex", startIndex,
+                "limit", dto.getLimit(),
+                "userId", dto.getUserId()
+        );
+
+        List<Cart> cartList = userCartMapper.getCart(params);
+
+        List<RespGetCartDto.CartContent> cartContentList = cartList.stream()
+                .map(cart -> {
+                    ImgUrl imgUrl = imgUrlMapper.findImgNameByProductId(cart.getProductId());
+                    return cart.toDto(imgUrl != null ?imgUrl.getImgName() : "");
+                })
+                .collect(Collectors.toList());
+
+        return RespGetCartDto.builder()
+                .cartList(cartContentList)
+                .cartListCount(cartList.size())
+                .build();
     }
 
     public int getCartAllCount(ReqGetCartAllCountDto dto) {

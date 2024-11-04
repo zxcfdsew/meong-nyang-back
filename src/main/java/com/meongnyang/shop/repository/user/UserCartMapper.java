@@ -10,7 +10,7 @@ import java.util.Map;
 @Mapper
 public interface UserCartMapper {
     int saveCart(Cart cart);
-    List<Cart> getCart(Long userId);
+    List<Cart> getCart(Map<String, Object> params);
     int findCartCount(Long userId);
     Long deleteCartAll (List<Long> userIds);
     int deleteCartById(List<Long> idList);
