@@ -4,10 +4,7 @@ import com.meongnyang.shop.dto.request.user.*;
 import com.meongnyang.shop.dto.response.user.RespGetCartDto;
 import com.meongnyang.shop.dto.response.user.RespPostCartDto;
 import com.meongnyang.shop.dto.response.user.RespProductAllDto;
-import com.meongnyang.shop.entity.Cart;
-import com.meongnyang.shop.entity.ImgUrl;
-import com.meongnyang.shop.entity.Product;
-import com.meongnyang.shop.entity.User;
+import com.meongnyang.shop.entity.*;
 import com.meongnyang.shop.exception.DeleteException;
 import com.meongnyang.shop.exception.UserNotAuthenticatedException;
 import com.meongnyang.shop.repository.ImgUrlMapper;
@@ -47,20 +44,35 @@ public class UserCartService {
     }
 
     public RespPostCartDto saveCart(ReqPostCartDto dto) {
-        User currentUser = getCurrentUser();
-        Long currentUserId = currentUser.getId();
+        User user = getCurrentUser();
+        Long currentUserId = user.getId();
+        Cart existingCart = userCartMapper.findCartByUserProductId(dto.getUserId(), dto.getProductId());
 
-        Cart cart = dto.toEntity(currentUserId);
-
-        Cart existingCart = userCartMapper.findCartByProductId(cart.getProductId(), cart.getUserId());
-        System.out.println(cart);
-        if (existingCart != null && existingCart.getUserId().equals(currentUserId)) {
-            System.out.println("실행2");
-            existingCart.setProductCount(existingCart.getProductCount() + 1);
-            userCartMapper.updateCart(existingCart);
+        if (!currentUserId.equals(dto.getUserId())) {
+            throw new SecurityException("Access denied: User ID does not match");
         }
-        System.out.println("실행3");
+
+        if (existingCart != null) {
+            // 기존 카트 항목이 있으면 productCount 증가
+            existingCart.setProductCount(existingCart.getProductCount() + dto.getProductCount());
+            userCartMapper.updateCart(existingCart);
+            System.out.println("update실행");
+
+            return RespPostCartDto.builder()
+                    .userId(existingCart.getUserId())
+                    .productId(existingCart.getProductId())
+                    .productCount(existingCart.getProductCount())
+                    .build();
+        }
+
+        Cart cart = Cart.builder()
+                .userId(user.getId())
+                .productId(dto.getProductId())
+                .productCount(dto.getProductCount())
+                .build();
+
         userCartMapper.saveCart(cart);
+        System.out.println("save실행");
 
         return RespPostCartDto.builder()
                 .userId(cart.getUserId())
@@ -70,8 +82,8 @@ public class UserCartService {
     }
 
     public RespGetCartDto getCartAll(ReqGetCartAllDto dto) {
-        User currentUser = getCurrentUser();
-        Long currentUserId = currentUser.getId();
+        User user = getCurrentUser();
+        Long currentUserId = user.getId();
 
         if (!currentUserId.equals(dto.getUserId())) {
             throw new SecurityException("Access denied: User ID does not match");
