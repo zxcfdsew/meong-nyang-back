@@ -3,16 +3,13 @@ package com.meongnyang.shop.service.user;
 import com.meongnyang.shop.dto.request.user.*;
 import com.meongnyang.shop.dto.response.user.RespGetCartDto;
 import com.meongnyang.shop.dto.response.user.RespPostCartDto;
-import com.meongnyang.shop.dto.response.user.RespProductAllDto;
 import com.meongnyang.shop.entity.*;
 import com.meongnyang.shop.exception.DeleteException;
 import com.meongnyang.shop.exception.UserNotAuthenticatedException;
 import com.meongnyang.shop.repository.ImgUrlMapper;
 import com.meongnyang.shop.repository.user.MyPageMapper;
 import com.meongnyang.shop.repository.user.UserCartMapper;
-import com.meongnyang.shop.security.principal.PrincipalUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -49,11 +46,10 @@ public class UserCartService {
         Cart existingCart = userCartMapper.findCartByUserProductId(dto.getUserId(), dto.getProductId());
 
         if (!currentUserId.equals(dto.getUserId())) {
-            throw new SecurityException("Access denied: User ID does not match");
+            throw new SecurityException("사용자 ID가 일치하지 않습니다");
         }
 
         if (existingCart != null) {
-            // 기존 카트 항목이 있으면 productCount 증가
             existingCart.setProductCount(existingCart.getProductCount() + dto.getProductCount());
             userCartMapper.updateCart(existingCart);
             System.out.println("update실행");
@@ -86,7 +82,7 @@ public class UserCartService {
         Long currentUserId = user.getId();
 
         if (!currentUserId.equals(dto.getUserId())) {
-            throw new SecurityException("Access denied: User ID does not match");
+            throw new SecurityException("사용자 ID가 일치하지 않습니다");
         }
 
         Long startIndex = (dto.getPage() - 1) * dto.getLimit();
@@ -114,20 +110,23 @@ public class UserCartService {
     public int getCartAllCount(ReqGetCartAllCountDto dto) {
 
         User user = getCurrentUser();
-        Long userId = user.getId();
+        Long currentUserId = user.getId();
 
-        if (userId.equals(dto.getUserId())) {
-            return userCartMapper.findCartCount(userId);
+        if (currentUserId.equals(dto.getUserId())) {
+            return userCartMapper.findCartCount(currentUserId);
         }
-        throw new AuthenticationServiceException("");
+        throw new SecurityException("사용자 ID가 일치하지 않습니다");
     }
 
     @Transactional(rollbackFor = DeleteException.class)
-    public void deleteCartAll(List<Long> userIds) {
+    public void deleteCartAll(List<Long> userId) {
         User user = getCurrentUser();
+        Long currentUserId = user.getId();
         try {
-            if (userIds.contains(user.getId())) {
-                userCartMapper.deleteCartAll(Collections.singletonList(user.getId()));
+            if (userId != null && userId.contains(currentUserId)) {
+                userCartMapper.deleteCartAll(Collections.singletonList(currentUserId));
+            } else {
+                throw new SecurityException("사용자 ID가 일치하지 않습니다");
             }
         } catch (Exception e) {
             throw new DeleteException(e.getMessage());
@@ -136,10 +135,15 @@ public class UserCartService {
 
     @Transactional(rollbackFor = DeleteException.class)
     public void deleteCart(ReqDeleteCartDto dto) {
+        User user = getCurrentUser();
+        Long currentUserId = user.getId();
         try {
-            List<Long> deleteCartIds = dto.getCartIds();
-            userCartMapper.deleteCartById(deleteCartIds);
-
+            if (dto.getUserId() != null && dto.getUserId().equals(currentUserId)) {
+                List<Long> deleteCartIds = dto.getCartIds();
+                userCartMapper.deleteCartById(deleteCartIds);
+            } else {
+                throw new SecurityException("사용자 ID가 일치하지 않습니다");
+            }
         } catch (Exception e) {
             throw new DeleteException(e.getMessage());
         }
