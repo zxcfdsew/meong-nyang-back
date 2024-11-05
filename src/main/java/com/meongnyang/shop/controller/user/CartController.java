@@ -18,6 +18,7 @@ public class CartController {
     // 장바구니 물품 추가(수정중!!)
     @PostMapping("/user/cart")
     public ResponseEntity<?> saveProductCart(@RequestBody ReqPostCartDto dto) {
+        System.out.println(dto);
         return ResponseEntity.ok().body(userCartService.saveCart(dto));
     }
 
