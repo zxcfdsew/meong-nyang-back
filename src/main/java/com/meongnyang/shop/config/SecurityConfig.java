@@ -42,8 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers("/auth/**",
-                        "/order/**",
-                        "/orders/**",
+//                        "/order/**",
+//                        "/orders/**",
                         "/images/**",
                         "/product/**",
                         "/swagger-ui.html/**/**",
@@ -56,12 +56,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/products/**",
                         "/product/**"
                 )
-                .permitAll()
-                .antMatchers(
-                        HttpMethod.POST,
-                        "/order/**",
-                        "/orders/**"
-                ).hasRole("USER")
+//                .permitAll()
+//                .antMatchers(
+//                        HttpMethod.POST,
+//                        "/order/**",
+//                        "/orders/**")
+                .hasRole("USER")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated();

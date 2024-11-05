@@ -8,16 +8,9 @@
 
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
         insert into order_tb
-        values(default, #{userId}, #{paymentId}, #{totalPrice}, #{orderItemCount}, now(), #{orderStatus}, #{orderName},
+        values(default, #{userId}, #{paymentId}, #{totalPrice}, #{orderItemCount}, now(), default, #{orderName},
         #{phone}, #{zipcode}, #{addressDefault}, #{addressDetail}, #{email}, #{request}, #{paymentType})
     </insert>
-    <delete id="deleteOrderById">
-        delete
-        from
-            order_tb
-        where
-            id = #{id}
-    </delete>
     <select id="findOrderById" resultType="com.meongnyang.shop.entity.Order">
         select
             *
@@ -26,22 +19,10 @@
         where
             id = #{id}
     </select>
-
     <update id="modifyOrder">
         update order_tb
         set
-            product_name = #{orderItemCount},
-            payment_id = #{paymentId},
-            order_date = now(),
-            order_name = #{orderName},
-            phone = #{phone},
-            zipcode = #{zipcode},
-            address_default = #{addressDefault},
-            address_detail = #{addressDetail},
-            email = #{email},
-            request = #{request},
-            payment_type = #{paymentType}
-
+            order_status = "환불완료"
         where
         id = #{id}
     </update>
