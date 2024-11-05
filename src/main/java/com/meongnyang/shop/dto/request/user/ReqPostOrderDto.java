@@ -8,7 +8,6 @@ import java.util.List;
 @Data
 public class ReqPostOrderDto {
     private Long userId;
-    private Long orderItemCount;
     private String orderName;
     private String zipcode;
     private String addressDefault;
@@ -33,7 +32,6 @@ public class ReqPostOrderDto {
     public Order toEntity() {
         return Order.builder()
                 .userId(userId)
-                .orderItemCount(orderItemCount)
                 .orderName(orderName)
                 .zipcode(zipcode)
                 .addressDefault(addressDefault)

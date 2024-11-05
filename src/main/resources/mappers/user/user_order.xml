@@ -8,7 +8,7 @@
 
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
         insert into order_tb
-        values(default, #{userId}, #{paymentId}, default, #{orderItemCount}, now(), default, #{orderName},
+        values(default, #{userId}, #{paymentId}, default, default, now(), default, #{orderName},
         #{phone}, #{zipcode}, #{addressDefault}, #{addressDetail}, #{email}, #{request}, #{paymentType})
     </insert>
     <select id="findOrderById" resultType="com.meongnyang.shop.entity.Order">
