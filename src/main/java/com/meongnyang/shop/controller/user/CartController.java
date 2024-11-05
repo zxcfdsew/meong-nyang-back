@@ -1,9 +1,6 @@
 package com.meongnyang.shop.controller.user;
 
-import com.meongnyang.shop.dto.request.user.ReqDeleteCartDto;
-import com.meongnyang.shop.dto.request.user.ReqGetCartAllCountDto;
-import com.meongnyang.shop.dto.request.user.ReqGetCartAllDto;
-import com.meongnyang.shop.dto.request.user.ReqPostCartDto;
+import com.meongnyang.shop.dto.request.user.*;
 import com.meongnyang.shop.service.user.UserCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +13,19 @@ import java.util.List;
 public class CartController {
 
     @Autowired
-    UserCartService userCartService;
+    private UserCartService userCartService;
 
     // 장바구니 물품 추가(수정중!!)
     @PostMapping("/user/cart")
-    public ResponseEntity<?> saveProductCart(@RequestBody ReqPostCartDto dto, BindingResult bindingResult) {
+    public ResponseEntity<?> saveProductCart(@RequestBody ReqPostCartDto dto) {
         return ResponseEntity.ok().body(userCartService.saveCart(dto));
+    }
+
+    @PutMapping("/user/{cartId}/count")
+    public ResponseEntity<?> modifyCartItemCount(@RequestBody ReqModifyCartItemDto dto) {
+        System.out.println(dto);
+        userCartService.modifyCartItemProduct(dto);
+        return ResponseEntity.ok().body(true);
     }
 
     // 장바구니 내역 조회

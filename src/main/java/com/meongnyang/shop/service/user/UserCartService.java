@@ -5,10 +5,12 @@ import com.meongnyang.shop.dto.response.user.RespGetCartDto;
 import com.meongnyang.shop.dto.response.user.RespPostCartDto;
 import com.meongnyang.shop.entity.*;
 import com.meongnyang.shop.exception.DeleteException;
+import com.meongnyang.shop.exception.InvalidUserException;
 import com.meongnyang.shop.exception.UserNotAuthenticatedException;
 import com.meongnyang.shop.repository.ImgUrlMapper;
 import com.meongnyang.shop.repository.user.MyPageMapper;
 import com.meongnyang.shop.repository.user.UserCartMapper;
+import com.meongnyang.shop.security.principal.PrincipalUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,13 +26,13 @@ import java.util.stream.Collectors;
 public class UserCartService {
 
     @Autowired
-    MyPageMapper myPageMapper;
+    private MyPageMapper myPageMapper;
 
     @Autowired
-    ImgUrlMapper imgUrlMapper;
+    private ImgUrlMapper imgUrlMapper;
 
     @Autowired
-    UserCartMapper userCartMapper;
+    private UserCartMapper userCartMapper;
 
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -38,6 +40,19 @@ public class UserCartService {
             throw new UserNotAuthenticatedException("로그인을 다시해주세요");
         }
         return myPageMapper.findUserByUsername(authentication.getName());
+    }
+
+    public void modifyCartItemProduct(ReqModifyCartItemDto dto) {
+        PrincipalUser principalUser = (PrincipalUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(principalUser.getId() != dto.getUserId()) {
+            throw new InvalidUserException("유효하지 않은 접근입니다.");
+        }
+
+        Cart cart = Cart.builder()
+                .id(dto.getCartId())
+                .productCount(dto.getProductCount())
+                .build();
+        userCartMapper.modifyCartItemCount(cart);
     }
 
     public RespPostCartDto saveCart(ReqPostCartDto dto) {
