@@ -62,7 +62,6 @@ public class AdminProductService {
         } catch (Exception e) {
             throw new RegisterException(e.getMessage());
         }
-
     }
 
     public RespGetProductsAllDto getProductsAll() {
@@ -87,7 +86,7 @@ public class AdminProductService {
 
         return RespGetProductsAllDto.builder()
                 .productList(productList)
-                .productListCount(productList.size())
+                .productListCount(productMapper.getCountByOption(params))
                 .build();
     }
 

@@ -376,12 +376,14 @@
             resultType="com.meongnyang.shop.dto.response.admin.RespDashboardDto$StatisticsStatus">
         select
             date(order_date) as `date`,
-            count(date(order_date)) as orderCount,
-            sum(total_price) as orderAmount
+            sum(if(order_status = '결제완료', 1, 0)) as orderCount,
+            sum(if(order_status = '결제완료', total_price, 0)) as orderAmount,
+            sum(if(order_status = '환불완료', 1, 0)) as refundCount,
+            sum(if(order_status = '환불완료', total_price, 0)) as refundAmount
         from
             order_tb
         where
-            date(order_date) > date(now() - interval 7 day)
+            date(order_date) >= date(now() - interval 7 day)
         group by
             date(order_date)
         order by

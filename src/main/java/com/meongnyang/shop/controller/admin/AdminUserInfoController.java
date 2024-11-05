@@ -20,7 +20,7 @@ public class AdminUserInfoController {
     }
 
     @GetMapping("/users/search")
-    public ResponseEntity<?> getUsersByOption(@RequestBody ReqSearchDto dto) {
+    public ResponseEntity<?> getUsersByOption(ReqSearchDto dto) {
         return ResponseEntity.ok().body(adminUserService.getUsersByOption(dto));
     }
 

@@ -6,6 +6,27 @@
 
 <mapper namespace="com.meongnyang.shop.repository.UserMapper">
 
+    <sql id="searchOptionIf" >
+        1 = 1
+            and r.role_name = 'ROLE_USER'
+        <if test='option.equals("all")'>
+            and(
+            u.username like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            or u.name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            )
+        </if>
+        <if test='option.equals("id")'>
+            and(
+            u.username like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            )
+        </if>
+        <if test='option.equals("name")'>
+            and(
+            u.name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            )
+        </if>
+    </sql>
+
     <resultMap id="userResultMap" type="com.meongnyang.shop.entity.User">
         <id property="id" column="u_id"/>
         <result property="username" column="username" />
@@ -212,23 +233,7 @@
             left outer join role_tb r on(r.id = ur.role_id)
             left outer join membership_level_tb ml on(ml.id = u.membership_level_id)
         where
-            1 = 1
-            <if test='option.equals("all")'>
-                and(
-                    u.username like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-                    or u.name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-                )
-            </if>
-            <if test='option.equals("id")'>
-                and(
-                    u.username like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-                )
-            </if>
-            <if test='option.equals("name")'>
-                and(
-                    u.name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-                )
-            </if>
+            <include refid="searchOptionIf" />
         limit #{startIndex}, #{limit}
 
     </select>
@@ -296,6 +301,17 @@
             sum(case when date(create_date) = date(now()) then 1 else 0 end) todayJoinCustomerCount
         from
             user_tb;
+    </select>
+    <select id="getCountByOption" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            user_tb u
+            left outer join user_role_tb ur on(u.id = ur.user_id)
+            left outer join role_tb r on(r.id = ur.role_id)
+            left outer join membership_level_tb ml on(ml.id = u.membership_level_id)
+        where
+            <include refid="searchOptionIf" />
     </select>
 
     <update id="updateUserMembershipById">

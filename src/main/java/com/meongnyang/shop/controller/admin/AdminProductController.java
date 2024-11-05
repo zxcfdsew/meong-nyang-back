@@ -35,7 +35,8 @@ public class AdminProductController {
     }
 
     @GetMapping("/products/search")
-    public ResponseEntity<?> getProductsByOption(@RequestBody ReqSearchDto dto) {
+    public ResponseEntity<?> getProductsByOption(ReqSearchDto dto) {
+        System.out.println(dto);
         return ResponseEntity.ok().body(adminProductService.getProductsByOption(dto));
     }
 
