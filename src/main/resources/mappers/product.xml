@@ -214,6 +214,14 @@
         where
             id = #{id}
     </select>
+    <select id="getProductPriceById" resultType="java.lang.Long">
+        select
+            product_price
+        from
+            product_tb
+        where
+            id = #{id}
+    </select>
 
 </mapper>
 
