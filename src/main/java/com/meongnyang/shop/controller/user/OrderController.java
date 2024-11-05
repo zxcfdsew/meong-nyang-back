@@ -24,16 +24,11 @@ public class OrderController {
         return ResponseEntity.ok().body(true);
     }
 
-//    @DeleteMapping("/order/{orderId}")
-//    public ResponseEntity<?> deleteProductsOrder(@PathVariable Long orderId) {
-//        orderService.deleteProductsOrder(orderId);
-//        return ResponseEntity.ok().body(true);
-//    }
-
 //    @ValidAop
 //    @PutMapping("/orders/{orderId}")
 //    public ResponseEntity<?> modifyProductsOrder(@Valid @ModelAttribute ReqModifyOrderDto dto, BindingResult bindingResult) {
 //        orderService.modifyProductsOrder(dto);
 //        return ResponseEntity.ok().body(true);
 //    }
+
 }
