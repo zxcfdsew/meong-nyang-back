@@ -24,8 +24,11 @@ public class Order {
     private String addressDefault;
     private String addressDetail;
     private String phone;
-    private int paymentId;
+    private String email;
     private String request;
+
+    private String paymentId;
+    private String paymentType;
 
     private Payment payment;
     private List<OrderDetail> orderDetails;
