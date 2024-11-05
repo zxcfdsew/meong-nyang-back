@@ -195,6 +195,7 @@
             odt.product_id,
             pt.product_name,
             pt.product_price
+        limit 0, 6
     </select>
     <select id="getOrderCountByOption" resultType="java.lang.Integer">
         select
@@ -252,6 +253,10 @@
             left outer join product_tb pt on(od.product_id = pt.id)
         where
             o.id = #{id}
+            and o.order_status = '결제완료'
+        order by
+            o.order_date desc
+        limit 0, 6
     </select>
     <select id="getRecentOrderDate" resultType="java.time.LocalDate">
         select
@@ -259,7 +264,7 @@
         from
             order_tb
         where
-            user_id = 5
+            user_id = #{userId}
         order by
             order_date desc
         limit
