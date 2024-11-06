@@ -9,5 +9,6 @@ import java.util.List;
 public interface PaymentMapper {
     int save(Payment payment);
     Payment findPaymentByName(String name);
+    Payment findPaymentMethodByName(String name);
     List<Payment> findAll();
 }
