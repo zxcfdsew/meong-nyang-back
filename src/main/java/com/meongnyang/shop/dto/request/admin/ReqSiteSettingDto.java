@@ -9,6 +9,7 @@ public class ReqSiteSettingDto {
     private String siteName;
     private String siteAddress;
     private String sitePhone;
+    private String deleteImgName;
     private int defaultDeliverCost;
     private MultipartFile logo;
 

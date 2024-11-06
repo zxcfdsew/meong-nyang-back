@@ -32,33 +32,30 @@ public class AdminSiteSettingService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Boolean modifySiteSetting(ReqSiteSettingDto dto) {
-        try {
-            int result = 0;
-            SiteSetting siteSetting = dto.toEntity();
-            if(siteSettingMapper.getSiteSettingCount() == 1) {
-                // 등록된 사이트 정보가 있을때는 값 변경
-                if(dto.getLogo() != null) {
-                    siteSetting.setImgPath(filePath);
-                    siteSetting.setImgName(dto.getLogo().getOriginalFilename());
-                }
-                result = siteSettingMapper.modifySiteSetting(siteSetting);
-            } else {
-                // 등록된 사이트 정보가 없을때는 추가
+    public Boolean modifySiteSetting(ReqSiteSettingDto dto) throws IOException {
+        int result = 0;
+        SiteSetting siteSetting = dto.toEntity();
+        if(siteSettingMapper.getSiteSettingCount() == 1) {
+            // 등록된 사이트 정보가 있을때는 값 변경
+            if(dto.getLogo() != null) {
                 siteSetting.setImgPath(filePath);
                 siteSetting.setImgName(dto.getLogo().getOriginalFilename());
-                result = siteSettingMapper.setSiteSetting(siteSetting);
             }
-            if (result == 0) {
-                throw new RuntimeException();
-            }
-            if(dto.getLogo() != null) {
-                registerImgs(dto.getLogo());
-            }
-            return true;
-        } catch (Exception e) {
-            throw new RuntimeException("수정 실패");
+            result = siteSettingMapper.modifySiteSetting(siteSetting);
+            deleteImgs(dto.getDeleteImgName());
+        } else {
+            // 등록된 사이트 정보가 없을때는 추가
+            siteSetting.setImgPath(filePath);
+            siteSetting.setImgName(dto.getLogo().getOriginalFilename());
+            result = siteSettingMapper.setSiteSetting(siteSetting);
         }
+        if (result == 0) {
+            throw new RuntimeException();
+        }
+        if(dto.getLogo() != null) {
+            registerImgs(dto.getLogo());
+        }
+        return true;
     }
 
     public String getLogoName() {
@@ -77,5 +74,10 @@ public class AdminSiteSettingService {
         }
         File file = new File(filePath + imgName);
         img.transferTo(file);
+    }
+
+    private void deleteImgs(String imgName) {
+        File file = new File(filePath + imgName);
+        file.delete();
     }
 }

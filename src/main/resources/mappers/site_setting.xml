@@ -22,7 +22,7 @@
         insert
         into
             site_set_tb
-        values(1, #{siteName}, #{siteAddress}, #{sitePhone}, #{defaultDeliverCost}, #{imgPath}, #{imgName})
+        values(1, #{siteName}, #{siteAddress}, #{sitePhone}, #{imgPath}, #{imgName}, #{defaultDeliverCost})
     </insert>
 
     <select id="getSiteSetting" resultType="com.meongnyang.shop.entity.SiteSetting">
