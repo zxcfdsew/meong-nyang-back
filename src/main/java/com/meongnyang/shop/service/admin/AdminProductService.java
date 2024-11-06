@@ -4,10 +4,8 @@ import com.meongnyang.shop.dto.request.admin.ReqDeleteProductDto;
 import com.meongnyang.shop.dto.request.admin.ReqModifyProductDto;
 import com.meongnyang.shop.dto.request.admin.ReqRegisterProductDto;
 import com.meongnyang.shop.dto.request.admin.ReqSearchDto;
-import com.meongnyang.shop.dto.response.admin.RespGetCategorysDto;
 import com.meongnyang.shop.dto.response.admin.RespGetProductsAllDto;
 import com.meongnyang.shop.dto.response.admin.RespProductDetailDto;
-import com.meongnyang.shop.dto.response.admin.RespProductDto;
 import com.meongnyang.shop.entity.*;
 import com.meongnyang.shop.exception.DeleteException;
 import com.meongnyang.shop.exception.RegisterException;
@@ -20,11 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class AdminProductService {
@@ -100,39 +94,33 @@ public class AdminProductService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void modifyProduct(ReqModifyProductDto dto) {
+    public void modifyProduct(ReqModifyProductDto dto) throws IOException {
         // 이미지 수정 기능 구현중
-        try {
-            Product product = null;
-            product = productMapper.findProductById(dto.getId());
+        Product product = null;
+        product = productMapper.findProductById(dto.getId());
 
-            if(product == null) {
-                throw new RegisterException("존재하지 않는 상품입니다.");
-            }
-
-            //상품테이블 수정
-            product = dto.toEntity();
-            productMapper.modifyProduct(product);
-
-            //이미지 삭제
-            deleteProductImg(dto.getDeleteImgList());
-
-            //이미지 추가
-            List<MultipartFile> imgs = dto.getProductImage();
-            if(imgs != null) {
-                for(MultipartFile img : imgs) {
-                    registerImgUrl(img,dto.getId());
-                }
-            }
-
-            //재고 테이블 수정
-            Stock stock = dto.toEntityStock();
-            System.out.println(stock);
-            stockMapper.modifyStockByProductId(stock);
-
-        } catch (Exception e) {
-            throw new RegisterException(e.getMessage());
+        if(product == null) {
+            throw new RegisterException("존재하지 않는 상품입니다.");
         }
+        //상품테이블 수정
+        product = dto.toEntity();
+        productMapper.modifyProduct(product);
+
+        //이미지 삭제
+        deleteProductImgByImgNames(dto.getDeleteImgList());
+
+        //이미지 추가
+        List<MultipartFile> imgs = dto.getProductImage();
+        if(imgs != null) {
+            for(MultipartFile img : imgs) {
+                registerImgUrl(img,dto.getId());
+            }
+        }
+
+        //재고 테이블 수정
+        Stock stock = dto.toEntityStock();
+        System.out.println(stock);
+        stockMapper.modifyStockByProductId(stock);
     }
 
     @Transactional(rollbackFor = DeleteException.class)
@@ -214,12 +202,11 @@ public class AdminProductService {
         imgUrlMapper.deleteImgUrlById(deleteImgUrlIds);
     }
 
-    public void deleteProductImg(List<String> fileNameList) {
-        int result = imgUrlMapper.deleteImgByNames(fileNameList);
-
-        if (result != fileNameList.size()) {
-            throw new DeleteException("이미지 삭제 실패");
+    public void deleteProductImgByImgNames(List<String> fileNameList) {
+        if(fileNameList == null || fileNameList.isEmpty()) {
+            return;
         }
+        imgUrlMapper.deleteImgByNames(fileNameList);
 
         // 서버컴퓨터 이미지 삭제
         for(String filename : fileNameList) {
