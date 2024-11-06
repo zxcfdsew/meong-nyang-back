@@ -1,6 +1,5 @@
 package com.meongnyang.shop.service.user;
 
-import com.meongnyang.shop.dto.request.admin.ReqModifyProductDto;
 import com.meongnyang.shop.dto.request.user.ReqGetOrderListDto;
 
 import com.meongnyang.shop.dto.request.user.ReqModifyOrderDto;
@@ -9,18 +8,16 @@ import com.meongnyang.shop.dto.response.user.RespGetOrderListDto;
 import com.meongnyang.shop.entity.*;
 import com.meongnyang.shop.exception.RegisterException;
 import com.meongnyang.shop.exception.UserNotAuthenticatedException;
+import com.meongnyang.shop.repository.PaymentMapper;
 import com.meongnyang.shop.repository.ProductMapper;
 import com.meongnyang.shop.repository.user.MyPageMapper;
 import com.meongnyang.shop.repository.user.UserOrderDetailMapper;
 import com.meongnyang.shop.repository.user.UserOrderMapper;
-import com.meongnyang.shop.security.principal.PrincipalUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +39,9 @@ public class OrderService {
     @Autowired
     private MyPageMapper myPageMapper;
 
+    @Autowired
+    private PaymentMapper paymentMapper;
+
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -60,7 +60,8 @@ public class OrderService {
         }
 
         try {
-            Order order = dto.toEntity();
+            Payment payment = paymentMapper.findPaymentMethodByName(dto.getPaymentMethod());
+            Order order = dto.toEntity(payment.getId());
             userOrderMapper.save(order);
 
             for (ReqPostOrderDto.ProductEasy product : dto.getProducts()) {
@@ -85,10 +86,13 @@ public class OrderService {
             throw new SecurityException("사용자 ID가 일치하지 않습니다");
         }
 
-    public RespGetOrderListDto getOrderList(ReqGetOrderListDto dto) {
+        userOrderMapper.modifyOrder(dto.getId());
+    }
+
+    public RespGetOrderListDto getOrderList (ReqGetOrderListDto dto){
         Long startIndex = (dto.getPage() - 1) * dto.getLimit();
         Map<String, Object> params = Map.of(
-                "userId",dto.getUserId(),
+                "userId", dto.getUserId(),
                 "startIndex", startIndex,
                 "limit", dto.getLimit(),
                 "paymentSelect", dto.getPaymentSelect(),
@@ -97,6 +101,7 @@ public class OrderService {
         );
 
         List<Order> orderList = userOrderMapper.findAllOrders(params);
+        System.out.println("orderList" + orderList);
         List<RespGetOrderListDto.OrderList> orderListDtos = new ArrayList<>();
 
         for (Order order : orderList) {
@@ -110,6 +115,7 @@ public class OrderService {
             orderList1.setOrderDetailList(orderDetails);
             orderListDtos.add(orderList1);
         }
+
         return RespGetOrderListDto.builder()
                 .orderList(orderListDtos)
                 .orderListCount(orderListDtos.size())
@@ -117,3 +123,4 @@ public class OrderService {
 
     }
 }
+

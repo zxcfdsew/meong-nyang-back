@@ -17,7 +17,7 @@ public class ReqPostOrderDto {
     private String request;
 
     private String paymentId;
-    private int paymentType;
+    private String paymentMethod;
 
     private List<ProductEasy> products;
 
@@ -29,7 +29,7 @@ public class ReqPostOrderDto {
         private Long productCount;
     }
 
-    public Order toEntity() {
+    public Order toEntity(int paymentTypeId) {
         return Order.builder()
                 .userId(userId)
                 .orderName(orderName)
@@ -40,7 +40,7 @@ public class ReqPostOrderDto {
                 .email(email)
                 .request(request)
                 .paymentId(paymentId)
-                .paymentType(paymentType)
+                .paymentType(paymentTypeId)
                 .build();
     }
 }
