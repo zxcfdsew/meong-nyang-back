@@ -280,7 +280,7 @@
             order_tb ot
         where
             order_status = '결제완료'
-            and order_date between #{startDate} and #{endDate}
+            and order_date between date(#{startDate}) and date(#{endDate})
         group by
             date(order_date)
         union all
@@ -293,7 +293,7 @@
             order_tb ot
         where
             order_status = '환불완료'
-            and order_date between #{startDate} and #{endDate}
+            and order_date between date(#{startDate}) and date(#{endDate})
         group by
             date(order_date);
     </select>

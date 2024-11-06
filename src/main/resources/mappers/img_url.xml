@@ -24,6 +24,16 @@
     <delete id="deleteImgUrlAll">
         truncate table img_url_tb
     </delete>
+    <delete id="deleteImgByNames">
+        delete
+        from
+            img_url_tb
+        where
+            img_name in
+            <foreach collection="imgNameList" item="imgName" open="(" separator="," close=")">
+                #{imgName}
+            </foreach>
+    </delete>
 
     <select id="findImgUrlByProductId" resultType="com.meongnyang.shop.entity.ImgUrl">
         select
