@@ -5,24 +5,20 @@ import lombok.Data;
 
 import java.util.List;
 
-@Builder
 @Data
-public class RespGetCartDto {
+@Builder
+public class RespCheckProductsDto {
+    private List<CheckProduct> checkProducts;
+    private int productsCount;
 
-    private List<RespGetCartDto.CartContent> cartList;
-    private int cartListCount;
-
-
-    @Builder
     @Data
-    public static class CartContent {
-        private Long cartId;
-        private Long userId;
+    @Builder
+    public static class CheckProduct {
         private Long productId;
-        private Long productCount;
         private String productName;
         private Long productPrice;
-
+        private String groupName;
+        private String categoryName;
         private String imgName;
     }
 }

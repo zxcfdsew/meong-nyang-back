@@ -3,8 +3,8 @@ package com.meongnyang.shop.dto.request.user;
 import lombok.Data;
 
 @Data
-public class ReqPostCartDto {
+public class ReqGetCartAllDto {
     private Long userId;
-    private Long productId;
-    private Long productCount;
+    private Long page;
+    private Long limit;
 }

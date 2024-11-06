@@ -1,8 +1,10 @@
 package com.meongnyang.shop.service.user;
 
+import com.meongnyang.shop.dto.request.user.ReqGetCheckProductsDto;
 import com.meongnyang.shop.dto.request.user.ReqProductAllDto;
 import com.meongnyang.shop.dto.request.user.ReqProductCountDto;
 import com.meongnyang.shop.dto.response.admin.RespGetCategorysDto;
+import com.meongnyang.shop.dto.response.user.RespCheckProductsDto;
 import com.meongnyang.shop.dto.response.user.RespGetProductDetailDto;
 import com.meongnyang.shop.dto.response.user.RespProductAllDto;
 import com.meongnyang.shop.entity.ImgUrl;
@@ -83,5 +85,29 @@ public class ProductService {
         List<String> imgNames = product.getImgUrls().stream().map(ImgUrl::getImgName).collect(Collectors.toList());
 
         return product.toUserProductDetailDto(imgNames);
+    }
+
+    public RespCheckProductsDto getCheckProduct(ReqGetCheckProductsDto dto) {
+        List<Product> productList = userProductMapper.findProductsById(dto.getProductIds());
+        System.out.println(productList);
+        List<RespCheckProductsDto.CheckProduct> checkProductList = productList.stream()
+                .map(product -> {
+                    ImgUrl imgName = imgUrlMapper.findImgNameByProductId(product.getId());
+
+                    return RespCheckProductsDto.CheckProduct.builder()
+                            .productId(product.getId())
+                            .productName(product.getProductName())
+                            .productPrice(product.getProductPrice())
+                            .groupName(product.getPetGroup().getCategoryGroupName())
+                            .categoryName(product.getCategory().getCategoryName())
+                            .imgName(imgName != null ? imgName.getImgName() : "")
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        return RespCheckProductsDto.builder()
+                .checkProducts(checkProductList)
+                .productsCount(checkProductList.size())
+                .build();
     }
 }

@@ -30,6 +30,8 @@ public class SampleData implements CommandLineRunner {
     @Autowired
     private MembershipMapper membershipMapper;
     @Autowired
+    private PaymentMapper paymentMapper;
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
@@ -37,6 +39,7 @@ public class SampleData implements CommandLineRunner {
         registerAdmin();
         registerCategory();
         registerMembership();
+        registerPayment();
     }
 
     @Transactional(rollbackFor = SignupException.class)
@@ -115,6 +118,24 @@ public class SampleData implements CommandLineRunner {
                         .membershipLevelName(membershipName)
                         .build());
             }
+        }
+    }
+
+    public void registerPayment() {
+        List<String> paymentList = new ArrayList<>(Arrays.asList("카드결제", "실시간 계좌이체", "휴대폰 결제"));
+        List<String> paymentMethodList = new ArrayList<>(Arrays.asList("CARD", "TRANSFER", "MOBILE"));
+//        List<String> paymentChannelKeyList = new ArrayList<>(Arrays.asList("CARD", "TRANSFER", "MOBILE", "VIRTUAL_ACCOUNT", "channel-key-74d2082b-6af1-4866-864d-1cc83fbf0917"));
+        Payment payment = null;
+        for(int i = 0; i < paymentList.size(); i++) {
+            payment = paymentMapper.findPaymentByName(paymentList.get(i));
+            if(payment == null) {
+                paymentMapper.save(Payment.builder()
+                        .paymentName(paymentList.get(i))
+                        .paymentMethod(paymentMethodList.get(i))
+                        .paymentChannelKey("channel-key-357b798b-239e-4b6e-ba4c-0f58b5faa3e4")
+                        .build());
+            }
+
         }
     }
 

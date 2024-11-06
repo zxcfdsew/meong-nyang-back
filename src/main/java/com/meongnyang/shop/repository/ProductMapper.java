@@ -19,4 +19,6 @@ public interface ProductMapper {
     Product findProductById(Long id);
     Product findProductDetailById(Long id);
 
+    Long getProductPriceById(Long productId);
+
 }

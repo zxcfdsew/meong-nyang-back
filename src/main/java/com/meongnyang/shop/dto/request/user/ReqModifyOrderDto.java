@@ -3,8 +3,7 @@ package com.meongnyang.shop.dto.request.user;
 import lombok.Data;
 
 @Data
-public class ReqPostCartDto {
+public class ReqModifyOrderDto {
+    private Long id;
     private Long userId;
-    private Long productId;
-    private Long productCount;
 }

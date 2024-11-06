@@ -12,4 +12,6 @@ import lombok.NoArgsConstructor;
 public class Payment {
     private int id;
     private String paymentName;
+    private String paymentMethod;
+    private String paymentChannelKey;
 }

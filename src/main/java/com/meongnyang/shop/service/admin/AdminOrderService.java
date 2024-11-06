@@ -1,6 +1,5 @@
 package com.meongnyang.shop.service.admin;
 
-import com.meongnyang.shop.dto.request.admin.ReqDeleteOrderDto;
 import com.meongnyang.shop.dto.request.admin.ReqSearchDto;
 import com.meongnyang.shop.dto.response.admin.RespGetOrdersDto;
 import com.meongnyang.shop.dto.response.admin.RespOrderDetailDto;
@@ -10,7 +9,6 @@ import com.meongnyang.shop.exception.DeleteException;
 import com.meongnyang.shop.repository.ImgUrlMapper;
 import com.meongnyang.shop.repository.OrderDetailMapper;
 import com.meongnyang.shop.repository.OrderMapper;
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

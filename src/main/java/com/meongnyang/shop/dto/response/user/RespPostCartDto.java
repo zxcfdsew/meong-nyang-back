@@ -10,5 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RespPostCartDto {
-    Long userId;
+    private Long userId;
+    private Long productId;
+    private Long productCount;
 }
