@@ -19,5 +19,6 @@ public interface UserMapper {
     RespDashboardDto getDashboardCustomer();
     List<User> findAll();
     List<User> findUserByOption(Map<String, Object> params);
+    int getCountByOption(Map<String, Object> params);
     int updateUserMembershipById(@Param("id")Long id, @Param("membershipId")Long membershipId);
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin")
-public class UserInfoController {
+public class AdminUserInfoController {
 
     @Autowired
     private AdminUserService adminUserService;
@@ -20,7 +20,7 @@ public class UserInfoController {
     }
 
     @GetMapping("/users/search")
-    public ResponseEntity<?> getUsersByOption(@RequestBody ReqSearchDto dto) {
+    public ResponseEntity<?> getUsersByOption(ReqSearchDto dto) {
         return ResponseEntity.ok().body(adminUserService.getUsersByOption(dto));
     }
 

@@ -6,6 +6,34 @@
 
 <mapper namespace="com.meongnyang.shop.repository.ProductMapper">
 
+    <sql id="searchOptionIf">
+        1 = 1
+        <if test='option.equals("all")'>
+            and (
+            p.id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            or p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            or pg.category_group_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            or c.category_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            )
+        </if>
+        <if test='option.equals("code")'>
+            and (
+            p.id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            )
+        </if>
+        <if test='option.equals("product")'>
+            and (
+            p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            )
+        </if>
+        <if test='option.equals("category")'>
+            and (
+            pg.category_group_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            or c.category_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            )
+        </if>
+    </sql>
+
     <resultMap id="productResultMap" type="com.meongnyang.shop.entity.Product">
         <id property="id" column="id"/>
         <result property="productName" column="product_name" />
@@ -124,42 +152,13 @@
             pg.id as pg_id,
             pg.category_group_name,
             c.id as c_id,
-            c.category_name,
-            iu.id as iu_id,
-            iu.product_id as iu_product_id,
-            iu.img_path,
-            iu.img_name
+            c.category_name
         from
             product_tb p
             left outer join pet_group_tb pg on(p.pet_group_id = pg.id)
             left outer join category_tb c on(p.category_id = c.id)
-            left outer join img_url_tb iu on(p.id = iu.product_id)
         where
-            1 = 1
-            <if test='option.equals("all")'>
-                and (
-                    p.id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-                    or p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-                    or pg.category_group_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-                    or c.category_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-                )
-            </if>
-            <if test='option.equals("code")'>
-                and (
-                    p.id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-                )
-            </if>
-            <if test='option.equals("product")'>
-                and (
-                    p.product_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-                )
-            </if>
-            <if test='option.equals("category")'>
-                and (
-                    pg.category_group_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-                    or c.category_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-                )
-            </if>
+            <include refid="searchOptionIf" />
         limit #{startIndex}, #{limit}
     </select>
 
@@ -214,6 +213,18 @@
         where
             id = #{id}
     </select>
+
+    <select id="getCountByOption" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            product_tb p
+            left outer join pet_group_tb pg on(p.pet_group_id = pg.id)
+            left outer join category_tb c on(p.category_id = c.id)
+        where
+            <include refid="searchOptionIf"></include>
+    </select>
+
     <select id="getProductPriceById" resultType="java.lang.Long">
         select
             product_price

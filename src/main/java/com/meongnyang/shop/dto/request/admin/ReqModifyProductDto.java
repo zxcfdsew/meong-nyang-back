@@ -33,6 +33,7 @@ public class ReqModifyProductDto {
     @Pattern(regexp = "^[12]$", message = "값은 1 또는 2여야 합니다.")
     private String recommendation;
     private List<MultipartFile> productImage;
+    private List<String> deleteImgList;
 
     //재고 테이블
     @NotNull

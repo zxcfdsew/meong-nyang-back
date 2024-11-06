@@ -48,5 +48,7 @@ public class RespDashboardDto {
         private LocalDate date;
         private Long orderCount;
         private Long orderAmount;
+        private Long refundCount;
+        private Long refundAmount;
     }
 }

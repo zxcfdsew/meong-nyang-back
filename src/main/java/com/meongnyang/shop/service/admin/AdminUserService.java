@@ -38,6 +38,8 @@ public class AdminUserService {
                         .anyMatch(role -> role.getRole().getRoleName().equals("ROLE_USER")))
                 .collect(Collectors.toList());
 
+        System.out.println(userList.get(0));
+
         List<RespGetUsersDto.RespUserDto> respUserDtos = userList.stream().map(user -> {
             return RespGetUsersDto.RespUserDto.builder()
                     .id(user.getId())
@@ -66,6 +68,8 @@ public class AdminUserService {
                 "option", dto.getOption() == null || dto.getOption().isBlank() ? "all" : dto.getOption()
         );
 
+        System.out.println(params);
+
         List<User> userList = userMapper.findUserByOption(params).stream()
                 .filter(user -> user.getUserRoles().stream()
                         .anyMatch(role -> role.getRole().getRoleName().equals("ROLE_USER")))
@@ -73,7 +77,7 @@ public class AdminUserService {
 
         return RespGetUsersDto.builder()
                 .userList(userList)
-                .userListCount(userList.size())
+                .userListCount(userMapper.getCountByOption(params))
                 .build();
     }
 

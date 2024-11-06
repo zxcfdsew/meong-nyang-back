@@ -77,7 +77,6 @@ public class AdminOrderService {
                 .userId(order.getUserId())
                 .totalPrice(order.getTotalPrice())
                 .orderItemCount(order.getOrderItemCount())
-                .orderDate(order.getOrderDate())
                 .orderStatus(order.getOrderStatus())
                 .orderName(order.getOrderName())
                 .zipcode(order.getZipcode())
