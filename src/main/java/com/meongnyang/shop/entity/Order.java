@@ -1,5 +1,6 @@
 package com.meongnyang.shop.entity;
 
+import com.meongnyang.shop.dto.response.user.RespGetOrderListDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,8 +29,28 @@ public class Order {
     private String request;
 
     private String paymentId;
-    private String paymentType;
+    private int paymentType;
 
     private Payment payment;
     private List<OrderDetail> orderDetails;
+
+    public RespGetOrderListDto.OrderList toDto() {
+        return RespGetOrderListDto.OrderList.builder()
+                .orderId(id)
+                .userId(userId)
+                .paymentId(paymentId)
+                .totalPrice(totalPrice)
+                .orderItemCount(orderItemCount)
+                .orderDate(orderDate)
+                .orderStatus(orderStatus)
+                .orderName(orderName)
+                .zipcode(zipcode)
+                .addressDefault(addressDefault)
+                .addressDetail(addressDetail)
+                .phone(phone)
+                .email(email)
+                .request(request)
+                .paymentTypeName(payment.getPaymentName())
+                .build();
+    }
 }

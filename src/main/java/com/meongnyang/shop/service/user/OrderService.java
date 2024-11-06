@@ -1,7 +1,11 @@
 package com.meongnyang.shop.service.user;
 
+import com.meongnyang.shop.dto.request.admin.ReqModifyProductDto;
+import com.meongnyang.shop.dto.request.user.ReqGetOrderListDto;
+
 import com.meongnyang.shop.dto.request.user.ReqModifyOrderDto;
 import com.meongnyang.shop.dto.request.user.ReqPostOrderDto;
+import com.meongnyang.shop.dto.response.user.RespGetOrderListDto;
 import com.meongnyang.shop.entity.*;
 import com.meongnyang.shop.exception.RegisterException;
 import com.meongnyang.shop.exception.UserNotAuthenticatedException;
@@ -15,6 +19,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 
 @Service
 public class OrderService {
@@ -74,6 +85,35 @@ public class OrderService {
             throw new SecurityException("사용자 ID가 일치하지 않습니다");
         }
 
-        userOrderMapper.modifyOrder(dto.getId());
+    public RespGetOrderListDto getOrderList(ReqGetOrderListDto dto) {
+        Long startIndex = (dto.getPage() - 1) * dto.getLimit();
+        Map<String, Object> params = Map.of(
+                "userId",dto.getUserId(),
+                "startIndex", startIndex,
+                "limit", dto.getLimit(),
+                "paymentSelect", dto.getPaymentSelect(),
+                "startDate", dto.getStartDate(),
+                "endDate", dto.getEndDate()
+        );
+
+        List<Order> orderList = userOrderMapper.findAllOrders(params);
+        List<RespGetOrderListDto.OrderList> orderListDtos = new ArrayList<>();
+
+        for (Order order : orderList) {
+            List<OrderDetail> orderDetailList = userOrderDetailMapper.findOrderDetailByOrderId(order.getId());
+            RespGetOrderListDto.OrderList orderList1 = order.toDto();
+            List<RespGetOrderListDto.OrderDetail> orderDetails = new ArrayList<>();
+
+            for (OrderDetail orderDetail : orderDetailList) {
+                orderDetails.add(orderDetail.toDto());
+            }
+            orderList1.setOrderDetailList(orderDetails);
+            orderListDtos.add(orderList1);
+        }
+        return RespGetOrderListDto.builder()
+                .orderList(orderListDtos)
+                .orderListCount(orderListDtos.size())
+                .build();
+
     }
 }

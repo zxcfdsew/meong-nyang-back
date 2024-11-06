@@ -17,7 +17,7 @@ public class ReqPostOrderDto {
     private String request;
 
     private String paymentId;
-    private String paymentType;
+    private int paymentType;
 
     private List<ProductEasy> products;
 
