@@ -8,6 +8,5 @@ import java.util.List;
 @Mapper
 public interface UserOrderDetailMapper {
     int save(OrderDetail orderDetail);
-    int deleteOrderDetailByOrderId(Long orderId);
     List<OrderDetail> findOrderDetailByOrderId(Long orderId);
 }

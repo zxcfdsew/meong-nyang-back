@@ -10,8 +10,7 @@ import java.util.Map;
 @Mapper
 public interface UserOrderMapper {
     int save(Order order);
-    int deleteOrderById(Long id);
     Order findOrderById(Long id);
-    Order modifyOrder(Order order);
     List<Order> findAllOrders(Map<String, Object> params);
+    int modifyOrder(Long id);
 }

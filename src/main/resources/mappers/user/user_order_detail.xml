@@ -36,13 +36,7 @@
         insert into order_detail_tb
         values(default, #{orderId}, #{productId}, #{productPrice}, #{productCount})
     </insert>
-    <delete id="deleteOrderDetailByOrderId">
-        delete
-        from
-            order_detail_tb
-        where
-            order_id = #{id}
-    </delete>
+
     <select id="findOrderDetailByOrderId" resultMap="orderDetailResultMap">
         select
             od.id as od_id,

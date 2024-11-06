@@ -2,23 +2,30 @@ package com.meongnyang.shop.service.user;
 
 import com.meongnyang.shop.dto.request.admin.ReqModifyProductDto;
 import com.meongnyang.shop.dto.request.user.ReqGetOrderListDto;
+
 import com.meongnyang.shop.dto.request.user.ReqModifyOrderDto;
 import com.meongnyang.shop.dto.request.user.ReqPostOrderDto;
 import com.meongnyang.shop.dto.response.user.RespGetOrderListDto;
 import com.meongnyang.shop.entity.*;
-import com.meongnyang.shop.exception.DeleteException;
 import com.meongnyang.shop.exception.RegisterException;
+import com.meongnyang.shop.exception.UserNotAuthenticatedException;
 import com.meongnyang.shop.repository.ProductMapper;
+import com.meongnyang.shop.repository.user.MyPageMapper;
 import com.meongnyang.shop.repository.user.UserOrderDetailMapper;
 import com.meongnyang.shop.repository.user.UserOrderMapper;
+import com.meongnyang.shop.security.principal.PrincipalUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 
 @Service
 public class OrderService {
@@ -32,8 +39,26 @@ public class OrderService {
     @Autowired
     private ProductMapper productMapper;
 
+    @Autowired
+    private MyPageMapper myPageMapper;
+
+    private User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new UserNotAuthenticatedException("로그인을 다시해주세요");
+        }
+        return myPageMapper.findUserByUsername(authentication.getName());
+    }
+
     @Transactional(rollbackFor = RegisterException.class)
     public void postProductsOrder(ReqPostOrderDto dto) {
+        User user = getCurrentUser();
+        Long currentUserId = user.getId();
+
+        if (!currentUserId.equals(dto.getUserId())) {
+            throw new SecurityException("사용자 ID가 일치하지 않습니다");
+        }
+
         try {
             Order order = dto.toEntity();
             userOrderMapper.save(order);
@@ -52,48 +77,13 @@ public class OrderService {
         }
     }
 
-    @Transactional(rollbackFor = DeleteException.class)
-    public void deleteProductsOrder(Long id) {
-        try {
-            userOrderMapper.deleteOrderById(id);
-            userOrderDetailMapper.deleteOrderDetailByOrderId(id);
-        } catch (Exception e) {
-            throw new DeleteException("삭제 실패");
-        }
-    }
+    public void modifyProductsOrder(ReqModifyOrderDto dto) {
+        User user = getCurrentUser();
+        Long currentUserId = user.getId();
 
-//    public void modifyProductsOrder(ReqModifyOrderDto dto) {
-//        try {
-//            Order order = userOrderMapper.findOrderById(dto.getId());
-//            if(order == null) {
-//                throw new RegisterException("존재하지 않는 주문입니다.");
-//            }
-//            order = dto.toEntity();
-//            userOrderMapper.modifyOrder(order);
-//
-//            //이미지 삭제
-//            List<ImgUrl> imgUrls = imgUrlMapper.findImgUrlByProductId(dto.getId());
-//            if (!imgUrls.isEmpty()) {
-//                deleteImgUrl(imgUrls);
-//            }
-//
-//            //이미지 추가
-//            List<MultipartFile> imgs = dto.getProductImage();
-//            if(imgs != null) {
-//                for(MultipartFile img : imgs) {
-//                    registerImgUrl(img,dto.getId());
-//                }
-//            }
-//
-//            //재고 테이블 수정
-//            Stock stock = dto.toEntityStock();
-//            System.out.println(stock);
-//            stockMapper.modifyStockByProductId(stock);
-//
-//        } catch (Exception e) {
-//            throw new RegisterException(e.getMessage());
-//        }
-//    }
+        if (!currentUserId.equals(dto.getUserId())) {
+            throw new SecurityException("사용자 ID가 일치하지 않습니다");
+        }
 
     public RespGetOrderListDto getOrderList(ReqGetOrderListDto dto) {
         Long startIndex = (dto.getPage() - 1) * dto.getLimit();
@@ -124,5 +114,6 @@ public class OrderService {
                 .orderList(orderListDtos)
                 .orderListCount(orderListDtos.size())
                 .build();
+
     }
 }
