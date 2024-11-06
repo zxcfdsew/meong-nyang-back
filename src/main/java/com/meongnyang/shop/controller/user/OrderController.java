@@ -27,6 +27,8 @@ public class OrderController {
     public ResponseEntity<?> getOrderList(ReqGetOrderListDto dto) {
         System.out.println(dto);
         return ResponseEntity.ok().body(orderService.getOrderList(dto));
+    }
+
     // 취소요청
     @PutMapping("/orders")
     public ResponseEntity<?> modifyProductsOrder(ReqModifyOrderDto dto) {

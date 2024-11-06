@@ -3,6 +3,8 @@ package com.meongnyang.shop.controller.user;
 import com.meongnyang.shop.dto.request.user.ReqGetCheckProductsDto;
 import com.meongnyang.shop.dto.request.user.ReqProductAllDto;
 import com.meongnyang.shop.dto.request.user.ReqProductCountDto;
+import com.meongnyang.shop.dto.request.user.ReqSearchProductDto;
+import com.meongnyang.shop.dto.response.user.RespProductListDto;
 import com.meongnyang.shop.service.user.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -43,5 +45,10 @@ public class ProductController {
     public ResponseEntity<?> getProductDetail(@PathVariable Long productId) {
         System.out.println(productId);
         return ResponseEntity.ok().body(productService.getProductDetail(productId));
+    }
+
+    @GetMapping("/product/search")
+    public ResponseEntity<RespProductListDto> getProductSearch(ReqSearchProductDto dto) {
+        return ResponseEntity.ok().body(productService.getProductSearch(dto));
     }
 }

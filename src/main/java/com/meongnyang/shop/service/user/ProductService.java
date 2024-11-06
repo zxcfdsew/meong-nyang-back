@@ -3,10 +3,12 @@ package com.meongnyang.shop.service.user;
 import com.meongnyang.shop.dto.request.user.ReqGetCheckProductsDto;
 import com.meongnyang.shop.dto.request.user.ReqProductAllDto;
 import com.meongnyang.shop.dto.request.user.ReqProductCountDto;
+import com.meongnyang.shop.dto.request.user.ReqSearchProductDto;
 import com.meongnyang.shop.dto.response.admin.RespGetCategorysDto;
 import com.meongnyang.shop.dto.response.user.RespCheckProductsDto;
 import com.meongnyang.shop.dto.response.user.RespGetProductDetailDto;
 import com.meongnyang.shop.dto.response.user.RespProductAllDto;
+import com.meongnyang.shop.dto.response.user.RespProductListDto;
 import com.meongnyang.shop.entity.ImgUrl;
 import com.meongnyang.shop.entity.Product;
 import com.meongnyang.shop.repository.CategoryMapper;
@@ -108,6 +110,27 @@ public class ProductService {
         return RespCheckProductsDto.builder()
                 .checkProducts(checkProductList)
                 .productsCount(checkProductList.size())
+                .build();
+    }
+
+    public RespProductListDto getProductSearch(ReqSearchProductDto dto) {
+        Long startIndex = (dto.getPage() - 1) * dto.getLimit();
+        Map<String, Object> params = Map.of(
+                "startIndex", startIndex,
+                "limit", dto.getLimit(),
+                "searchValue", dto.getSearch() == null ? "" : dto.getSearch()
+        );
+        List<Product> productLists = userProductMapper.findAllBySearch(params);
+        List<RespProductListDto.SearchContent> searchList = productLists.stream()
+                .map(product -> {
+                    ImgUrl imgUrl = imgUrlMapper.findImgNameByProductId(product.getId());
+                    return product.toSearchContent(imgUrl != null ?imgUrl.getImgName() : "");
+                })
+                .collect(Collectors.toList());
+
+        return  RespProductListDto.builder()
+                .products(searchList)
+                .productCount(productLists.size())
                 .build();
     }
 }

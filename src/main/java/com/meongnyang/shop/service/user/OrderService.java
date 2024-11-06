@@ -84,6 +84,7 @@ public class OrderService {
         if (!currentUserId.equals(dto.getUserId())) {
             throw new SecurityException("사용자 ID가 일치하지 않습니다");
         }
+    }
 
     public RespGetOrderListDto getOrderList(ReqGetOrderListDto dto) {
         Long startIndex = (dto.getPage() - 1) * dto.getLimit();
@@ -114,6 +115,5 @@ public class OrderService {
                 .orderList(orderListDtos)
                 .orderListCount(orderListDtos.size())
                 .build();
-
     }
 }
