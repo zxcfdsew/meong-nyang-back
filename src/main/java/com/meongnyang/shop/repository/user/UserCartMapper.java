@@ -16,5 +16,6 @@ public interface UserCartMapper {
     int deleteCartById(List<Long> idList);
     Cart findCartByUserProductId(Long userId,Long productId);
     int updateCart(Cart cart);
+    int modifyCartItemCount(Cart cart);
     List<Long> findCartIdsByUserId(@Param("userId") Long userId, @Param("cartIds") List<Long> cartIds);
 }

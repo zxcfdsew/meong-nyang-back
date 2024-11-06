@@ -76,6 +76,14 @@
             user_id = #{userId} AND
             product_id = #{productId}
     </update>
+    <update id="modifyCartItemCount">
+        update
+            cart_tb
+        set
+            product_count = #{productCount}
+        where
+            id = #{id}
+    </update>
     <select id="getCart" resultMap="cartResultMap">
         select
             c.id,
