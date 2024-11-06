@@ -15,7 +15,7 @@ public class CartController {
     @Autowired
     private UserCartService userCartService;
 
-    // 장바구니 물품 추가(수정중!!)
+    // 장바구니 물품 추가
     @PostMapping("/user/cart")
     public ResponseEntity<?> saveProductCart(@RequestBody ReqPostCartDto dto) {
         return ResponseEntity.ok().body(userCartService.saveCart(dto));
