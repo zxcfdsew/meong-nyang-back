@@ -12,6 +12,7 @@ public interface ProductMapper {
     int save(Product product);
     List<Product> findProducts();
     List<Product> findProductsByOption(Map<String, Object> params);
+    int getCountByOption(Map<String, Object> params);
     int modifyProduct(Product product);
     int deleteProductAll();
     int deleteProductById(List<Long> idList);

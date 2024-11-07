@@ -62,7 +62,6 @@ public class AdminProductService {
         } catch (Exception e) {
             throw new RegisterException(e.getMessage());
         }
-
     }
 
     public RespGetProductsAllDto getProductsAll() {
@@ -87,7 +86,7 @@ public class AdminProductService {
 
         return RespGetProductsAllDto.builder()
                 .productList(productList)
-                .productListCount(productList.size())
+                .productListCount(productMapper.getCountByOption(params))
                 .build();
     }
 
@@ -100,8 +99,9 @@ public class AdminProductService {
         return product.toProductDetailDto(stockMapper.findStockByProductId(product.getId()));
     }
 
-    @Transactional(rollbackFor = RegisterException.class)
+    @Transactional(rollbackFor = Exception.class)
     public void modifyProduct(ReqModifyProductDto dto) {
+        // 이미지 수정 기능 구현중
         try {
             Product product = null;
             product = productMapper.findProductById(dto.getId());
@@ -115,10 +115,7 @@ public class AdminProductService {
             productMapper.modifyProduct(product);
 
             //이미지 삭제
-            List<ImgUrl> imgUrls = imgUrlMapper.findImgUrlByProductId(dto.getId());
-            if (!imgUrls.isEmpty()) {
-                deleteImgUrl(imgUrls);
-            }
+            deleteProductImg(dto.getDeleteImgList());
 
             //이미지 추가
             List<MultipartFile> imgs = dto.getProductImage();
@@ -189,7 +186,6 @@ public class AdminProductService {
         return false;
     }
 
-
     public void registerImgUrl(MultipartFile img, Long productId) throws IOException {
             String imgName = img.getOriginalFilename();
             File directory = new File(filePath);
@@ -208,7 +204,6 @@ public class AdminProductService {
             imgUrlMapper.save(imgUrl);
     }
 
-
     public void deleteImgUrl(List<ImgUrl> imgUrls) {
         List<Long> deleteImgUrlIds = new ArrayList<>();
         for(ImgUrl imgUrl : imgUrls) {
@@ -217,5 +212,19 @@ public class AdminProductService {
             deleteImgUrlIds.add(imgUrl.getId());
         }
         imgUrlMapper.deleteImgUrlById(deleteImgUrlIds);
+    }
+
+    public void deleteProductImg(List<String> fileNameList) {
+        int result = imgUrlMapper.deleteImgByNames(fileNameList);
+
+        if (result != fileNameList.size()) {
+            throw new DeleteException("이미지 삭제 실패");
+        }
+
+        // 서버컴퓨터 이미지 삭제
+        for(String filename : fileNameList) {
+            File file = new File(filePath + filename);
+            file.delete();
+        }
     }
 }

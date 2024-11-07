@@ -32,4 +32,15 @@
         order by
             id
     </select>
+    <select id="findPaymentMethodByName" resultType="com.meongnyang.shop.entity.Payment">
+        select
+            id,
+            payment_name as paymentName,
+            payment_method as paymentMethod,
+            payment_channel_key as paymentChannelKey
+        from
+            payment_tb
+        where
+            payment_method = #{name}
+    </select>
 </mapper>

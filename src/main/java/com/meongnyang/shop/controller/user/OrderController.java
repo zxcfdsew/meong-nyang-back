@@ -20,6 +20,7 @@ public class OrderController {
     // 주문 등록
     @PostMapping("/order")
     public ResponseEntity<?> postProductsOrder(@RequestBody ReqPostOrderDto dto) {
+        System.out.println(dto);
         orderService.postProductsOrder(dto);
         return ResponseEntity.ok().body(true);
     }
@@ -28,7 +29,6 @@ public class OrderController {
         System.out.println(dto);
         return ResponseEntity.ok().body(orderService.getOrderList(dto));
     }
-
     // 취소요청
     @PutMapping("/orders")
     public ResponseEntity<?> modifyProductsOrder(ReqModifyOrderDto dto) {
