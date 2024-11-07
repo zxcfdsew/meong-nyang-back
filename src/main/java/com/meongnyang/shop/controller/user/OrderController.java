@@ -29,9 +29,14 @@ public class OrderController {
         System.out.println(dto);
         return ResponseEntity.ok().body(orderService.getOrderList(dto));
     }
+    @GetMapping("/user/orderlist/count")
+    public ResponseEntity<?> getOrderListCount() {
+        return ResponseEntity.ok().body(orderService.getOrderListCount());
+    }
     // 취소요청
-    @PutMapping("/orders")
-    public ResponseEntity<?> modifyProductsOrder(ReqModifyOrderDto dto) {
+    @PutMapping("/order/status")
+    public ResponseEntity<?> modifyProductsOrder(@RequestBody ReqModifyOrderDto dto) {
+        System.out.println(dto.getUserId());
         orderService.modifyProductsOrder(dto);
         return ResponseEntity.ok().body(true);
     }

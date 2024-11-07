@@ -82,10 +82,10 @@
                     and p.category_id = #{categoryId}
                 </when>
                 <when test='petGroupId == 3 and categoryId == 0'>
-                    and p.recommendation = 1
+                    and p.recommendation = 2
                 </when>
                 <when test='petGroupId == 3 and categoryId != 0'>
-                    and p.recommendation = 1
+                    and p.recommendation = 2
                     and p.category_id = #{categoryId}
                 </when>
                 <when test='petGroupId == 0 and categoryId != 0'>

@@ -85,13 +85,21 @@
             o.order_date desc
         limit #{startIndex}, #{limit}
     </select>
+    <select id="findOrderCount" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            order_tb
+        where
+            user_id = #{id}
+    </select>
 
     <update id="modifyOrder">
         update order_tb
         set
             order_status = "환불완료"
         where
-        id = #{id}
+            id = #{id}
     </update>
 
 </mapper>
