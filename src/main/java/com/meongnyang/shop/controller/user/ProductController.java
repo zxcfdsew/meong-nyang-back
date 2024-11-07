@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -50,5 +51,11 @@ public class ProductController {
     @GetMapping("/product/search")
     public ResponseEntity<RespProductListDto> getProductSearch(ReqSearchProductDto dto) {
         return ResponseEntity.ok().body(productService.getProductSearch(dto));
+    }
+
+    @GetMapping("/product/search/count")
+    public ResponseEntity<?> getProductSearchCount(@RequestParam String search) {
+        System.out.println("검색카운트" + search);
+        return ResponseEntity.ok().body(productService.getProductSearchCount(search));
     }
 }

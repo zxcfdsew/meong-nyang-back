@@ -14,4 +14,5 @@ public interface UserProductMapper {
     Product findProductById(Long id);
     List<Product> findProductsById(List<Long> ids);
     List<Product> findAllBySearch(Map<String, Object> params);
+    int findAllBySearchCount(String search);
 }

@@ -133,4 +133,8 @@ public class ProductService {
                 .productCount(productLists.size())
                 .build();
     }
+
+    public int getProductSearchCount(String search) {
+        return userProductMapper.findAllBySearchCount(search);
+    }
 }
