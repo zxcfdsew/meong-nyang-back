@@ -13,6 +13,7 @@ import com.meongnyang.shop.repository.ProductMapper;
 import com.meongnyang.shop.repository.user.MyPageMapper;
 import com.meongnyang.shop.repository.user.UserOrderDetailMapper;
 import com.meongnyang.shop.repository.user.UserOrderMapper;
+import com.meongnyang.shop.security.principal.PrincipalUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -81,7 +82,7 @@ public class OrderService {
     public void modifyProductsOrder(ReqModifyOrderDto dto) {
         User user = getCurrentUser();
         Long currentUserId = user.getId();
-
+        System.out.println(user.getId());
         if (!currentUserId.equals(dto.getUserId())) {
             throw new SecurityException("사용자 ID가 일치하지 않습니다");
         }
@@ -121,6 +122,11 @@ public class OrderService {
                 .orderListCount(orderListDtos.size())
                 .build();
 
+    }
+
+    public int getOrderListCount() {
+        PrincipalUser principalUser = (PrincipalUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userOrderMapper.findOrderCount(principalUser.getId());
     }
 }
 
