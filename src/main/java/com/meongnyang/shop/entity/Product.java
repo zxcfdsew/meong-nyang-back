@@ -3,6 +3,7 @@ package com.meongnyang.shop.entity;
 import com.meongnyang.shop.dto.response.admin.RespProductDetailDto;
 import com.meongnyang.shop.dto.response.user.RespGetProductDetailDto;
 import com.meongnyang.shop.dto.response.user.RespProductAllDto;
+import com.meongnyang.shop.dto.response.user.RespProductListDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -88,6 +89,21 @@ public class Product {
                 .productPrice(productPrice.toString())
                 .productPriceDiscount(String.valueOf(productPriceDiscount))
                 .imgNames(imgNames)
+                .build();
+    }
+
+    public RespProductListDto.SearchContent toSearchContent(String imgName) {
+        return RespProductListDto.SearchContent.builder()
+                .productId(id)
+                .productName(productName)
+                .petGroupName(petGroup.getCategoryGroupName())
+                .categoryName(category.getCategoryName())
+                .productPrice(productPrice)
+                .productPriceDiscount(productPriceDiscount)
+                .productDetail(productDetail)
+                .productBrand(productBrand)
+                .productModel(productModel)
+                .imgName(imgName)
                 .build();
     }
 }
