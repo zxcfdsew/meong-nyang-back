@@ -37,25 +37,43 @@ public class AdminProductService {
     private CategoryMapper categoryMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private ProductDetailImgMapper productDetailImgMapper;
 
-    @Transactional(rollbackFor = RegisterException.class)
-    public void registerProduct(ReqRegisterProductDto dto) {
-        try {
-            Product product = dto.toEntity();
-            productMapper.save(product);
+    @Transactional(rollbackFor = Exception.class)
+    public void registerProduct(ReqRegisterProductDto dto) throws IOException {
+        Product product = dto.toEntity();
+        productMapper.save(product);
 
-            List<MultipartFile> imgs = dto.getProductImage();
-            if(imgs != null && !imgs.get(0).isEmpty()) {
-                for(MultipartFile img : imgs) {
-                    registerImgUrl(img, product.getId());
-                }
+        List<MultipartFile> imgs = dto.getProductImage();
+        if(imgs != null && !imgs.get(0).isEmpty()) {
+            for(MultipartFile img : imgs) {
+                registerProductImg(img);
+                ImgUrl imgUrl = ImgUrl.builder()
+                        .productId(product.getId())
+                        .imgPath(filePath)
+                        .imgName(img.getOriginalFilename())
+                        .build();
+                imgUrlMapper.save(imgUrl);
             }
-
-            Stock stock = dto.toEntity(product.getId());
-            stockMapper.save(stock);
-        } catch (Exception e) {
-            throw new RegisterException(e.getMessage());
         }
+        List<MultipartFile> detailImgs = dto.getProductDetailImg();
+        List<ProductDetailImg> productDetailImgs = new ArrayList<>();
+        if(detailImgs != null && !detailImgs.get(0).isEmpty()) {
+            for (MultipartFile img : detailImgs) {
+                registerProductImg(img);
+                ProductDetailImg productDetailImg = ProductDetailImg.builder()
+                        .productId(product.getId())
+                        .imgPath(filePath)
+                        .imgName(img.getOriginalFilename())
+                        .build();
+                productDetailImgs.add(productDetailImg);
+            }
+            productDetailImgMapper.save(productDetailImgs);
+        }
+
+        Stock stock = dto.toEntity(product.getId());
+        stockMapper.save(stock);
     }
 
     public RespGetProductsAllDto getProductsAll() {
@@ -89,7 +107,6 @@ public class AdminProductService {
         if(product == null) {
             throw new RegisterException("존재하지 않는 상품입니다.");
         }
-        System.out.println(product.toProductDetailDto(stockMapper.findStockByProductId(product.getId())));
         return product.toProductDetailDto(stockMapper.findStockByProductId(product.getId()));
     }
 
@@ -106,15 +123,48 @@ public class AdminProductService {
         product = dto.toEntity();
         productMapper.modifyProduct(product);
 
-        //이미지 삭제
-        deleteProductImgByImgNames(dto.getDeleteImgList());
+        //상품 이미지 삭제
+        List<String> deleteImgList = dto.getDeleteImgList();
+        if (deleteImgList != null) {
+            imgUrlMapper.deleteImgByNames(deleteImgList);
+            deleteProductImgByImgNames(deleteImgList);
+        }
 
         //이미지 추가
         List<MultipartFile> imgs = dto.getProductImage();
         if(imgs != null) {
             for(MultipartFile img : imgs) {
-                registerImgUrl(img,dto.getId());
+                registerProductImg(img);
+                ImgUrl imgUrl = ImgUrl.builder()
+                        .productId(product.getId())
+                        .imgPath(filePath)
+                        .imgName(img.getOriginalFilename())
+                        .build();
+                imgUrlMapper.save(imgUrl);
             }
+        }
+
+        //상세이미지 삭제
+        List<String> deleteDetailImgList = dto.getDeleteProductDetailImgList();
+        if (deleteDetailImgList != null) {
+            deleteProductImgByImgNames(deleteDetailImgList);
+            productDetailImgMapper.deleteByImgNames(deleteDetailImgList);
+        }
+
+        //상세이미지 추가
+        List<MultipartFile> detailImgs = dto.getProductDetailImage();
+        List<ProductDetailImg> productDetailImgs = new ArrayList<>();
+        if(detailImgs != null && !detailImgs.get(0).isEmpty()) {
+            for (MultipartFile img : detailImgs) {
+                registerProductImg(img);
+                ProductDetailImg productDetailImg = ProductDetailImg.builder()
+                        .productId(product.getId())
+                        .imgPath(filePath)
+                        .imgName(img.getOriginalFilename())
+                        .build();
+                productDetailImgs.add(productDetailImg);
+            }
+            productDetailImgMapper.save(productDetailImgs);
         }
 
         //재고 테이블 수정
@@ -174,22 +224,14 @@ public class AdminProductService {
         return false;
     }
 
-    public void registerImgUrl(MultipartFile img, Long productId) throws IOException {
-            String imgName = img.getOriginalFilename();
-            File directory = new File(filePath);
-            if(!directory.exists()) {
-                directory.mkdirs();
-            }
-            File file = new File(filePath + imgName);
-            img.transferTo(file);
-
-            ImgUrl imgUrl = ImgUrl.builder()
-                    .productId(productId)
-                    .imgPath(filePath)
-                    .imgName(imgName)
-                    .build();
-
-            imgUrlMapper.save(imgUrl);
+    public void registerProductImg(MultipartFile img) throws IOException {
+        String imgName = img.getOriginalFilename();
+        File directory = new File(filePath);
+        if(!directory.exists()) {
+            directory.mkdirs();
+        }
+        File file = new File(filePath + imgName);
+        img.transferTo(file);
     }
 
     public void deleteImgUrl(List<ImgUrl> imgUrls) {
@@ -206,7 +248,6 @@ public class AdminProductService {
         if(fileNameList == null || fileNameList.isEmpty()) {
             return;
         }
-        imgUrlMapper.deleteImgByNames(fileNameList);
 
         // 서버컴퓨터 이미지 삭제
         for(String filename : fileNameList) {

@@ -40,6 +40,7 @@ public class ReqRegisterProductDto {
     private int outOfStock;
 
     private List<MultipartFile> productImage;
+    private List<MultipartFile> productDetailImg;
 
     public Product toEntity() {
         return Product.builder()

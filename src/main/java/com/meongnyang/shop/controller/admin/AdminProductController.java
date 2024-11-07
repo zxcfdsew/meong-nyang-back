@@ -24,7 +24,7 @@ public class AdminProductController {
 
     @ValidAop
     @PostMapping("/product")
-    public ResponseEntity<?> registerProduct(@Valid @ModelAttribute ReqRegisterProductDto dto, BindingResult bindingResult) {
+    public ResponseEntity<?> registerProduct(@Valid @ModelAttribute ReqRegisterProductDto dto, BindingResult bindingResult) throws IOException {
         adminProductService.registerProduct(dto);
         return ResponseEntity.ok().body(true);
     }
