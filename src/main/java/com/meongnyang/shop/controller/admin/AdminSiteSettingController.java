@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 public class AdminSiteSettingController {
 
@@ -23,7 +25,7 @@ public class AdminSiteSettingController {
     }
 
     @PutMapping("/admin/setting")
-    public ResponseEntity<?> modifySiteSetting(@ModelAttribute ReqSiteSettingDto dto) {
+    public ResponseEntity<?> modifySiteSetting(@ModelAttribute ReqSiteSettingDto dto) throws IOException {
         return ResponseEntity.ok().body(adminSiteSettingService.modifySiteSetting(dto));
     }
 }

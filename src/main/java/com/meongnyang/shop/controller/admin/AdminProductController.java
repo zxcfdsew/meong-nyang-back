@@ -24,7 +24,7 @@ public class AdminProductController {
 
     @ValidAop
     @PostMapping("/product")
-    public ResponseEntity<?> registerProduct(@Valid @ModelAttribute ReqRegisterProductDto dto, BindingResult bindingResult) {
+    public ResponseEntity<?> registerProduct(@Valid @ModelAttribute ReqRegisterProductDto dto, BindingResult bindingResult) throws IOException {
         adminProductService.registerProduct(dto);
         return ResponseEntity.ok().body(true);
     }
@@ -47,7 +47,7 @@ public class AdminProductController {
 
     @ValidAop
     @PutMapping("/product/{productId}")
-    public ResponseEntity<?> modifyProduct(@Valid @ModelAttribute ReqModifyProductDto dto, BindingResult bindingResult) {
+    public ResponseEntity<?> modifyProduct(@Valid @ModelAttribute ReqModifyProductDto dto, BindingResult bindingResult) throws IOException {
         adminProductService.modifyProduct(dto);
         return ResponseEntity.ok().body(true);
     }

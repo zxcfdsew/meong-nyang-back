@@ -34,6 +34,8 @@ public class ReqModifyProductDto {
     private String recommendation;
     private List<MultipartFile> productImage;
     private List<String> deleteImgList;
+    private List<MultipartFile> productDetailImage;
+    private List<String> deleteProductDetailImgList;
 
     //재고 테이블
     @NotNull

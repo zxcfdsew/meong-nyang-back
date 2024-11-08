@@ -354,14 +354,14 @@
     </select>
     <select id="getDashboardData" resultType="com.meongnyang.shop.dto.response.admin.RespDashboardDto">
         select
-            sum(if(order_status = '결제완료', total_price, 0)) totalPrice,
-            sum(if(order_status = '결제완료', order_item_count, 0)) totalCount,
-            sum(if(order_status = '환불완료', total_price, 0)) refundPrice,
-            sum(if(order_status = '환불완료', order_item_count, 0)) refundCount,
-            sum(if(order_status = '결제완료' and date(order_date) = curdate(), total_price, 0)) todayTotalPrice,
-            sum(if(order_status = '결제완료' and date(order_date) = curdate(), order_item_count, 0)) todayTotalCount,
-            sum(if(order_status = '환불완료' and date(order_date) = curdate(), total_price, 0)) todayRefundPrice,
-            sum(if(order_status = '환불완료' and date(order_date) = curdate(), order_item_count, 0)) todayRefundCount
+            ifnull(sum(if(order_status = '결제완료', total_price, 0)), 0) totalPrice,
+            ifnull(sum(if(order_status = '결제완료', order_item_count, 0)), 0) totalCount,
+            ifnull(sum(if(order_status = '환불완료', total_price, 0)), 0) refundPrice,
+            ifnull(sum(if(order_status = '환불완료', order_item_count, 0)), 0) refundCount,
+            ifnull(sum(if(order_status = '결제완료' and date(order_date) = curdate(), total_price, 0)), 0) todayTotalPrice,
+            ifnull(sum(if(order_status = '결제완료' and date(order_date) = curdate(), order_item_count, 0)), 0) todayTotalCount,
+            ifnull(sum(if(order_status = '환불완료' and date(order_date) = curdate(), total_price, 0)), 0) todayRefundPrice,
+            ifnull(sum(if(order_status = '환불완료' and date(order_date) = curdate(), order_item_count, 0)), 0) todayRefundCount
         from
             order_tb;
     </select>
@@ -397,5 +397,3 @@
     </select>
 
 </mapper>
-
-

@@ -56,11 +56,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/products/**",
                         "/product/**"
                 )
-//                .permitAll()
-//                .antMatchers(
-//                        HttpMethod.POST,
-//                        "/order/**",
-//                        "/orders/**")
+                .permitAll()
+                .antMatchers(
+                        HttpMethod.POST,
+                        "/order/**",
+                        "/orders/**")
                 .hasRole("USER")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest()

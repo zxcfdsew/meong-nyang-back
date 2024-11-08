@@ -51,6 +51,11 @@
         <association property="petGroup" resultMap="petGroupResultMap" />
         <association property="category" resultMap="categoryResultMap" />
         <collection property="imgUrls" javaType="java.util.List" resultMap="imgUrlResultMap" />
+        <collection property="productDetailImgUrls" javaType="java.util.List" resultMap="productImgUrlResultMap" />
+    </resultMap>
+
+    <resultMap id="productImgUrlResultMap" type="com.meongnyang.shop.entity.ProductDetailImg">
+        <result property="imgName" column="product_detail_img_name" />
     </resultMap>
 
     <resultMap id="imgUrlResultMap" type="com.meongnyang.shop.entity.ImgUrl" >
@@ -184,12 +189,14 @@
             iu.id as iu_id,
             iu.product_id as iu_product_id,
             iu.img_path,
-            iu.img_name
+            iu.img_name,
+            pdit.img_name product_detail_img_name
         from
             product_tb p
             left outer join pet_group_tb pg on(p.pet_group_id = pg.id)
             left outer join category_tb c on(p.category_id = c.id)
             left outer join img_url_tb iu on(p.id = iu.product_id)
+            left outer join product_detail_img_tb pdit on(p.id = pdit.product_id)
         where
             p.id = #{id}
     </select>

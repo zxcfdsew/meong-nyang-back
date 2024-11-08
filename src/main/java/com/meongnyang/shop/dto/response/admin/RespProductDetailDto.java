@@ -28,6 +28,7 @@ public class RespProductDetailDto {
     private LocalDate productUpdateDate;
     private int recommendation;
     private List<ImgUrl> imgUrls;
+    private List<ImgUrl> productDetailImgUrls;
     private Long currentStock;
     private Long expectedStock;
     private String arrivalDate;

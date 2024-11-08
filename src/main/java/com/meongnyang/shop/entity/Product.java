@@ -32,6 +32,7 @@ public class Product {
     private int recommendation;
 
     private List<ImgUrl> imgUrls;
+    private List<ImgUrl> productDetailImgUrls;
     private PetGroup petGroup;
     private Category category;
     private Stock stock;
@@ -54,6 +55,7 @@ public class Product {
                 .productUpdateDate(getProductUpdateDate())
                 .recommendation(recommendation)
                 .imgUrls(imgUrls)
+                .productDetailImgUrls(productDetailImgUrls)
                 .currentStock(stock.getCurrentStock())
                 .expectedStock(stock.getExpectedStock())
                 .arrivalDate(stock.getArrivalDate())
