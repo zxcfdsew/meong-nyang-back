@@ -18,4 +18,5 @@ public interface UserCartMapper {
     int updateCart(Cart cart);
     int modifyCartItemCount(Cart cart);
     List<Long> findCartIdsByUserId(@Param("userId") Long userId, @Param("cartIds") List<Long> cartIds);
+    List<Cart> findCartIdByUserId(Long userId);
 }
