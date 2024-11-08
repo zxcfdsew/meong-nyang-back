@@ -119,6 +119,10 @@ public class UserCartService {
                 .build();
     }
 
+    public List<Cart> getCartIdAll(Long userId) {
+       return userCartMapper.findCartIdByUserId(userId);
+    }
+
     public int getCartAllCount(ReqGetCartAllCountDto dto) {
 
         User user = getCurrentUser();

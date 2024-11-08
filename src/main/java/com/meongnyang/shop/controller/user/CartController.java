@@ -35,6 +35,11 @@ public class CartController {
         return ResponseEntity.ok().body(userCartService.getCartAll(dto));
     }
 
+    @GetMapping("/user/cartId")
+    public ResponseEntity<?> getCartIdAll(@RequestParam Long userId) {
+        return ResponseEntity.ok().body(userCartService.getCartIdAll(userId));
+    }
+
     // 장바구니 내역 갯수 조회
     @GetMapping("/user/cart/count")
     public ResponseEntity<?> getCartAllCount(ReqGetCartAllCountDto dto) {

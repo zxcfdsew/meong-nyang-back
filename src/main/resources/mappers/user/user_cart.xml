@@ -133,6 +133,23 @@
                 #{id}
             </foreach>
     </select>
+    <select id="findCartIdByUserId" resultMap="cartResultMap">
+        select
+            c.id,
+            c.user_id,
+            c.product_id,
+            c.product_count,
+            c.cart_update_date,
+            p.product_name,
+            p.product_price
+        from
+            cart_tb c
+            left outer join product_tb p on(p.id = c.product_id)
+        where
+            c.user_id = #{userId}
+        order by
+            c.cart_update_date DESC
+    </select>
     <delete id="deleteCartById">
         delete
         from
