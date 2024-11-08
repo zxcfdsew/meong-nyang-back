@@ -86,8 +86,6 @@ public class OrderService {
         if (!currentUserId.equals(dto.getUserId())) {
             throw new SecurityException("사용자 ID가 일치하지 않습니다");
         }
-    }
-
         userOrderMapper.modifyOrder(dto.getId());
     }
 

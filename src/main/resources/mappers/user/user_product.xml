@@ -217,6 +217,17 @@
             left outer join category_tb c on(p.category_id = c.id)
         where
             p.product_name like concat('%', trim(ifnull(#{searchValue}, '')), '%')
+        limit #{startIndex}, #{limit}
+    </select>
+    <select id="findAllBySearchCount" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            product_tb p
+            left outer join pet_group_tb pg on(p.pet_group_id = pg.id)
+            left outer join category_tb c on(p.category_id = c.id)
+        where
+            p.product_name like concat('%', trim(ifnull(#{search}, '')), '%')
     </select>
 
 </mapper>
