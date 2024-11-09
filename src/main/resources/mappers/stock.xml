@@ -86,7 +86,7 @@
             </if>
             <if test='option.equals("상품코드")'>
                 and (
-                    s.product_id = #{searchWord}
+                    s.product_id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
                 )
             </if>
             <if test='option.equals("상품명")'>
@@ -130,7 +130,7 @@
             </if>
             <if test='option.equals("상품코드")'>
                 and (
-                    s.product_id = #{searchWord}
+                    s.product_id like concat('%', trim(ifnull(#{searchWord}, '')), "%")
                 )
             </if>
             <if test='option.equals("상품명")'>
