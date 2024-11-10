@@ -27,13 +27,7 @@ public class RespProductDetailDto {
     private LocalDate productCreateDate;
     private LocalDate productUpdateDate;
     private int recommendation;
+    private int onSale;
     private List<ImgUrl> imgUrls;
     private List<ImgUrl> productDetailImgUrls;
-    private Long currentStock;
-    private Long expectedStock;
-    private String arrivalDate;
-    private Long arrivalQuantity;
-    private Long minAlertQuantity;
-    private Long alertSetting;
-    private int hidden;
 }

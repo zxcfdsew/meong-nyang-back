@@ -6,21 +6,33 @@
 
 <mapper namespace="com.meongnyang.shop.repository.StockMapper">
 
-    <resultMap id="stockDataResultMap" type="com.meongnyang.shop.entity.Stock">
-        <id property="id" column="id" />
-        <result property="" column="productId" />
-        <result property="" column="productName" />
-        <result property="" column="currentStock" />
-        <result property="" column="expectedStock" />
-        <result property="" column="minAlertQuantity" />
-        <result property="" column="alertSetting" />
-        <result property="" column="hidden" />
-        <result property="" column="stockDetails" />
+    <resultMap id="stockResultMap" type="com.meongnyang.shop.entity.Stock">
+        <id property="id" column="st_id" />
+        <result property="productId" column="product_id" />
+        <result property="currentStock" column="current_stock" />
+        <result property="expectedStock" column="expected_stock" />
+        <result property="minAlertQuantity" column="min_alert_quantity" />
+        <result property="alertSetting" column="alert_setting" />
+        <association property="product" resultMap="stockDetailProductNameResultMap" />
+        <collection property="stockDetails" javaType="java.util.List" resultMap="stockDetailResultMap" />
+    </resultMap>
+
+    <resultMap id="stockDetailProductNameResultMap" type="com.meongnyang.shop.entity.Product">
+        <result property="productName" column="product_name" />
+    </resultMap>
+
+    <resultMap id="stockDetailResultMap" type="com.meongnyang.shop.entity.StockDetail">
+        <id property="id" column="sdt_id" />
+        <result property="type" column="type" />
+        <result property="createDate" column="create_date" />
+        <result property="arrivalDate" column="arrival_date" />
+        <result property="arrivalQuantity" column="arrival_quantity" />
+        <result property="status" column="status" />
     </resultMap>
 
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
         insert into stock_tb
-        values(default, #{productId}, #{currentStock}, #{expectedStock}, #{minAlertQuantity}, #{alertSetting}, #{hidden})
+        values(default, #{productId}, 0, 0, 0, 1)
     </insert>
     <update id="modifyStockByProductId">
         update stock_tb
@@ -28,8 +40,7 @@
             current_stock = #{currentStock},
             expected_stock = #{expectedStock},
             min_alert_quantity = #{minAlertQuantity},
-            alert_setting = #{alertSetting},
-            hidden = #{hidden}
+            alert_setting = #{alertSetting}
         where
             product_id = #{productId}
     </update>
@@ -39,8 +50,23 @@
             current_stock = #{currentStock},
             expected_stock = #{expectedStock},
             min_alert_quantity = #{minAlertQuantity},
-            alert_setting = #{alertSetting},
-            hidden = #{hidden}
+            alert_setting = #{alertSetting}
+        where
+            id = #{id}
+    </update>
+    <update id="modifyCurrentAndExpectedStock">
+        update stock_tb
+        set
+            current_stock = #{currentStock},
+            expected_stock = #{expectedStock}
+        where
+            id = #{id}
+    </update>
+    <update id="modifyAlertSetting">
+        update stock_tb
+        set
+            min_alert_quantity = #{minAlertQuantity},
+            alert_setting = #{alertSetting}
         where
             id = #{id}
     </update>
@@ -63,7 +89,6 @@
             s.expected_stock as expectedStock,
             s.min_alert_quantity as minAlertQuantity,
             s.alert_setting as alertSetting,
-            s.hidden,
             sdt.arrival_date as arrivalDate,
             sdt.arrival_quantity as arrivalQuantity
         from
@@ -79,8 +104,7 @@
             s.current_stock as currentStock,
             s.expected_stock as expectedStock,
             s.min_alert_quantity as minAlertQuantity,
-            s.alert_setting as alertSetting,
-            s.hidden
+            s.alert_setting as alertSetting
         from
             stock_tb s
             left outer join product_tb p on(s.product_id = p.id)
@@ -112,14 +136,10 @@
             s.current_stock as currentStock,
             s.expected_stock as expectedStock,
             s.min_alert_quantity as minAlertQuantity,
-            s.alert_setting as alertSetting,
-            s.hidden,
-            sdt.arrival_date as arrivalDate,
-            sdt.arrival_quantity as arrivalQuantity
+            s.alert_setting as alertSetting
         from
             stock_tb s
             left outer join product_tb p on(s.product_id = p.id)
-            left outer join stock_detail_tb sdt on(s.id = sdt.stock_id)
         where
             product_id = #{productId}
     </select>
@@ -161,5 +181,37 @@
         where
             st.expected_stock <![CDATA[<=]]> min_alert_quantity
         limit 0, 7
+    </select>
+    <select id="getStockDetail" resultMap="stockResultMap">
+        select
+            st.id as st_id,
+            st.product_id,
+            st.current_stock,
+            st.expected_stock,
+            st.min_alert_quantity,
+            st.alert_setting,
+            pt.product_name,
+            sdt.id as sdt_id,
+            sdt.type,
+            sdt.create_date,
+            sdt.arrival_date,
+            sdt.arrival_quantity,
+            sdt.status
+        from
+            stock_tb st
+            left outer join product_tb pt on(st.product_id = pt.id)
+            left outer join stock_detail_tb sdt on(st.id = sdt.stock_id and sdt.status = '입고예정')
+        where
+            st.id = #{id}
+    </select>
+    <select id="findStockDataById" resultType="com.meongnyang.shop.entity.Stock">
+        select
+            id,
+            current_stock currentStock,
+            expected_stock expectedStock
+        from
+            stock_tb
+        where
+            id = #{id}
     </select>
 </mapper>

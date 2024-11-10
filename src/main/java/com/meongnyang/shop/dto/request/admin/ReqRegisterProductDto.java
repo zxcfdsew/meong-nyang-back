@@ -26,13 +26,9 @@ public class ReqRegisterProductDto {
     private String productModel;
     private String productMemo;
     @NotNull
-    @Pattern(regexp = "^[12]$", message = "값은 1 또는 2여야 합니다.")
-    private String recommendation;
+    private int recommendation;
     @NotNull
-    private Long currentStock; //현재재고
-    @NotNull
-    private Long expectedStock; //가재고
-    private int hidden;
+    private int onSale;
 
     private List<MultipartFile> productImage;
     private List<MultipartFile> productDetailImg;
@@ -48,16 +44,8 @@ public class ReqRegisterProductDto {
                 .productBrand(productBrand)
                 .productModel(productModel)
                 .productMemo(productMemo)
-                .recommendation(Integer.parseInt(recommendation))
-                .build();
-    }
-
-    public Stock toEntity(Long productId) {
-        return Stock.builder()
-                .productId(productId)
-                .currentStock(currentStock)
-                .expectedStock(expectedStock)
-                .hidden(hidden)
+                .recommendation(recommendation)
+                .onSale(onSale)
                 .build();
     }
 }

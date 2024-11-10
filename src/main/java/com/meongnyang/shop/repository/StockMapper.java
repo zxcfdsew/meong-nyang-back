@@ -12,10 +12,14 @@ public interface StockMapper {
     int save(Stock stock);
     int modifyStockByProductId(Stock stock);
     int modifyStockById(Stock stock);
+    int modifyCurrentAndExpectedStock(Stock stock);
+    int modifyAlertSetting(Stock stock);
     int deleteStockByProductId(Long productId);
     int deleteStockAll();
     Stock findStockByProductId(Long productId);
+    Stock findStockDataById(Long id);
     List<Stock> findStockAll();
+    Stock getStockDetail(Long id);
     int getAllCount(
             @Param("option") String option,
             @Param("searchWord") String search,

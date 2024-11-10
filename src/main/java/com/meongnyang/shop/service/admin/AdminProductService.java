@@ -44,7 +44,10 @@ public class AdminProductService {
     public void registerProduct(ReqRegisterProductDto dto) throws IOException {
         Product product = dto.toEntity();
 
+        System.out.println(product);
+
         productMapper.save(product);
+        stockMapper.save(Stock.builder().productId(product.getId()).build());
 
         List<MultipartFile> imgs = dto.getProductImage();
         if(imgs != null && !imgs.get(0).isEmpty()) {
@@ -72,9 +75,6 @@ public class AdminProductService {
             }
             productDetailImgMapper.save(productDetailImgs);
         }
-
-        Stock stock = dto.toEntity(product.getId());
-        stockMapper.save(stock);
     }
 
     public RespGetProductsAllDto getProductsAll() {
@@ -167,11 +167,6 @@ public class AdminProductService {
             }
             productDetailImgMapper.save(productDetailImgs);
         }
-
-        //재고 테이블 수정
-        Stock stock = dto.toEntityStock();
-
-        stockMapper.modifyStockByProductId(stock);
     }
 
     @Transactional(rollbackFor = DeleteException.class)
