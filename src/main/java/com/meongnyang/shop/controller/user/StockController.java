@@ -16,9 +16,9 @@ public class StockController {
     @Autowired
     private UserStockService userStockService;
 
-//    @GetMapping("/product/stock")
-//    public ResponseEntity<?> getCurrentStock(@RequestParam List<Long> productIds) {
-////        System.out.println("현재재고 요청" + productId);
-//        return ResponseEntity.ok().body(userStockService.getCurrentStock(productIds));
-//    }
+    @GetMapping("/product/stock")
+    public ResponseEntity<?> getCurrentStock(@RequestParam List<Long> productIds) {
+        System.out.println("현재재고 요청" + productIds);
+        return ResponseEntity.ok().body(userStockService.getCurrentStock(productIds));
+    }
 }

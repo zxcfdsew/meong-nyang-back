@@ -155,7 +155,16 @@
     </select>
     <select id="findCurrenStockByProductIds" resultType="com.meongnyang.shop.entity.Stock">
         select
-            id,
-
+            product_id as productId,
+            current_stock as currentStock,
+            out_of_stock as outOfStock
+        from
+            stock_tb
+        where
+            product_id in (
+            <foreach collection="productIds" item="productId" separator=",">
+                #{productId}
+            </foreach>
+        )
     </select>
 </mapper>

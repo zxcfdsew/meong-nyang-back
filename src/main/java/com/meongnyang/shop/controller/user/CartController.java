@@ -24,7 +24,7 @@ public class CartController {
 
     @PutMapping("/user/{cartId}/count")
     public ResponseEntity<?> modifyCartItemCount(@RequestBody ReqModifyCartItemDto dto) {
-        System.out.println(dto);
+        System.out.println("장바구니 카운트" + dto);
         userCartService.modifyCartItemProduct(dto);
         return ResponseEntity.ok().body(true);
     }
