@@ -32,12 +32,7 @@ public class ReqRegisterProductDto {
     private Long currentStock; //현재재고
     @NotNull
     private Long expectedStock; //가재고
-    @Pattern(regexp = "^(|\\d{4}-\\d{2}-\\d{2})$", message = "빈 값이거나 'yyyy-MM-dd' 형식이어야 합니다.")
-    private String arrivalDate;
-    private Long arrivalQuantity;
-    private Long minAlertQuantity;
-    private Long alertSetting;
-    private int outOfStock;
+    private int hidden;
 
     private List<MultipartFile> productImage;
     private List<MultipartFile> productDetailImg;
@@ -62,11 +57,7 @@ public class ReqRegisterProductDto {
                 .productId(productId)
                 .currentStock(currentStock)
                 .expectedStock(expectedStock)
-                .arrivalDate(arrivalDate)
-                .arrivalQuantity(arrivalQuantity)
-                .alertSetting(alertSetting)
-                .outOfStock(outOfStock)
-                .minAlertQuantity(minAlertQuantity)
+                .hidden(hidden)
                 .build();
     }
 }

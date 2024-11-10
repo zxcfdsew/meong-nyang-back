@@ -35,5 +35,5 @@ public class RespProductDetailDto {
     private Long arrivalQuantity;
     private Long minAlertQuantity;
     private Long alertSetting;
-    private int outOfStock;
+    private int hidden;
 }

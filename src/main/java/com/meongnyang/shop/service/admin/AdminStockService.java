@@ -14,7 +14,7 @@ import java.util.List;
 
 @EnableScheduling
 @Service
-public class StockService {
+public class AdminStockService {
 
     @Autowired
     private StockMapper stockMapper;

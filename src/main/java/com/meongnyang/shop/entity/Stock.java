@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -17,9 +18,9 @@ public class Stock {
     private String productName;
     private Long currentStock;
     private Long expectedStock;
-    private String arrivalDate;
-    private Long arrivalQuantity;
     private Long minAlertQuantity;
     private Long alertSetting;
-    private int outOfStock;
+    private int hidden;
+
+    private List<StockDetail> stockDetails;
 }

@@ -36,6 +36,7 @@ public class Product {
     private PetGroup petGroup;
     private Category category;
     private Stock stock;
+    private StockDetail stockDetail;
 
     public RespProductDetailDto toProductDetailDto(Stock stock) {
         return RespProductDetailDto.builder()
@@ -58,11 +59,8 @@ public class Product {
                 .productDetailImgUrls(productDetailImgUrls)
                 .currentStock(stock.getCurrentStock())
                 .expectedStock(stock.getExpectedStock())
-                .arrivalDate(stock.getArrivalDate())
-                .arrivalQuantity(stock.getArrivalQuantity())
                 .minAlertQuantity(stock.getMinAlertQuantity())
                 .alertSetting(stock.getAlertSetting())
-                .outOfStock(stock.getOutOfStock())
                 .build();
     }
 

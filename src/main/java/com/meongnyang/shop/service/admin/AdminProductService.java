@@ -43,6 +43,7 @@ public class AdminProductService {
     @Transactional(rollbackFor = Exception.class)
     public void registerProduct(ReqRegisterProductDto dto) throws IOException {
         Product product = dto.toEntity();
+
         productMapper.save(product);
 
         List<MultipartFile> imgs = dto.getProductImage();
@@ -169,7 +170,7 @@ public class AdminProductService {
 
         //재고 테이블 수정
         Stock stock = dto.toEntityStock();
-        System.out.println(stock);
+
         stockMapper.modifyStockByProductId(stock);
     }
 

@@ -5,20 +5,31 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.meongnyang.shop.repository.StockMapper">
+
+    <resultMap id="stockDataResultMap" type="com.meongnyang.shop.entity.Stock">
+        <id property="id" column="id" />
+        <result property="" column="productId" />
+        <result property="" column="productName" />
+        <result property="" column="currentStock" />
+        <result property="" column="expectedStock" />
+        <result property="" column="minAlertQuantity" />
+        <result property="" column="alertSetting" />
+        <result property="" column="hidden" />
+        <result property="" column="stockDetails" />
+    </resultMap>
+
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
         insert into stock_tb
-        values(default, #{productId}, #{currentStock}, #{expectedStock}, #{arrivalDate}, #{arrivalQuantity}, #{minAlertQuantity}, #{alertSetting}, #{outOfStock})
+        values(default, #{productId}, #{currentStock}, #{expectedStock}, #{minAlertQuantity}, #{alertSetting}, #{hidden})
     </insert>
     <update id="modifyStockByProductId">
         update stock_tb
         set
             current_stock = #{currentStock},
             expected_stock = #{expectedStock},
-            arrival_date = #{arrivalDate},
-            arrival_quantity = #{arrivalQuantity},
             min_alert_quantity = #{minAlertQuantity},
             alert_setting = #{alertSetting},
-            out_of_stock = #{outOfStock}
+            hidden = #{hidden}
         where
             product_id = #{productId}
     </update>
@@ -27,11 +38,9 @@
         set
             current_stock = #{currentStock},
             expected_stock = #{expectedStock},
-            arrival_date = #{arrivalDate},
-            arrival_quantity = #{arrivalQuantity},
             min_alert_quantity = #{minAlertQuantity},
             alert_setting = #{alertSetting},
-            out_of_stock = #{outOfStock}
+            hidden = #{hidden}
         where
             id = #{id}
     </update>
@@ -52,14 +61,15 @@
             p.product_name as productName,
             s.current_stock as currentStock,
             s.expected_stock as expectedStock,
-            s.arrival_date as arrivalDate,
-            s.arrival_quantity as arrivalQuantity,
             s.min_alert_quantity as minAlertQuantity,
             s.alert_setting as alertSetting,
-            s.out_of_stock as outOfStock
+            s.hidden,
+            sdt.arrival_date as arrivalDate,
+            sdt.arrival_quantity as arrivalQuantity
         from
             stock_tb s
             left outer join product_tb p on(s.product_id = p.id)
+            left outer join stock_detail_tb sdt on(s.id = sdt.stock_id)
     </select>
     <select id="findStockByOption" resultType="com.meongnyang.shop.entity.Stock">
         select
@@ -68,11 +78,9 @@
             p.product_name as productName,
             s.current_stock as currentStock,
             s.expected_stock as expectedStock,
-            s.arrival_date as arrivalDate,
-            s.arrival_quantity as arrivalQuantity,
             s.min_alert_quantity as minAlertQuantity,
             s.alert_setting as alertSetting,
-            s.out_of_stock as outOfStock
+            s.hidden
         from
             stock_tb s
             left outer join product_tb p on(s.product_id = p.id)
@@ -103,14 +111,15 @@
             p.product_name as productName,
             s.current_stock as currentStock,
             s.expected_stock as expectedStock,
-            s.arrival_date as arrivalDate,
-            s.arrival_quantity as arrivalQuantity,
             s.min_alert_quantity as minAlertQuantity,
             s.alert_setting as alertSetting,
-            s.out_of_stock as outOfStock
+            s.hidden,
+            sdt.arrival_date as arrivalDate,
+            sdt.arrival_quantity as arrivalQuantity
         from
             stock_tb s
             left outer join product_tb p on(s.product_id = p.id)
+            left outer join stock_detail_tb sdt on(s.id = sdt.stock_id)
         where
             product_id = #{productId}
     </select>

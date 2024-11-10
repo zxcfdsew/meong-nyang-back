@@ -42,12 +42,7 @@ public class ReqModifyProductDto {
     private Long currentStock;
     @NotNull
     private Long expectedStock;
-    @Pattern(regexp = "^(|\\d{4}-\\d{2}-\\d{2})$", message = "빈 값이거나 'yyyy-MM-dd' 형식이어야 합니다.")
-    private String arrivalDate;
-    private Long arrivalQuantity;
-    private Long minAlertQuantity;
-    private Long alertSetting;
-    private int outOfStock;
+    private int hidden;
 
     public Product toEntity() {
         return Product.builder()
@@ -70,11 +65,7 @@ public class ReqModifyProductDto {
                 .productId(id)
                 .currentStock(currentStock)
                 .expectedStock(expectedStock)
-                .arrivalDate(arrivalDate)
-                .arrivalQuantity(arrivalQuantity)
-                .minAlertQuantity(minAlertQuantity)
-                .alertSetting(alertSetting)
-                .outOfStock(outOfStock)
+                .hidden(hidden)
                 .build();
     }
 }
