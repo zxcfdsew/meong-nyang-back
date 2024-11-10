@@ -153,4 +153,9 @@
             st.expected_stock <![CDATA[<=]]> min_alert_quantity
         limit 0, 7
     </select>
+    <select id="findCurrenStockByProductIds" resultType="com.meongnyang.shop.entity.Stock">
+        select
+            id,
+
+    </select>
 </mapper>

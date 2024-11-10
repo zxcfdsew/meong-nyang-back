@@ -11,9 +11,11 @@ import com.meongnyang.shop.dto.response.user.RespProductAllDto;
 import com.meongnyang.shop.dto.response.user.RespProductListDto;
 import com.meongnyang.shop.entity.ImgUrl;
 import com.meongnyang.shop.entity.Product;
+import com.meongnyang.shop.entity.Stock;
 import com.meongnyang.shop.repository.CategoryMapper;
 import com.meongnyang.shop.repository.ImgUrlMapper;
 import com.meongnyang.shop.repository.PetGroupMapper;
+import com.meongnyang.shop.repository.StockMapper;
 import com.meongnyang.shop.repository.user.UserProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,8 @@ public class ProductService {
     private UserProductMapper userProductMapper;
     @Autowired
     private ImgUrlMapper imgUrlMapper;
+    @Autowired
+    private StockMapper stockMapper;
 
     private Map<String, Object> petGroupIdMap = Map.of(
             "all", 0,
@@ -84,9 +88,10 @@ public class ProductService {
     public RespGetProductDetailDto getProductDetail(Long productId) {
         Product product = userProductMapper.findProductById(productId);
         System.out.println(product);
+        Stock stock = stockMapper.findStockByProductId(productId);
         List<String> imgNames = product.getImgUrls().stream().map(ImgUrl::getImgName).collect(Collectors.toList());
 
-        return product.toUserProductDetailDto(imgNames);
+        return product.toUserProductDetailDto(imgNames, stock.getCurrentStock(), stock.getOutOfStock());
     }
 
     public RespCheckProductsDto getCheckProduct(ReqGetCheckProductsDto dto) {

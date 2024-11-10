@@ -29,4 +29,5 @@ public interface StockMapper {
             @Param("limit") int limit);
 
     List<RespDashboardDto.StockStatus> getDashboardStockStatus();
+    List<Stock> findCurrenStockByProductIds(List<Long> productIds);
 }
