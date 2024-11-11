@@ -37,4 +37,5 @@ public interface StockMapper {
     List<RespDashboardDto.StockStatus> getDashboardStockStatus();
     List<Stock> findCurrenStockByProductIds(List<Long> productIds);
     int modifyCurrentStockByProductId(Map<String, Object> params);
+    int modifyExpectedStockByProductId(Map<String, Object> params);
 }

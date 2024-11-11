@@ -58,11 +58,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/product/**"
                 )
                 .permitAll()
-                .antMatchers(
-                        HttpMethod.POST,
-                        "/order/**",
-                        "/orders/**")
-                .hasRole("USER")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated();

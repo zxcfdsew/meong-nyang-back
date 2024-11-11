@@ -61,6 +61,7 @@
     </select>
     <select id="findOrderProductIdByOrderId" resultType="com.meongnyang.shop.entity.OrderDetail">
         select
+            id,
             product_id as productId,
             product_count as productCount
         from

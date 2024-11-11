@@ -91,7 +91,7 @@ public class ProductService {
         Stock stock = stockMapper.findStockByProductId(productId);
         List<String> imgNames = product.getImgUrls().stream().map(ImgUrl::getImgName).collect(Collectors.toList());
 
-        return product.toUserProductDetailDto(imgNames, stock.getCurrentStock(), stock.getOutOfStock());
+        return product.toUserProductDetailDto(imgNames, stock.getCurrentStock());
     }
 
     public RespCheckProductsDto getCheckProduct(ReqGetCheckProductsDto dto) {

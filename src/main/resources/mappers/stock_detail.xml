@@ -7,7 +7,11 @@
 <mapper namespace="com.meongnyang.shop.repository.StockDetailMapper">
     <insert id="save">
         insert into stock_detail_tb values
-            (default, "입고", #{stockId}, now(), #{arrivalDate}, #{arrivalQuantity}, null, "입고예정");
+            (default, "입고", #{stockId}, now(), #{arrivalDate}, #{arrivalQuantity}, null, "입고예정", null);
+    </insert>
+    <insert id="saveOrder">
+        insert into stock_detail_tb values
+            (default, "출고", #{stockId}, now(), null, null, null, #{status}, #{orderDetailId});
     </insert>
     <select id="getIncommingList" resultType="com.meongnyang.shop.entity.StockDetail">
         select
@@ -35,5 +39,12 @@
             arrived_date = now()
         where
             id = #{id}
+    </update>
+    <update id="modifyStatusByOrderDetailId">
+        update stock_detail_tb
+        set
+            status = #{status}
+        where
+            order_detail_id = #{orderDetailId}
     </update>
 </mapper>

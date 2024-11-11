@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ReqModifyOrderDto {
-    private Long id;
+    private Long id; //주문 아이디
     private Long userId;
     private String orderStatus;
 }

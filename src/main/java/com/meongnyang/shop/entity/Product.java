@@ -77,7 +77,7 @@ public class Product {
                 .build();
     }
 
-    public RespGetProductDetailDto toUserProductDetailDto(List<String> imgNames, Long currentStock, int outOfStock) {
+    public RespGetProductDetailDto toUserProductDetailDto(List<String> imgNames, Long currentStock) {
         return RespGetProductDetailDto.builder()
                 .id(id)
                 .productName(productName)
@@ -87,7 +87,6 @@ public class Product {
                 .productPrice(productPrice.toString())
                 .productPriceDiscount(String.valueOf(productPriceDiscount))
                 .currentStock(currentStock)
-                .outOfStock(outOfStock)
                 .imgNames(imgNames)
                 .build();
     }
