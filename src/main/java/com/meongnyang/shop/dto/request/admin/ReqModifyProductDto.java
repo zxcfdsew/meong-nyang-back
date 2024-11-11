@@ -29,25 +29,12 @@ public class ReqModifyProductDto {
     private String productBrand;
     private String productModel;
     private String productMemo;
-    @NotNull
-    @Pattern(regexp = "^[12]$", message = "값은 1 또는 2여야 합니다.")
-    private String recommendation;
+    private int recommendation;
+    private int onSale;
     private List<MultipartFile> productImage;
     private List<String> deleteImgList;
     private List<MultipartFile> productDetailImage;
     private List<String> deleteProductDetailImgList;
-
-    //재고 테이블
-    @NotNull
-    private Long currentStock;
-    @NotNull
-    private Long expectedStock;
-    @Pattern(regexp = "^(|\\d{4}-\\d{2}-\\d{2})$", message = "빈 값이거나 'yyyy-MM-dd' 형식이어야 합니다.")
-    private String arrivalDate;
-    private Long arrivalQuantity;
-    private Long minAlertQuantity;
-    private Long alertSetting;
-    private int outOfStock;
 
     public Product toEntity() {
         return Product.builder()
@@ -61,20 +48,8 @@ public class ReqModifyProductDto {
                 .productBrand(productBrand)
                 .productModel(productModel)
                 .productMemo(productMemo)
-                .recommendation(Integer.parseInt(recommendation))
-                .build();
-    }
-
-    public Stock toEntityStock() {
-        return Stock.builder()
-                .productId(id)
-                .currentStock(currentStock)
-                .expectedStock(expectedStock)
-                .arrivalDate(arrivalDate)
-                .arrivalQuantity(arrivalQuantity)
-                .minAlertQuantity(minAlertQuantity)
-                .alertSetting(alertSetting)
-                .outOfStock(outOfStock)
+                .recommendation(recommendation)
+                .onSale(onSale)
                 .build();
     }
 }

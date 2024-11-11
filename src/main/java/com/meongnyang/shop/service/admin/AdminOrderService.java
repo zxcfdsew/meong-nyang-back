@@ -50,6 +50,7 @@ public class AdminOrderService {
         }
 
         List<Order> orderList = orderMapper.findOrderByOption(params);
+
         return RespGetOrdersDto.builder()
                 .orderList(orderList)
                 .orderListCount(orderMapper.getOrderCountByOption(params))

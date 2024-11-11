@@ -68,8 +68,6 @@ public class AdminUserService {
                 "option", dto.getOption() == null || dto.getOption().isBlank() ? "all" : dto.getOption()
         );
 
-        System.out.println(params);
-
         List<User> userList = userMapper.findUserByOption(params).stream()
                 .filter(user -> user.getUserRoles().stream()
                         .anyMatch(role -> role.getRole().getRoleName().equals("ROLE_USER")))

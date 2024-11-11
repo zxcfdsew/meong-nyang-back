@@ -30,12 +30,14 @@ public class Product {
     private LocalDate productCreateDate;
     private LocalDate productUpdateDate;
     private int recommendation;
+    private int onSale;
 
     private List<ImgUrl> imgUrls;
     private List<ImgUrl> productDetailImgUrls;
     private PetGroup petGroup;
     private Category category;
     private Stock stock;
+    private StockDetail stockDetail;
 
     public RespProductDetailDto toProductDetailDto(Stock stock) {
         return RespProductDetailDto.builder()
@@ -54,15 +56,9 @@ public class Product {
                 .productCreateDate(getProductCreateDate())
                 .productUpdateDate(getProductUpdateDate())
                 .recommendation(recommendation)
+                .onSale(onSale)
                 .imgUrls(imgUrls)
                 .productDetailImgUrls(productDetailImgUrls)
-                .currentStock(stock.getCurrentStock())
-                .expectedStock(stock.getExpectedStock())
-                .arrivalDate(stock.getArrivalDate())
-                .arrivalQuantity(stock.getArrivalQuantity())
-                .minAlertQuantity(stock.getMinAlertQuantity())
-                .alertSetting(stock.getAlertSetting())
-                .outOfStock(stock.getOutOfStock())
                 .build();
     }
 
