@@ -97,7 +97,7 @@
     <update id="modifyOrder">
         update order_tb
         set
-            order_status = "환불완료"
+            order_status = #{orderStatus}
         where
             id = #{id}
     </update>

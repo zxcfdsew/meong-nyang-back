@@ -35,6 +35,24 @@
         where
             id = #{id}
     </update>
+    <update id="modifyCurrentStockByProductId">
+
+        <if test="orderStatus == '구매확정'">
+            update stock_tb
+            set
+                current_stock = current_stock - #{productCount}
+            where
+                product_id = #{productId}
+        </if>
+        <if test="orderStatus == '환불완료'">
+            update stock_tb
+            set
+                current_stock = current_stock + #{productCount},
+                expected_stock = expected_stock + #{productCount}
+            where
+                product_id = #{productId}
+        </if>
+    </update>
     <delete id="deleteStockByProductId">
         delete
         from
@@ -156,8 +174,7 @@
     <select id="findCurrenStockByProductIds" resultType="com.meongnyang.shop.entity.Stock">
         select
             product_id as productId,
-            current_stock as currentStock,
-            out_of_stock as outOfStock
+            current_stock as currentStock
         from
             stock_tb
         where

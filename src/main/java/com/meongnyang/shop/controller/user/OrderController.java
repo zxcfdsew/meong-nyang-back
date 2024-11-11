@@ -33,10 +33,9 @@ public class OrderController {
     public ResponseEntity<?> getOrderListCount() {
         return ResponseEntity.ok().body(orderService.getOrderListCount());
     }
-    // 취소요청
+    // 주문상태 수정
     @PutMapping("/order/status")
     public ResponseEntity<?> modifyProductsOrder(@RequestBody ReqModifyOrderDto dto) {
-        System.out.println(dto.getUserId());
         orderService.modifyProductsOrder(dto);
         return ResponseEntity.ok().body(true);
     }

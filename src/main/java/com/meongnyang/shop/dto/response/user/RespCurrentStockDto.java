@@ -15,6 +15,5 @@ public class RespCurrentStockDto {
     public static class CurrentStock {
         private Long productId;
         private Long currentStock;
-        private int outOfStock;
     }
 }

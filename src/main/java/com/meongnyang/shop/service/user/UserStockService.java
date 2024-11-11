@@ -24,7 +24,6 @@ public class UserStockService {
                     RespCurrentStockDto.CurrentStock stockDto = RespCurrentStockDto.CurrentStock.builder()
                             .productId(stock.getProductId())
                             .currentStock(stock.getCurrentStock())
-                            .outOfStock(stock.getOutOfStock())
                             .build();
                     return stockDto;
                 }).collect(Collectors.toList());
