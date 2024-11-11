@@ -17,6 +17,7 @@
             sdt.create_date createDate,
             sdt.arrival_date arrivalDate,
             sdt.arrival_quantity arrivalQuantity,
+            sdt.arrived_date arrivedDate,
             sdt.status
         from
             stock_tb st

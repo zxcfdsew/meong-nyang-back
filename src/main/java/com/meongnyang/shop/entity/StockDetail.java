@@ -19,6 +19,7 @@ public class StockDetail {
     private LocalDateTime createDate;
     private LocalDateTime arrivalDate;
     private int arrivalQuantity;
+    private LocalDateTime arrivedDate;
     private String status;
 
     public RespStockDetailDto.StockDetailList toDto() {
@@ -28,6 +29,18 @@ public class StockDetail {
                 .createDate(createDate.toString().substring(0, 10))
                 .arrivalDate(arrivalDate.toString().substring(0, 10))
                 .arrivalQuantity(arrivalQuantity)
+                .status(status)
+                .build();
+    }
+
+    public RespStockDetailDto.StockDetailList toFullDto() {
+        return RespStockDetailDto.StockDetailList.builder()
+                .id(id)
+                .type(type)
+                .createDate(createDate.toString().substring(0, 10))
+                .arrivalDate(arrivalDate.toString().substring(0, 10))
+                .arrivalQuantity(arrivalQuantity)
+                .arrivedDate(arrivedDate.toString().substring(0, 10))
                 .status(status)
                 .build();
     }

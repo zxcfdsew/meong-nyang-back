@@ -33,6 +33,7 @@ public class RespStockDetailDto {
         private String createDate;
         private String arrivalDate;
         private int arrivalQuantity;
+        private String arrivedDate;
         private String status;
     }
 

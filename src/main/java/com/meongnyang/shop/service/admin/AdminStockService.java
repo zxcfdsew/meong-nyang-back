@@ -43,7 +43,7 @@ public class AdminStockService {
         RespStockDetailDto respDto = stocks.toDto();
         respDto.setStockDetailList(stocks.getStockDetails().stream().map(StockDetail::toDto).collect(Collectors.toList()));
         respDto.setIncommingList(
-                stockDetailMapper.getIncommingList(id).stream().map(StockDetail::toDto).collect(Collectors.toList())
+                stockDetailMapper.getIncommingList(id).stream().map(StockDetail::toFullDto).collect(Collectors.toList())
         );
         return respDto;
     }
