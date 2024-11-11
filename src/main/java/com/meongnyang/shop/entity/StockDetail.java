@@ -21,6 +21,7 @@ public class StockDetail {
     private int arrivalQuantity;
     private LocalDateTime arrivedDate;
     private String status;
+    private Long orderDetailId;
 
     public RespStockDetailDto.StockDetailList toDto() {
         return RespStockDetailDto.StockDetailList.builder()

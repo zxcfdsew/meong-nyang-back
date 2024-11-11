@@ -11,4 +11,6 @@ public interface StockDetailMapper {
     int save(StockDetail stockDetail);
     List<StockDetail> getIncommingList(Long stock_id);
     int modifyStatusById(@Param("id") Long id, @Param("status") String status);
+    int saveOrder(StockDetail stockDetail);
+    int modifyStatusByOrderDetailId(StockDetail stockDetail);
 }

@@ -82,11 +82,17 @@
         <if test="orderStatus == '환불완료'">
             update stock_tb
             set
-                current_stock = current_stock + #{productCount},
                 expected_stock = expected_stock + #{productCount}
             where
                 product_id = #{productId}
         </if>
+    </update>
+    <update id="modifyExpectedStockByProductId">
+        update stock_tb
+        set
+            expected_stock = expected_stock - #{productCount}
+        where
+            product_id = #{productId}
     </update>
     <delete id="deleteStockByProductId">
         delete
