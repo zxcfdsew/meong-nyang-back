@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.meongnyang.shop.repository.StockDetailMapper">
+    <insert id="save">
+        insert into stock_detail_tb values
+            (default, "입고", #{stockId}, now(), #{arrivalDate}, #{arrivalQuantity}, null, "입고예정");
+    </insert>
+    <select id="getIncommingList" resultType="com.meongnyang.shop.entity.StockDetail">
+        select
+            sdt.id,
+            sdt.type,
+            sdt.stock_id stockId,
+            sdt.create_date createDate,
+            sdt.arrival_date arrivalDate,
+            sdt.arrival_quantity arrivalQuantity,
+            sdt.arrived_date arrivedDate,
+            sdt.status
+        from
+            stock_tb st
+            left outer join stock_detail_tb sdt on(st.id = sdt.stock_id)
+        where
+            st.id = #{stock_id}
+            and status != '입고예정'
+        order by
+            create_date
+    </select>
+    <update id="modifyStatusById">
+        update stock_detail_tb
+        set
+            status = #{status},
+            arrived_date = now()
+        where
+            id = #{id}
+    </update>
+</mapper>

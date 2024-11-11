@@ -11,18 +11,24 @@
             and r.role_name = 'ROLE_USER'
         <if test='option.equals("all")'>
             and(
-            u.username like concat('%', trim(ifnull(#{searchWord}, '')), "%")
-            or u.name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                u.username like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                or u.name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                or ml.membership_level_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
             )
         </if>
         <if test='option.equals("id")'>
             and(
-            u.username like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                u.username like concat('%', trim(ifnull(#{searchWord}, '')), "%")
             )
         </if>
         <if test='option.equals("name")'>
             and(
-            u.name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+                u.name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
+            )
+        </if>
+        <if test='option.equals("membership")'>
+            and(
+                ml.membership_level_name like concat('%', trim(ifnull(#{searchWord}, '')), "%")
             )
         </if>
     </sql>
@@ -121,7 +127,7 @@
 
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
         insert into user_tb
-        values(default, #{username}, #{password}, #{name}, #{phone}, #{membershipLevelId}, now(), #{provider})
+        values(default, #{username}, #{password}, #{name}, #{phone}, default, now(), #{provider})
     </insert>
 
     <select id="findUserByUsername" resultMap="userResultMap">

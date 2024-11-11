@@ -48,6 +48,7 @@
         <result property="productCreateDate" column="product_create_date" />
         <result property="productUpdateDate" column="product_update_date" />
         <result property="recommendation" column="recommendation" />
+        <result property="onSale" column="on_sale" />
         <association property="petGroup" resultMap="petGroupResultMap" />
         <association property="category" resultMap="categoryResultMap" />
         <collection property="imgUrls" javaType="java.util.List" resultMap="imgUrlResultMap" />
@@ -78,7 +79,7 @@
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
         insert into product_tb
         values(default, #{productName}, #{petGroupId}, #{categoryId}, #{productPrice},#{productPriceDiscount}, #{productDetail},
-        #{productBrand}, #{productModel}, #{productMemo}, now(), now(), #{recommendation})
+        #{productBrand}, #{productModel}, #{productMemo}, now(), now(), #{recommendation}, #{onSale})
     </insert>
     <update id="modifyProduct">
         update product_tb
@@ -93,7 +94,8 @@
             product_model = #{productModel},
             product_memo = #{productMemo},
             product_update_date = now(),
-            recommendation = #{recommendation}
+            recommendation = #{recommendation},
+            on_sale = #{onSale}
         where
             id = #{id}
     </update>
@@ -124,6 +126,7 @@
             p.product_create_date,
             p.product_update_date,
             p.recommendation,
+            p.on_sale,
             pg.id as pg_id,
             pg.category_group_name,
             c.id as c_id,
@@ -154,6 +157,7 @@
             p.product_create_date,
             p.product_update_date,
             p.recommendation,
+            p.on_sale,
             pg.id as pg_id,
             pg.category_group_name,
             c.id as c_id,
@@ -182,6 +186,7 @@
             p.product_create_date,
             p.product_update_date,
             p.recommendation,
+            p.on_sale,
             pg.id as pg_id,
             pg.category_group_name,
             c.id as c_id,
@@ -214,7 +219,8 @@
             product_memo as productMemo,
             product_create_date as productCreateDate,
             product_update_date as productUpdateDate,
-            recommendation
+            recommendation,
+            on_sale onSale
         from
             product_tb
         where

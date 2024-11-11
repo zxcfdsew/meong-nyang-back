@@ -109,7 +109,7 @@ public class SampleData implements CommandLineRunner {
     }
 
     public void registerMembership() {
-        List<String> membershipList = new ArrayList<>(Arrays.asList("VIP", "일반", "블랙", "휴먼계정"));
+        List<String> membershipList = new ArrayList<>(Arrays.asList("VIP", "일반", "블랙", "휴면계정"));
         Membership membership = null;
         for(String membershipName : membershipList) {
             membership = membershipMapper.findMembershipByName(membershipName);
