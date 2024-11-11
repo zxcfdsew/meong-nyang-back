@@ -5,7 +5,9 @@ import com.meongnyang.shop.entity.Stock;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface StockMapper {
@@ -33,4 +35,6 @@ public interface StockMapper {
             @Param("limit") int limit);
 
     List<RespDashboardDto.StockStatus> getDashboardStockStatus();
+    List<Stock> findCurrenStockByProductIds(List<Long> productIds);
+    int modifyCurrentStockByProductId(Map<String, Object> params);
 }

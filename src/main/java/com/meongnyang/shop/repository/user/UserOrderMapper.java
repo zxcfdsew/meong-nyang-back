@@ -12,6 +12,6 @@ public interface UserOrderMapper {
     int save(Order order);
     Order findOrderById(Long id);
     List<Order> findAllOrders(Map<String, Object> params);
-    int modifyOrder(Long id);
+    int modifyOrder(Map<String, Object> params);
     int findOrderCount(Long id);
 }

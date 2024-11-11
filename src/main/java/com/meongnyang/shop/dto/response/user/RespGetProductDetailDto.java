@@ -15,6 +15,8 @@ public class RespGetProductDetailDto {
     private String productPrice;
     private String productPriceDiscount;
     private String productDetail;
+    private Long currentStock;
+    private int outOfStock;
 
     private List<String> imgNames;
 }

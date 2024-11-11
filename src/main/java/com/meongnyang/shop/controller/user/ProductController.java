@@ -58,4 +58,6 @@ public class ProductController {
         System.out.println("검색카운트" + search);
         return ResponseEntity.ok().body(productService.getProductSearchCount(search));
     }
+
+
 }

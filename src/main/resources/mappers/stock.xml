@@ -70,6 +70,24 @@
         where
             id = #{id}
     </update>
+    <update id="modifyCurrentStockByProductId">
+
+        <if test="orderStatus == '구매확정'">
+            update stock_tb
+            set
+                current_stock = current_stock - #{productCount}
+            where
+                product_id = #{productId}
+        </if>
+        <if test="orderStatus == '환불완료'">
+            update stock_tb
+            set
+                current_stock = current_stock + #{productCount},
+                expected_stock = expected_stock + #{productCount}
+            where
+                product_id = #{productId}
+        </if>
+    </update>
     <delete id="deleteStockByProductId">
         delete
         from
@@ -181,6 +199,20 @@
         where
             st.expected_stock <![CDATA[<=]]> min_alert_quantity
         limit 0, 7
+    </select>
+
+    <select id="findCurrenStockByProductIds" resultType="com.meongnyang.shop.entity.Stock">
+        select
+            product_id as productId,
+            current_stock as currentStock
+        from
+            stock_tb
+        where
+            product_id in (
+            <foreach collection="productIds" item="productId" separator=",">
+                #{productId}
+            </foreach>
+        )
     </select>
     <select id="getStockDetail" resultMap="stockResultMap">
         select

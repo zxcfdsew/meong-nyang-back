@@ -9,4 +9,5 @@ import java.util.List;
 public interface UserOrderDetailMapper {
     int save(OrderDetail orderDetail);
     List<OrderDetail> findOrderDetailByOrderId(Long orderId);
+    List<OrderDetail> findOrderProductIdByOrderId(Long orderId);
 }

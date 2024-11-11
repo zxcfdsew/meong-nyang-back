@@ -1,7 +1,9 @@
 package com.meongnyang.shop.repository;
 
+import com.meongnyang.shop.entity.OrderDetail;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
 import java.util.Map;
 
 @Mapper

@@ -6,4 +6,5 @@ import lombok.Data;
 public class ReqModifyOrderDto {
     private Long id;
     private Long userId;
+    private String orderStatus;
 }

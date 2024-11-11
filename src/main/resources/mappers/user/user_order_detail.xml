@@ -59,5 +59,14 @@
         where
             order_id = #{orderId}
     </select>
+    <select id="findOrderProductIdByOrderId" resultType="com.meongnyang.shop.entity.OrderDetail">
+        select
+            product_id as productId,
+            product_count as productCount
+        from
+            order_detail_tb
+        where
+            order_id = #{orderId}
+    </select>
 
 </mapper>

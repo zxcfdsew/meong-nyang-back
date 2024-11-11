@@ -10,6 +10,7 @@ import com.meongnyang.shop.exception.RegisterException;
 import com.meongnyang.shop.exception.UserNotAuthenticatedException;
 import com.meongnyang.shop.repository.PaymentMapper;
 import com.meongnyang.shop.repository.ProductMapper;
+import com.meongnyang.shop.repository.StockMapper;
 import com.meongnyang.shop.repository.user.MyPageMapper;
 import com.meongnyang.shop.repository.user.UserOrderDetailMapper;
 import com.meongnyang.shop.repository.user.UserOrderMapper;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +44,8 @@ public class OrderService {
 
     @Autowired
     private PaymentMapper paymentMapper;
+    @Autowired
+    private StockMapper stockMapper;
 
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -80,13 +84,29 @@ public class OrderService {
     }
 
     public void modifyProductsOrder(ReqModifyOrderDto dto) {
-        User user = getCurrentUser();
-        Long currentUserId = user.getId();
-        System.out.println(user.getId());
-        if (!currentUserId.equals(dto.getUserId())) {
+        PrincipalUser principalUser = (PrincipalUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(principalUser.getId() != dto.getUserId()){
             throw new SecurityException("사용자 ID가 일치하지 않습니다");
         }
-        userOrderMapper.modifyOrder(dto.getId());
+        Map<String, Object> params = Map.of(
+                "userId", dto.getUserId(),
+                "id", dto.getId(),
+                "orderStatus", dto.getOrderStatus()
+        );
+        userOrderMapper.modifyOrder(params);
+
+        List<OrderDetail> orderDetailList = userOrderDetailMapper.findOrderProductIdByOrderId(dto.getId());
+
+        for (int i = 0; i < orderDetailList.size(); i++) {
+            Map<String, Object> productDetail = new HashMap<>();
+            productDetail.put("productId", orderDetailList.get(i).getProductId());
+            productDetail.put("productCount", orderDetailList.get(i).getProductCount());
+            productDetail.put("orderStatus", dto.getOrderStatus());
+
+            stockMapper.modifyCurrentStockByProductId(productDetail);
+        }
+
+
     }
 
     public RespGetOrderListDto getOrderList (ReqGetOrderListDto dto){
