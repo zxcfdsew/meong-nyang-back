@@ -46,5 +46,6 @@ public class RespGetOrderListDto {
         private String categoryName;
         private Long productPrice;
         private Long productCount;
+        private String imgName;
     }
 }

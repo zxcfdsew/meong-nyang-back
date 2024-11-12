@@ -39,9 +39,9 @@ public class StockDetail {
                 .id(id)
                 .type(type)
                 .createDate(createDate.toString().substring(0, 10))
-                .arrivalDate(arrivalDate.toString().substring(0, 10))
+                .arrivalDate(arrivalDate == null ? null : arrivalDate.toString().substring(0, 10))
                 .arrivalQuantity(arrivalQuantity)
-                .arrivedDate(arrivedDate.toString().substring(0, 10))
+                .arrivedDate(arrivedDate == null ? null : arrivedDate.toString().substring(0, 10))
                 .status(status)
                 .build();
     }
