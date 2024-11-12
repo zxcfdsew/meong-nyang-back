@@ -31,6 +31,7 @@ public class Cart {
                 .productCount(productCount)
                 .productName(product.getProductName())
                 .productPrice(product.getProductPrice())
+                .productDiscountPrice(product.getProductPriceDiscount())
                 .imgName(imgName)
                 .build();
     }

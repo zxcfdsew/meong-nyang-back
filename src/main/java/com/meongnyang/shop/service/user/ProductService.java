@@ -105,6 +105,7 @@ public class ProductService {
                             .productId(product.getId())
                             .productName(product.getProductName())
                             .productPrice(product.getProductPrice())
+                            .productPriceDiscount(product.getProductPriceDiscount())
                             .groupName(product.getPetGroup().getCategoryGroupName())
                             .categoryName(product.getCategory().getCategoryName())
                             .imgName(imgName != null ? imgName.getImgName() : "")

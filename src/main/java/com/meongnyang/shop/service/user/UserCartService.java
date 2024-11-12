@@ -106,6 +106,7 @@ public class UserCartService {
         );
 
         List<Cart> cartList = userCartMapper.getCart(params);
+        System.out.println(cartList);
         List<RespGetCartDto.CartContent> cartContentList = cartList.stream()
                 .map(cart -> {
                     ImgUrl imgUrl = imgUrlMapper.findImgNameByProductId(cart.getProductId());
