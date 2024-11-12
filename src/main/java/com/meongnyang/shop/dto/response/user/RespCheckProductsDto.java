@@ -17,6 +17,7 @@ public class RespCheckProductsDto {
         private Long productId;
         private String productName;
         private Long productPrice;
+        private Long productPriceDiscount;
         private String groupName;
         private String categoryName;
         private String imgName;

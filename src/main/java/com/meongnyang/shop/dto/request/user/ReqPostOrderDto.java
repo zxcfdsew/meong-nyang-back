@@ -15,7 +15,7 @@ public class ReqPostOrderDto {
     private String phone;
     private String email;
     private String request;
-
+    private Long totalPrice;
     private String paymentId;
     private String paymentMethod;
 
@@ -33,6 +33,7 @@ public class ReqPostOrderDto {
         return Order.builder()
                 .userId(userId)
                 .orderName(orderName)
+                .totalPrice(totalPrice)
                 .zipcode(zipcode)
                 .addressDefault(addressDefault)
                 .addressDetail(addressDetail)

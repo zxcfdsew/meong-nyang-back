@@ -92,7 +92,8 @@
             c.product_count,
             c.cart_update_date,
             p.product_name,
-            p.product_price
+            p.product_price,
+            p.product_price_discount
         from
             cart_tb c
             left outer join product_tb p on(p.id = c.product_id)
@@ -141,7 +142,8 @@
             c.product_count,
             c.cart_update_date,
             p.product_name,
-            p.product_price
+            p.product_price,
+            p.product_price_discount
         from
             cart_tb c
             left outer join product_tb p on(p.id = c.product_id)
