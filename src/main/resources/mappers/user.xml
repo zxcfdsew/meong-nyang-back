@@ -42,9 +42,11 @@
         <result property="createDate" column="create_date" />
         <result property="membershipLevelId" column="membership_level_id" />
         <result property="provider" column="provider" />
+        <result property="recentPurchaseDate" column="recent_purchase_date" />
         <association property="address" resultMap="addressResultMap" />
         <association property="pet" resultMap="petResultMap" />
         <association property="membership" resultMap="membershipResultMap" />
+        <association property="orders" resultMap="orderResultMap" />
         <collection property="userRoles" javaType="java.util.Set" resultMap="userRoleResultMap" />
     </resultMap>
 
@@ -232,14 +234,18 @@
             r.id as r_id,
             r.role_name as r_role_name,
             ml.id as ml_id,
-            ml.membership_level_name
+            ml.membership_level_name,
+            max(ot.order_date) recent_purchase_date
         from
             user_tb u
             left outer join user_role_tb ur on(u.id = ur.user_id)
             left outer join role_tb r on(r.id = ur.role_id)
             left outer join membership_level_tb ml on(ml.id = u.membership_level_id)
+            left outer join order_tb ot on(ot.user_id = u.id)
         where
             <include refid="searchOptionIf" />
+        group by
+            u_id
         limit #{startIndex}, #{limit}
 
     </select>

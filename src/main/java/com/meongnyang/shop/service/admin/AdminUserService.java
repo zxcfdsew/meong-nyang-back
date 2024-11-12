@@ -73,6 +73,8 @@ public class AdminUserService {
                         .anyMatch(role -> role.getRole().getRoleName().equals("ROLE_USER")))
                 .collect(Collectors.toList());
 
+        System.out.println(userList);
+
         return RespGetUsersDto.builder()
                 .userList(userList)
                 .userListCount(userMapper.getCountByOption(params))
