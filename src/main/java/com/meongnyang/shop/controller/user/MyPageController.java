@@ -1,5 +1,6 @@
 package com.meongnyang.shop.controller.user;
 
+import com.meongnyang.shop.aspect.annotation.ValidAop;
 import com.meongnyang.shop.dto.request.user.ReqUpdatePasswordDto;
 import com.meongnyang.shop.dto.request.user.ReqUpdatePetDto;
 import com.meongnyang.shop.dto.request.user.ReqUpdateUserDto;
@@ -35,7 +36,7 @@ public class MyPageController {
     }
 
     // 비밀번호 수정
-    @Valid
+    @ValidAop
     @PutMapping("/edit/password")
     public ResponseEntity<?> editPassword(@Valid @RequestBody ReqUpdatePasswordDto dto, BindingResult bindingResult) {
         userService.editPassword(dto);

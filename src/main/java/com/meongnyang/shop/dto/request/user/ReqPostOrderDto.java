@@ -26,7 +26,8 @@ public class ReqPostOrderDto {
     @Getter
     public static class ProductEasy{
         private Long productId;
-        private Long productCount;
+        private int productCount;
+        private Long productPrice;
     }
 
     public Order toEntity(int paymentTypeId) {
