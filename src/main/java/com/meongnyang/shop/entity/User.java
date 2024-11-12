@@ -25,6 +25,7 @@ public class User {
     private String phone;
     private int membershipLevelId;
     private LocalDate createDate;
+    private LocalDate recentPurchaseDate;
     private String provider;
 
     private Address address;
