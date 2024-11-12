@@ -43,7 +43,8 @@
     <update id="modifyStatusByOrderDetailId">
         update stock_detail_tb
         set
-            status = #{status}
+            status = #{status},
+            arrived_date = now()
         where
             order_detail_id = #{orderDetailId}
     </update>
