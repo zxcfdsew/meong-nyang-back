@@ -62,9 +62,10 @@ public class OrderService {
                 OrderDetail orderDetail = OrderDetail.builder()
                         .orderId(order.getId())
                         .productId(product.getProductId())
-                        .productPrice(productMapper.getProductPriceById(product.getProductId()))
-                        .productCount(product.getProductCount())
+                        .productPrice(product.getProductPrice())
+                        .productCount(Long.valueOf(product.getProductCount()))
                         .build();
+                System.out.println(orderDetail);
                 userOrderDetailMapper.save(orderDetail);
                 System.out.println(orderDetail.getId());
                 //가재고 빼기, 재고 상세 추가(배송중으로)
@@ -80,6 +81,7 @@ public class OrderService {
                 stockDetailMapper.saveOrder(StockDetail.builder()
                                 .stockId(stock.getId())
                                 .status("배송중")
+                                .arrivalQuantity(product.getProductCount())
                                 .orderDetailId(orderDetail.getId())
                                 .build());
             }

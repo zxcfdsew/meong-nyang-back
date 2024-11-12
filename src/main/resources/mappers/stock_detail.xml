@@ -11,7 +11,7 @@
     </insert>
     <insert id="saveOrder">
         insert into stock_detail_tb values
-            (default, "출고", #{stockId}, now(), null, null, null, #{status}, #{orderDetailId});
+            (default, "출고", #{stockId}, now(), null, #{arrivalQuantity}, now(), #{status}, #{orderDetailId});
     </insert>
     <select id="getIncommingList" resultType="com.meongnyang.shop.entity.StockDetail">
         select
