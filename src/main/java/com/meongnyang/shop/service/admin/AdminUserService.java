@@ -16,7 +16,6 @@ import com.meongnyang.shop.repository.PetMapper;
 import com.meongnyang.shop.repository.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
