@@ -9,6 +9,7 @@ import java.util.Map;
 
 @Mapper
 public interface UserOrderMapper {
+    List<Order> findArrivingStatusOrderList();
     int save(Order order);
     Order findOrderById(Long id);
     List<Order> findAllOrders(Map<String, Object> params);

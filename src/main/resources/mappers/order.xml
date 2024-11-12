@@ -143,7 +143,7 @@
             left outer join product_tb p on(od.product_id = p.id)
 
     </select>
-    <select id="findOrderByOption" resultMap="orderResultMap">
+    <select id="getOrderByOption" resultMap="orderResultMap">
         select
             o.id as o_id,
             o.user_id,
@@ -177,7 +177,7 @@
         limit #{startIndex}, #{limit}
 
     </select>
-    <select id="findOrderDetailProductsById" resultType="com.meongnyang.shop.dto.response.admin.RespGetUserDetailDto$RespUserDetailProductDto">
+    <select id="getOrderDetailProductsById" resultType="com.meongnyang.shop.dto.response.admin.RespGetUserDetailDto$RespUserDetailProductDto">
         select
             odt.product_id,
             pt.product_name,
@@ -253,10 +253,8 @@
             left outer join product_tb pt on(od.product_id = pt.id)
         where
             o.id = #{id}
-            and o.order_status = '결제완료'
         order by
             o.order_date desc
-        limit 0, 6
     </select>
     <select id="getRecentOrderDate" resultType="java.time.LocalDate">
         select
@@ -393,7 +391,17 @@
             date(order_date)
         order by
             date(order_date) desc
-        limit 0, 7;
+        limit 0, 7
     </select>
-
+    <select id="getUserTotalAmount" resultType="com.meongnyang.shop.entity.Order">
+        select
+            user_id userId,
+            sum(total_price) totalPrice
+        from
+            order_tb
+        where
+            date_add(order_date, interval 30 day) > now()
+        group by
+            user_id
+    </select>
 </mapper>

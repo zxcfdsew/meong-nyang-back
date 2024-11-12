@@ -14,8 +14,9 @@ import java.util.Map;
 @Mapper
 public interface OrderMapper {
     List<Order> findOrderAll();
-    List<RespGetUserDetailDto.RespUserDetailProductDto> findOrderDetailProductsById(Long id);
-    List<Order> findOrderByOption(Map<String, Object> params);
+    List<RespGetUserDetailDto.RespUserDetailProductDto> getOrderDetailProductsById(Long id);
+    List<Order> getOrderByOption(Map<String, Object> params);
+    List<Order> getUserTotalAmount();
     Order getOrderDetail(Long id);
     LocalDate getRecentOrderDate(Long userId);
     RespDashboardDto getDashboardData();

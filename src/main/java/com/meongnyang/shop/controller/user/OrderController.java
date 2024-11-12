@@ -1,7 +1,5 @@
 package com.meongnyang.shop.controller.user;
 
-import com.meongnyang.shop.aspect.annotation.ValidAop;
-import com.meongnyang.shop.dto.request.admin.ReqModifyProductDto;
 import com.meongnyang.shop.dto.request.user.ReqGetOrderListDto;
 import com.meongnyang.shop.dto.request.user.ReqModifyOrderDto;
 import com.meongnyang.shop.dto.request.user.ReqPostOrderDto;

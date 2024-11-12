@@ -325,6 +325,15 @@
         where
             <include refid="searchOptionIf" />
     </select>
+    <select id="findUserMembershipLevel" resultType="com.meongnyang.shop.entity.User">
+        select
+            id,
+            membership_level_id membershipLevelId
+        from
+            user_tb
+        where
+            id = #{id};
+    </select>
 
     <update id="updateUserMembershipById">
         update

@@ -49,7 +49,7 @@ public class AdminOrderService {
             params.put("endDate", dto.getEndDate());
         }
 
-        List<Order> orderList = orderMapper.findOrderByOption(params);
+        List<Order> orderList = orderMapper.getOrderByOption(params);
 
         return RespGetOrdersDto.builder()
                 .orderList(orderList)

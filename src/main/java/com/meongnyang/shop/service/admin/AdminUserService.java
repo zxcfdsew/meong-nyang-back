@@ -5,6 +5,7 @@ import com.meongnyang.shop.dto.request.admin.ReqSearchDto;
 import com.meongnyang.shop.dto.response.admin.RespGetMembershipsDto;
 import com.meongnyang.shop.dto.response.admin.RespGetUserDetailDto;
 import com.meongnyang.shop.dto.response.admin.RespGetUsersDto;
+import com.meongnyang.shop.entity.Order;
 import com.meongnyang.shop.entity.Pet;
 import com.meongnyang.shop.entity.User;
 import com.meongnyang.shop.exception.NotFoundMembershipException;
@@ -14,8 +15,11 @@ import com.meongnyang.shop.repository.OrderMapper;
 import com.meongnyang.shop.repository.PetMapper;
 import com.meongnyang.shop.repository.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -83,7 +87,7 @@ public class AdminUserService {
 
     public RespGetUserDetailDto getUserDetail(Long userId) {
         User user = userMapper.findUserDetailById(userId);
-        List<RespGetUserDetailDto.RespUserDetailProductDto> userOrderList = orderMapper.findOrderDetailProductsById(userId);
+        List<RespGetUserDetailDto.RespUserDetailProductDto> userOrderList = orderMapper.getOrderDetailProductsById(userId);
         RespGetUserDetailDto.UserPurchaseData userPurchaseData = userMapper.findUserPurchaseDateById(userId);
         Pet pet = petMapper.findPetByUserId(userId);
 
@@ -113,5 +117,23 @@ public class AdminUserService {
         return RespGetMembershipsDto.builder()
                 .membershipList(membershipMapper.findMembershipAll())
                 .build();
+    }
+
+    // 매일 자정에 최근 30일동안 구매한 금액이 500,000만원 이상이면 VIP 아니면 일반등급으로 업데이트
+    @Scheduled(cron = "0 0 0 * * *")
+    public void autoPurchaseConfirmation() {
+        List<Order> orderList = orderMapper.getUserTotalAmount();
+        for (Order order : orderList) {
+            Long userId = order.getUserId();
+            Long totalPrice = order.getTotalPrice();
+            User user = userMapper.findUserMembershipLevel(userId);
+            if (totalPrice >= 500000 && user.getMembershipLevelId() == 2) {
+                userMapper.updateUserMembershipById(userId, 1L);
+            }
+            if (totalPrice < 500000 && user.getMembershipLevelId() == 1) {
+                userMapper.updateUserMembershipById(userId, 2L);
+            }
+        }
+        System.out.println("사용자 등급 업데이트 성공");
     }
 }

@@ -15,6 +15,8 @@ import com.meongnyang.shop.repository.user.UserOrderDetailMapper;
 import com.meongnyang.shop.repository.user.UserOrderMapper;
 import com.meongnyang.shop.security.principal.PrincipalUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 
+//@EnableScheduling
 @Service
 public class OrderService {
 
@@ -90,7 +93,7 @@ public class OrderService {
         }
     }
 
-
+    // 재고확정
     @Transactional(rollbackFor = RegisterException.class)
     public void modifyProductsOrder(ReqModifyOrderDto dto) {
         getCurrentUser(dto.getUserId());
@@ -101,7 +104,7 @@ public class OrderService {
                     "id", dto.getId(),
                     "orderStatus", dto.getOrderStatus()
             );
-            //주문 테이블의 orderStatus를 환불완료 및 구매확정으로 변경
+            // 주문 테이블의 orderStatus를 환불완료 및 구매확정으로 변경
             userOrderMapper.modifyOrder(params);
 
             //주문아이디로 주문상세의 상품 리스트들 가져옴(productId와 productCount필요)
@@ -114,8 +117,8 @@ public class OrderService {
                         "productCount", orderDetailList.get(i).getProductCount(),
                         "orderStatus", dto.getOrderStatus()
                 );
-                //환불완료시 재고 상세에 상태를 "취소"로 변경 => 가재고를 상품 개수만큼 더함
-                //구매확정시 재고 상세에 상태를 "구매확정"으로 변경 => 현재재고에서 상품 개수만큼 뺌
+                // 환불완료시 재고 상세에 상태를 "취소"로 변경 => 가재고를 상품 개수만큼 더함
+                // 구매확정시 재고 상세에 상태를 "구매확정"으로 변경 => 현재재고에서 상품 개수만큼 뺌
                 stockDetailMapper.modifyStatusByOrderDetailId(StockDetail.builder()
                         .orderDetailId(orderDetailList.get(i).getId())
                         .status(dto.getOrderStatus().equals("구매확정") ? "구매확정" : "취소")
@@ -164,5 +167,36 @@ public class OrderService {
         PrincipalUser principalUser = (PrincipalUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userOrderMapper.findOrderCount(principalUser.getId());
     }
-}
 
+// 매일 자정에 들어온 주문 중 구매 후 3일이 지난 경우 자동 확정
+    @Scheduled(cron = "0 0 0 * * *")
+    public void autoPurchaseConfirmation() {
+        List<Order> orderList = userOrderMapper.findArrivingStatusOrderList();
+        for (Order order : orderList) {
+            ReqModifyOrderDto dto = new ReqModifyOrderDto(order.getId(), order.getUserId(), "구매확정");
+            Map<String, Object> params = Map.of(
+                    "userId", dto.getUserId(),
+                    "id", dto.getId(),
+                    "orderStatus", dto.getOrderStatus()
+            );
+            // 주문 테이블의 orderStatus를 환불완료 및 구매확정으로 변경
+            userOrderMapper.modifyOrder(params);
+            List<OrderDetail> orderDetailList = userOrderDetailMapper.findOrderProductIdByOrderId(dto.getId());
+            for (int i = 0; i < orderDetailList.size(); i++) {
+                Map<String, Object> productDetail = Map.of(
+                        "productId", orderDetailList.get(i).getProductId(),
+                        "productCount", orderDetailList.get(i).getProductCount(),
+                        "orderStatus", dto.getOrderStatus()
+                );
+                // 환불완료시 재고 상세에 상태를 "취소"로 변경 => 가재고를 상품 개수만큼 더함
+                // 구매확정시 재고 상세에 상태를 "구매확정"으로 변경 => 현재재고에서 상품 개수만큼 뺌
+                stockDetailMapper.modifyStatusByOrderDetailId(StockDetail.builder()
+                        .orderDetailId(orderDetailList.get(i).getId())
+                        .status(dto.getOrderStatus().equals("구매확정") ? "구매확정" : "취소")
+                        .build());
+                stockMapper.modifyCurrentStockByProductId(productDetail);
+            }
+        }
+        System.out.println("구매확정 업데이트 성공");
+    }
+}
