@@ -28,6 +28,7 @@ public class OrderDetail {
                 .categoryName(product.getCategory().getCategoryName())
                 .productPrice(productPrice)
                 .productCount(productCount)
+                .imgName(product.getImgUrls().get(0).getImgName())
                 .build();
     }
 }

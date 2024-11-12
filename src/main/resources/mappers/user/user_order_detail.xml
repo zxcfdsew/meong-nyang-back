@@ -20,6 +20,14 @@
         <result property="productPrice" column="p_product_price" />
         <association property="petGroup" resultMap="petGroupResultMap" />
         <association property="category" resultMap="categoryResultMap" />
+        <collection property="imgUrls" resultMap="imgUrlResultMap"/>
+    </resultMap>
+
+    <resultMap id="imgUrlResultMap" type="com.meongnyang.shop.entity.ImgUrl" >
+        <id property="id" column="iu_id" />
+        <result property="productId" column="iu_product_id" />
+        <result property="imgPath" column="img_path" />
+        <result property="imgName" column="img_name" />
     </resultMap>
 
     <resultMap id="petGroupResultMap" type="com.meongnyang.shop.entity.PetGroup" >
@@ -50,12 +58,17 @@
             pg.id as pg_id,
             pg.category_group_name,
             c.id as c_id,
-            c.category_name
+            c.category_name,
+            iu.id as iu_id,
+            iu.product_id as iu_product_id,
+            iu.img_path,
+            iu.img_name
         from
             order_detail_tb od
             left outer join product_tb p on(p.id = od.product_id)
             left outer join pet_group_tb pg on(p.pet_group_id = pg.id)
             left outer join category_tb c on(p.category_id = c.id)
+            left outer join img_url_tb iu on(p.id = iu.product_id)
         where
             order_id = #{orderId}
     </select>

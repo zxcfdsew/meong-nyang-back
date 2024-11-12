@@ -18,13 +18,11 @@ public class CartController {
     // 장바구니 물품 추가
     @PostMapping("/user/cart")
     public ResponseEntity<?> saveProductCart(@RequestBody ReqPostCartDto dto) {
-        System.out.println(dto);
         return ResponseEntity.ok().body(userCartService.saveCart(dto));
     }
 
     @PutMapping("/user/{cartId}/count")
     public ResponseEntity<?> modifyCartItemCount(@RequestBody ReqModifyCartItemDto dto) {
-        System.out.println("장바구니 카운트" + dto);
         userCartService.modifyCartItemProduct(dto);
         return ResponseEntity.ok().body(true);
     }

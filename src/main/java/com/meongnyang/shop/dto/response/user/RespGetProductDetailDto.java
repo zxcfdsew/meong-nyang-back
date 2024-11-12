@@ -1,5 +1,6 @@
 package com.meongnyang.shop.dto.response.user;
 
+import com.meongnyang.shop.entity.ImgUrl;
 import lombok.Builder;
 import lombok.Data;
 
@@ -15,8 +16,9 @@ public class RespGetProductDetailDto {
     private String productPrice;
     private String productPriceDiscount;
     private String productDetail;
+    private int recommendation;
+    private int onSale;
     private Long currentStock;
-    private int outOfStock;
-
+    private List<ImgUrl> detailImgUrls;
     private List<String> imgNames;
 }

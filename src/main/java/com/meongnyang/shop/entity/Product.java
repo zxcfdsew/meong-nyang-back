@@ -86,7 +86,10 @@ public class Product {
                 .productDetail(productDetail)
                 .productPrice(productPrice.toString())
                 .productPriceDiscount(String.valueOf(productPriceDiscount))
+                .recommendation(recommendation)
+                .onSale(onSale)
                 .currentStock(currentStock)
+                .detailImgUrls(productDetailImgUrls)
                 .imgNames(imgNames)
                 .build();
     }

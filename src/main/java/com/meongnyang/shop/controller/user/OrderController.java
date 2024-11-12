@@ -26,7 +26,6 @@ public class OrderController {
     }
     @GetMapping("/user/orderlist")
     public ResponseEntity<?> getOrderList(ReqGetOrderListDto dto) {
-        System.out.println(dto);
         return ResponseEntity.ok().body(orderService.getOrderList(dto));
     }
     @GetMapping("/user/orderlist/count")
