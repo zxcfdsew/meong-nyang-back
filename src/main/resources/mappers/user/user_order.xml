@@ -93,6 +93,17 @@
         where
             user_id = #{id}
     </select>
+    <select id="findArrivingStatusOrderList" resultType="com.meongnyang.shop.entity.Order">
+        select
+            id,
+            user_id userId,
+            order_status orderStatus
+        from
+            order_tb
+        where
+            order_status = '결제완료'
+            and date_add(order_date, interval 3 day) <![CDATA[<]]> now();
+    </select>
 
     <update id="modifyOrder">
         update order_tb

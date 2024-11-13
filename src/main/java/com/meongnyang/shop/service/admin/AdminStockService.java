@@ -11,16 +11,12 @@ import com.meongnyang.shop.entity.StockDetail;
 import com.meongnyang.shop.repository.StockDetailMapper;
 import com.meongnyang.shop.repository.StockMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@EnableScheduling
 @Service
 public class AdminStockService {
 

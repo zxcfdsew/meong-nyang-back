@@ -143,7 +143,7 @@
             left outer join product_tb p on(od.product_id = p.id)
 
     </select>
-    <select id="findOrderByOption" resultMap="orderResultMap">
+    <select id="getOrderByOption" resultMap="orderResultMap">
         select
             o.id as o_id,
             o.user_id,
@@ -177,7 +177,7 @@
         limit #{startIndex}, #{limit}
 
     </select>
-    <select id="findOrderDetailProductsById" resultType="com.meongnyang.shop.dto.response.admin.RespGetUserDetailDto$RespUserDetailProductDto">
+    <select id="getOrderDetailProductsById" resultType="com.meongnyang.shop.dto.response.admin.RespGetUserDetailDto$RespUserDetailProductDto">
         select
             odt.product_id,
             pt.product_name,
@@ -253,10 +253,8 @@
             left outer join product_tb pt on(od.product_id = pt.id)
         where
             o.id = #{id}
-            and o.order_status = '결제완료'
         order by
             o.order_date desc
-        limit 0, 6
     </select>
     <select id="getRecentOrderDate" resultType="java.time.LocalDate">
         select
@@ -279,7 +277,7 @@
         from
             order_tb ot
         where
-            order_status = '결제완료'
+            order_status = '구매확정'
             and date(order_date) between date(#{startDate}) and date(#{endDate})
         group by
             date(order_date)
@@ -310,7 +308,7 @@
             from
                 order_tb
             where
-                order_date between #{startDate} and #{endDate} and order_status = "결제완료"
+                order_date between #{startDate} and #{endDate} and order_status = "구매확정"
             group by
                 order_date) as amout_tb
     </select>
@@ -354,12 +352,12 @@
     </select>
     <select id="getDashboardData" resultType="com.meongnyang.shop.dto.response.admin.RespDashboardDto">
         select
-            ifnull(sum(if(order_status = '결제완료', total_price, 0)), 0) totalPrice,
-            ifnull(sum(if(order_status = '결제완료', order_item_count, 0)), 0) totalCount,
+            ifnull(sum(if(order_status = '구매확정', total_price, 0)), 0) totalPrice,
+            ifnull(sum(if(order_status = '구매확정', order_item_count, 0)), 0) totalCount,
             ifnull(sum(if(order_status = '환불완료', total_price, 0)), 0) refundPrice,
             ifnull(sum(if(order_status = '환불완료', order_item_count, 0)), 0) refundCount,
-            ifnull(sum(if(order_status = '결제완료' and date(order_date) = curdate(), total_price, 0)), 0) todayTotalPrice,
-            ifnull(sum(if(order_status = '결제완료' and date(order_date) = curdate(), order_item_count, 0)), 0) todayTotalCount,
+            ifnull(sum(if(order_status = '구매확정' and date(order_date) = curdate(), total_price, 0)), 0) todayTotalPrice,
+            ifnull(sum(if(order_status = '구매확정' and date(order_date) = curdate(), order_item_count, 0)), 0) todayTotalCount,
             ifnull(sum(if(order_status = '환불완료' and date(order_date) = curdate(), total_price, 0)), 0) todayRefundPrice,
             ifnull(sum(if(order_status = '환불완료' and date(order_date) = curdate(), order_item_count, 0)), 0) todayRefundCount
         from
@@ -379,21 +377,40 @@
     </select>
     <select id="getDashboardStatisticsStatus"
             resultType="com.meongnyang.shop.dto.response.admin.RespDashboardDto$StatisticsStatus">
+        with recursive seven_day as (
+            select
+                curdate() - interval 6 day as date_value
+            union all
+            select
+                date_value + interval 1 day
+            from
+                seven_day
+            where
+                date_value + interval 1 day <![CDATA[<=]]> curdate()
+        )
         select
-            date(order_date) as `date`,
-            sum(if(order_status = '결제완료', 1, 0)) as orderCount,
-            sum(if(order_status = '결제완료', total_price, 0)) as orderAmount,
-            sum(if(order_status = '환불완료', 1, 0)) as refundCount,
-            sum(if(order_status = '환불완료', total_price, 0)) as refundAmount
+            sd.date_value as `date`,
+            ifnull(sum(if(ot.order_status = '구매확정', 1, 0)), 0) as ordercount,
+            ifnull(sum(if(ot.order_status = '구매확정', ot.total_price, 0)), 0) as orderamount,
+            ifnull(sum(if(ot.order_status = '환불완료', 1, 0)), 0) as refundcount,
+            ifnull(sum(if(ot.order_status = '환불완료', ot.total_price, 0)), 0) as refundamount
+        from
+            seven_day sd
+            left join order_tb ot on date(ot.order_date) = sd.date_value
+        group by
+            sd.date_value
+        order by
+            sd.date_value desc;
+    </select>
+    <select id="getUserTotalAmount" resultType="com.meongnyang.shop.entity.Order">
+        select
+            user_id userId,
+            sum(total_price) totalPrice
         from
             order_tb
         where
-            date(order_date) >= date(now() - interval 7 day)
+            date_add(order_date, interval 30 day) > now()
         group by
-            date(order_date)
-        order by
-            date(order_date) desc
-        limit 0, 7;
+            user_id
     </select>
-
 </mapper>

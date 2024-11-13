@@ -71,7 +71,6 @@
             id = #{id}
     </update>
     <update id="modifyCurrentStockByProductId">
-
         <if test="orderStatus == '구매확정'">
             update stock_tb
             set
