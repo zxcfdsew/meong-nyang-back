@@ -26,7 +26,7 @@ spring:
 server:
   port: 8080
 client:
-  address: http://localhost:3000
+  address: https://dllnk2s3dwa0t.cloudfront.net
 
 ---
 
@@ -37,7 +37,7 @@ spring:
 server:
   port: 9090
 client:
-  address: http://localhost:3000
+  address: https://dllnk2s3dwa0t.cloudfront.net
 ---
 
 spring:
